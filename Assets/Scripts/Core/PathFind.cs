@@ -33,7 +33,7 @@ public class PathFind
 
             foreach(var nTile in curTile.Neighbor)
             {
-                if(nTile.Type == TileType.None && !closeList.Contains(nTile))
+                if(nTile.Type == TileType.Path && !closeList.Contains(nTile))
                 {
                     int G = curTile.G + 1;
                     int H = endTile - nTile;

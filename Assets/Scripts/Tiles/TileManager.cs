@@ -24,6 +24,7 @@ public class TileManager : MonoBehaviour
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
     private List<PathTile> tileList = new List<PathTile>();
     private Vector3[] neighborPositions = new Vector3[6];
+    private LineRenderer lineRenderer;
 
     private PathFind pathFind = new PathFind();
 
@@ -31,6 +32,9 @@ public class TileManager : MonoBehaviour
     {
         SpriteRenderer sp = prefabs.GetComponent<SpriteRenderer>();
         gridSize = new Vector2(sp.bounds.size.x, sp.bounds.size.z);
+
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 0;
 
         neighborPositions[0] = new Vector3(gridSize.y, 0 , -(gridSize.x - gridSize.x * 0.5f) );
         neighborPositions[1] = new Vector3(gridSize.y, 0 , (gridSize.x - gridSize.x * 0.5f) );
@@ -57,16 +61,20 @@ public class TileManager : MonoBehaviour
         {
             if (pathFind.Find(tileList, startTile, endTile[i]))
             {
-                while (endTile[0].ParentTile != null)
-                {
-                    endTile[0].Type = TileType.Path;
-                    endTile[0] = endTile[0].ParentTile;
-                }
+                
             }
             else
             {
                 Debug.Log("Find Fail");
             }
+        }
+        var copyTile = endTile[0];
+        int idx = 0;
+        while (copyTile != null)
+        {
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(idx++ , copyTile.transform.position + Vector3.up);
+            copyTile = copyTile.ParentTile;
         }
     }
     
@@ -74,7 +82,7 @@ public class TileManager : MonoBehaviour
     public void SetTileType()
     {
         if (!drawMode) return;
-        if (!Input.GetMouseButtonDown(0)) return;
+        if (TouchManager.TouchType != TouchType.Draw) return;
 
         var tile = GetTile();
         if(tile != null)
