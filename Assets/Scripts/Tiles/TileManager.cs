@@ -77,8 +77,6 @@ public class TileManager : MonoBehaviour
             copyTile = copyTile.ParentTile;
         }
     }
-    
-
     public void SetTileType()
     {
         if (!drawMode) return;
@@ -90,7 +88,6 @@ public class TileManager : MonoBehaviour
             tile.Type = tileType;
         }
     }
-
     private PathTile GetTile()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -106,7 +103,6 @@ public class TileManager : MonoBehaviour
 
         return null;
     }
-
     // Test 용 코드임
     public void DrawTiles()
     {
@@ -134,7 +130,6 @@ public class TileManager : MonoBehaviour
 
         FindNeighbor();
     }
-
     private void FindNeighbor()
     {
         foreach(var tile in tileList)
@@ -148,5 +143,11 @@ public class TileManager : MonoBehaviour
                 }
             }
         }
+    }
+    // Test 용 코드임
+
+    public PathTile[] GetEndTiles()
+    {
+        return endTile;
     }
 }
