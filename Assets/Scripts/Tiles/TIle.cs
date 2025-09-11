@@ -11,7 +11,7 @@ public enum TileType
 public class Tile : MonoBehaviour
 {
     private new Renderer renderer;
-    private Material[] material;
+    protected Material[] material;
     private TileType type;
     public TileType Type
     {

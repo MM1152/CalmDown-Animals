@@ -1,29 +1,37 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour , IDamageAble
 {
-    protected float MaxHp { get; private set; } = 55;
-    public float Hp { get; private set; }
-    public bool IsDie { get; private set; }
-    
+    protected int MaxHp { get; private set; } = 55;
+    public int Hp { get; private set; }
+    public bool IsDie { get => isDie; }
+    private bool isDie ;
+    public Hpbar slider;
+
     public void Init()
     {
+        isDie = false;
         Hp = MaxHp;
     }
 
-    public void Hit(int damage)
+    public bool Hit(int damage)
     {
         Hp -= damage;
-
+        slider.SetValue(Hp, MaxHp);
         if(Hp <= 0)
         {
             Die();
+            return true;
         }
+
+        return false;
     }
 
     public virtual void Die()
     {
-        IsDie = true;
+        isDie = true;
+        Destroy(gameObject);
     }
 }

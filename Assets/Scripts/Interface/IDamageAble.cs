@@ -1,5 +1,6 @@
 
 public interface IDamageAble
 {
-    public void Hit(int damage);
+    public bool IsDie { get; }
+    public bool Hit(int damage);
 }

@@ -1,54 +1,72 @@
 using NUnit.Framework;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
+using UnityEngineInternal;
+using static UnityEngine.InputManagerEntry;
 public class DrawManager : MonoBehaviour
 {
     public GameObject prefabs;
-    public TMP_InputField widthInput;
-    public TMP_InputField heightInput;
-    public Button createButton;
-
-    private int width;
-    private int height;
+    public LayerMask mask;
     private Vector2 gridSize;
+
+    private List<DrawTile> tiles = new List<DrawTile>();
+    private Dictionary<Vector3, DrawTile> tileTable = new Dictionary<Vector3, DrawTile>();
+
+    private NeighborPosition neighborPosition;
 
     private void Awake()
     {
-        SpriteRenderer sp = prefabs.GetComponent<SpriteRenderer>();
-        gridSize = new Vector2(sp.bounds.size.x, sp.bounds.size.z);
-    }
-    private void Start()
-    {
-        createButton.onClick.AddListener(() => Create());
-    }
-    public void Create()
-    {
-        if(string.IsNullOrEmpty(widthInput.text) || string.IsNullOrEmpty(heightInput.text)) 
-            return;
+        Renderer sp = prefabs.GetComponent<Renderer>();
+        neighborPosition = new NeighborPosition(sp);
 
-        width = int.Parse(widthInput.text.ToString());
-        height = int.Parse(heightInput.text.ToString());
+        var tile = Instantiate(prefabs, transform);
+        tile.transform.position = Vector3.zero;
 
-        if (width == 0 || height == 0)
-            return;
-
-        for(int i = 0; i < height; i++)
+        var find = tile.GetComponent<DrawTile>();
+        if(find != null)
         {
-            for(int j = 0; j < width; j++)
+            find.Draw();
+            tiles.Add(find);
+            tileTable.Add(find.transform.position , find);
+            SetAroundTile(find);
+        }
+
+    }
+
+    private void Update()
+    {
+        if(TouchManager.TouchType == TouchType.Tab)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
+            Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red , 100);
+            if(Physics.Raycast(ray , out RaycastHit hit , Mathf.Infinity , mask))
             {
-                GameObject tile = Instantiate(prefabs, transform);
-                if (i % 2 != 0)
+                var find = hit.collider.GetComponent<DrawTile>();
+
+                if(find != null && !find.IsDraw)
                 {
-                    tile.transform.position = new Vector3(i * gridSize.y, 0f, j * gridSize.x);
-                }
-                else
-                {
-                    tile.transform.position = new Vector3(i * gridSize.y, 0f, j * gridSize.x - gridSize.x * 0.5f);
+                    find.Draw();
+                    SetAroundTile(find);
                 }
             }
         }
-        
+    }
+
+    private void SetAroundTile(DrawTile tile)
+    {
+        for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
+        {
+            Vector3 newPosition = NeighborPosition.GetFloor(neighborPosition.nextNeighborPos[i] + tile.transform.position);
+            if(!tileTable.ContainsKey(newPosition))
+            {
+                var newTile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
+                newTile.transform.position = newPosition;
+
+                if (newTile != null)
+                {
+                    tileTable.Add(newTile.transform.position, newTile);
+                }
+            }
+        }
     }
 }

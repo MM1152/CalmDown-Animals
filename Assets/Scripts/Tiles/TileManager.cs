@@ -26,11 +26,11 @@ public class TileManager : MonoBehaviour
     public CrewSpawner crewSpawner;
 
     [SerializeField]
-    private Vector2 gridSize;
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
     private List<PathTile> tileList = new List<PathTile>();
-    private Vector3[] neighborPositions = new Vector3[6];
     private LineRenderer lineRenderer;
+    private NeighborPosition neighborPosition;
+
 
     //Test 용 코드임
     public bool isSelectStart;
@@ -42,17 +42,10 @@ public class TileManager : MonoBehaviour
     private void Start()
     {
         Renderer sp = prefabs.GetComponent<MeshRenderer>();
-        gridSize = new Vector2(Mathf.Ceil(sp.bounds.size.x * 10f) / 10f, Mathf.Ceil(sp.bounds.size.z * 10f) / 10f);
+        neighborPosition = new NeighborPosition(sp);
 
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
-
-        neighborPositions[0] = GetFloor(new Vector3(gridSize.y, 0 , -(gridSize.x - gridSize.x * 0.5f)));
-        neighborPositions[1] = GetFloor(new Vector3(gridSize.y, 0 , (gridSize.x - gridSize.x * 0.5f)));
-        neighborPositions[2] = GetFloor(new Vector3(-gridSize.y, 0 , (gridSize.x - gridSize.x * 0.5f)));
-        neighborPositions[3] = GetFloor(new Vector3(-gridSize.y, 0 , -(gridSize.x - gridSize.x * 0.5f)));
-        neighborPositions[4] = GetFloor(new Vector3(0, 0 , gridSize.x));
-        neighborPositions[5] = GetFloor(new Vector3(0, 0 , -gridSize.x));
 
         DrawTiles();
     }
@@ -177,11 +170,19 @@ public class TileManager : MonoBehaviour
                 tile.gameObject.name = $"Tile_{i}_{j}";
                 if (i % 2 != 0)
                 {
-                    tile.transform.position = new Vector3(GetFloor(i * gridSize.y) , 0f , GetFloor(j * gridSize.x));
+                    tile.transform.position = new Vector3(
+                        NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                        , 0
+                        , NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
+                        );
                 }
                 else
                 {
-                    tile.transform.position = new Vector3(GetFloor(i * gridSize.y), 0f , GetFloor((j * gridSize.x) - (gridSize.x * 0.5f)));
+                    tile.transform.position = new Vector3(
+                        NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                        , 0
+                        , NeighborPosition.GetFloor(neighborPosition.gridSize.x * j - neighborPosition.gridSize.x * 0.5f)
+                        );
                 }
                 tileList.Add(tile);
                 tileTable.Add(tile.transform.position , tile);
@@ -190,25 +191,14 @@ public class TileManager : MonoBehaviour
 
         FindNeighbor();
     }
-    private float GetFloor(float value)
-    {
-        return Mathf.Round(value * 10f) / 10f;
-    }
-    private Vector3 GetFloor(Vector3 value)
-    {
-        return new Vector3 (
-            Mathf.Round(value.x * 10f) / 10f,
-            Mathf.Round(value.y * 10f) / 10f,
-            Mathf.Round(value.z * 10f) / 10f
-        );
-    }
+
     private void FindNeighbor()
     {
         foreach(var tile in tileList)
         {
-            for(int i = 0; i < neighborPositions.Length; i++)
+            for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
             {
-                Vector3 nPos = GetFloor(tile.transform.position + neighborPositions[i]);
+                Vector3 nPos = NeighborPosition.GetFloor(tile.transform.position + neighborPosition.nextNeighborPos[i]);
                 Debug.Log(nPos);
                 if(tileTable.ContainsKey(nPos))
                 {

@@ -11,6 +11,7 @@ public class DragCamera : MonoBehaviour
     private void Update()
     {
         Vector3 linear = Vector3.zero;
+
         //if (Input.GetMouseButton(0))
         //{
         //    if (Input.GetMouseButtonDown(0))
