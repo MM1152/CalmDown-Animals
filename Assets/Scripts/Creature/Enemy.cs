@@ -6,15 +6,22 @@ public class Enemy : MonoBehaviour
 {
     private PathTile spawnTile;
     private PathTile nTile;
+    private EnemyHealth health;
     private bool spawn;
 
     public float speed;
-    
+
+    public void Awake()
+    {
+        health = GetComponent<EnemyHealth>();
+    }
+
     public void Spawn(PathTile spawnTile)
     {
         this.spawnTile = spawnTile;
         transform.position = this.spawnTile.transform.position;
         nTile = spawnTile.ParentTile;
+        health.Init();
         spawn = true;
     }
 

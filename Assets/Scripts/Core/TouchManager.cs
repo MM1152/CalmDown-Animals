@@ -6,7 +6,7 @@ public enum TouchType
     Tab,
     Swipe,
     Zoom,
-    Draw,
+    Drag,
 }
 
 public class TouchManager : MonoBehaviour
@@ -22,6 +22,8 @@ public class TouchManager : MonoBehaviour
     public float amount;
 
     private static Vector2 dir;
+    private static Vector3 pos;
+
     private bool touchFinish;
 
     public void LateUpdate()
@@ -38,12 +40,13 @@ public class TouchManager : MonoBehaviour
             {
                 amount = 0;
                 dir = Vector2.zero;
+                pos = Vector2.zero;
                 fingerTouchStartTime = Time.time;
                 fingerTouchStartPosition = touch.position;
                 TouchType = TouchType.None;
             }
 
-            if(Time.time > fingerTouchStartTime + checkTime)
+            if(Time.time > (fingerTouchStartTime + checkTime) && amount > 5)
             {
                 if (amount > swipeAmount)
                 {
@@ -51,9 +54,8 @@ public class TouchManager : MonoBehaviour
                 }
                 else if (amount < swipeAmount)
                 {
-                    TouchType = TouchType.Draw;
+                    TouchType = TouchType.Drag;
                 }
-                
             }
             else if (touch.phase == TouchPhase.Ended)
             {
@@ -62,8 +64,9 @@ public class TouchManager : MonoBehaviour
             else
             {
                 amount += touch.deltaPosition.magnitude;
-                dir = (touch.position - fingerTouchStartPosition).normalized;
             }
+            dir = (touch.position - fingerTouchStartPosition).normalized;
+            pos = new Vector3(touch.position.x, touch.position.y , 10);
         }
         touchType = TouchType;
     }
@@ -71,5 +74,14 @@ public class TouchManager : MonoBehaviour
     public static Vector3 GetSwipeDir()
     {
         return new Vector3(dir.x , 0 , dir.y);
+    }
+    public static Vector3 GetDragPos()
+    {
+        return pos;
+    }
+    //Y 축 카메라 포지션 Y 축임
+    public static Vector3 GetDragWorldPosition()
+    {
+        return Camera.main.ScreenToWorldPoint(pos);
     }
 }
