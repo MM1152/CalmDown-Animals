@@ -41,13 +41,10 @@ public class DrawManager : MonoBehaviour
             tileTable.Add(find.transform.position , find);
             SetAroundTile(find);
         }
-
     }
 
     private void Update()
     {
-        
-        
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z) && mode == DrawMode.Tile)
         {
             if(undoStack.Count > 0)

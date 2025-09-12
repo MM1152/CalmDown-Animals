@@ -14,7 +14,6 @@ public class TouchManager : MonoBehaviour
     public TouchType touchType;
     public static TouchType TouchType {get; private set;}
 
-
     private Vector2 fingerTouchStartPosition;
     private float fingerTouchStartTime;
 

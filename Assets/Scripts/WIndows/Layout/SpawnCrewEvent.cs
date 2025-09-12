@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -5,6 +6,15 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
 {
     public CrewSpawner spawner;
     public bool spawn = false;
+
+    public TextMeshProUGUI hireText;
+    public TextMeshProUGUI placedText;
+
+    public void Start()
+    {
+        Crew.Init(x => placedText.text = x.ToString()
+                , x => hireText.text = x.ToString());
+    }
 
     public void OnDrag(PointerEventData eventData)
     {

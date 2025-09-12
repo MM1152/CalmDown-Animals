@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System;
+
 [RequireComponent(typeof(SphereCollider))]
 public class Crew : MonoBehaviour
 {
@@ -8,10 +9,11 @@ public class Crew : MonoBehaviour
     
     public static int hireCount = 0;
     public static int placeCount = 0;
-
+   
     public float attackRadius;
     public float attackInterval;
     public float lastAttackTime;
+    public CrewSpawner spawner;
 
     public int damage;
 
@@ -21,26 +23,49 @@ public class Crew : MonoBehaviour
 
     public bool DragAble => dragAble;
 
+    private PathTile underTile;
     private SphereCollider collider;
     public EnemyHealth target;
     public List<EnemyHealth> targets;
+
+    public static Action<int> changePlaceCount;
+    public static Action<int> changeHireCount;
 
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
     }
 
-    public void Spawn()
+    public static void Init(Action<int> _changePlaceCount, Action<int> _changeHireCount)
+    {
+        changePlaceCount = _changePlaceCount;
+        changeHireCount = _changeHireCount;
+    }
+
+    public void Spawn(CrewSpawner spawner)
+    {
+        this.spawner = spawner;
+        SetDrag();
+        collider.radius = attackRadius;
+    }
+
+    public void SetDrag()
     {
         dragAble = true;
         isSpawn = false;
-
-        collider.radius = attackRadius;
     }
+
     public static void Hire()
     {
         hireCount++;
+        changeHireCount?.Invoke(hireCount);
     }
+    public static void Sell()
+    {
+        hireCount--;
+        changeHireCount?.Invoke(hireCount);
+    }
+
 
     private void Update()
     {
@@ -109,10 +134,17 @@ public class Crew : MonoBehaviour
 
             if (TouchManager.TouchType == TouchType.Drag)
             {
+                if(underTile != null)
+                {
+                    underTile.Type = TileType.None;
+                    placeCount--;
+                    changePlaceCount?.Invoke(placeCount);
+                    underTile = null;
+                }
                 touchPosition = TouchManager.GetDragWorldPosition();
                 transform.position = new Vector3(touchPosition.x, 1, touchPosition.z);
-                Debug.Log(touchPosition);
                 isSpawn = true;
+                spawner.DragCrew = this;
             }
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
@@ -121,14 +153,15 @@ public class Crew : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
                 {
-                    var find = hit.collider.GetComponent<PathTile>();
-                    if (find != null)
+                    underTile = hit.collider.GetComponent<PathTile>();
+                    if (underTile != null)
                     {
-                        if (find.Type == TileType.None)
+                        if (underTile.Type == TileType.None)
                         {
-                            find.Type = TileType.Crew;
-                            transform.position = find.transform.position + Vector3.up * 0.5f;
+                            underTile.Type = TileType.Crew;
+                            transform.position = underTile.transform.position + Vector3.up * 0.5f;
                             placeCount++;
+                            changePlaceCount?.Invoke(placeCount);
                         }
                         else
                         {
@@ -140,6 +173,7 @@ public class Crew : MonoBehaviour
                 {
                     Destroy(gameObject);
                 }
+                spawner.DragCrew = null;
             }
         }
     }
