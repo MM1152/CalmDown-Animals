@@ -79,6 +79,7 @@ public class TouchManager : MonoBehaviour
     {
         return pos;
     }
+
     //Y 축 카메라 포지션 Y 축임
     public static Vector3 GetDragWorldPosition()
     {

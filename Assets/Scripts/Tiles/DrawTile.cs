@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DrawTile : Tile
 {
-    private bool isDraw = false;
-    public bool IsDraw 
+    public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>(); 
+
+    protected bool isDraw = false;
+    public virtual bool IsDraw 
     { 
         get => isDraw; 
         set {
@@ -37,5 +40,11 @@ public class DrawTile : Tile
     public void Draw()
     {
         IsDraw = true;
+    }
+
+    public virtual void Undo()
+    {
+        IsDraw = false;
+        AroundTile.Clear();
     }
 }

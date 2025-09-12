@@ -8,6 +8,13 @@ public enum TileType
     Crew,
 }
 
+public enum DrawType
+{
+    None,
+    MonsterArrive,
+    MonsterSpawn,
+}
+
 public class Tile : MonoBehaviour
 {
     private new Renderer renderer;
