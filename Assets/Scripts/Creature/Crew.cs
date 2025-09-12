@@ -6,6 +6,9 @@ public class Crew : MonoBehaviour
 {
     public LayerMask mask;
     
+    public static int hireCount = 0;
+    public static int placeCount = 0;
+
     public float attackRadius;
     public float attackInterval;
     public float lastAttackTime;
@@ -25,7 +28,6 @@ public class Crew : MonoBehaviour
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
-        
     }
 
     public void Spawn()
@@ -34,6 +36,10 @@ public class Crew : MonoBehaviour
         isSpawn = false;
 
         collider.radius = attackRadius;
+    }
+    public static void Hire()
+    {
+        hireCount++;
     }
 
     private void Update()
@@ -108,13 +114,11 @@ public class Crew : MonoBehaviour
                 Debug.Log(touchPosition);
                 isSpawn = true;
             }
-
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
                 dragAble = false;
 
                 Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
-                Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red , 100f);
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
                 {
                     var find = hit.collider.GetComponent<PathTile>();
@@ -124,6 +128,7 @@ public class Crew : MonoBehaviour
                         {
                             find.Type = TileType.Crew;
                             transform.position = find.transform.position + Vector3.up * 0.5f;
+                            placeCount++;
                         }
                         else
                         {

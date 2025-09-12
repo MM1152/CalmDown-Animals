@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using Unity.VisualScripting;
-using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
 public class TileManager : MonoBehaviour
 {
+
     [Header("DEBUG")]
     public TileType tileType;
-    public bool drawMode = false;
+    public bool drawMode;
     public LayerMask layerMask;
 
     [Space(10)]
@@ -24,23 +27,23 @@ public class TileManager : MonoBehaviour
     [Space(10)]
     [Header("Reference")]
     public CrewSpawner crewSpawner;
+    public WindowManager windowManager;
 
-    [SerializeField]
+    [Space(10)]
+    [Header("Check")]
+    public bool isChangedTile;
+
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
     private List<PathTile> tileList = new List<PathTile>();
     private LineRenderer lineRenderer;
     private NeighborPosition neighborPosition;
 
-
-    //Test 용 코드임
-    public bool isSelectStart;
-    public bool isSelectEnd;
-    public bool isSelectbutton;
-
     private PathFind pathFind = new PathFind();
 
     private void Start()
     {
+        isChangedTile = false;
+
         Renderer sp = prefabs.GetComponent<MeshRenderer>();
         neighborPosition = new NeighborPosition(sp);
 
@@ -48,97 +51,72 @@ public class TileManager : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         DrawTiles();
+        SetStartTile(new Vector3(-0.6f, 0f, 2.2f));
+        SetEndTile(new Vector3(4.2f, 0f, 2.2f));
+
+        FindPath(TileType.Path | TileType.None);
+
+        SetInitPath();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            FindPath();
-        }
         SetTileType();
-
-        if (isSelectStart)
-        {
-            if (TouchManager.TouchType == TouchType.Tab)
-            {
-                if (isSelectbutton)
-                {
-                    isSelectbutton = false;
-                    return;
-                }
-
-                PathTile tile = GetTile();
-
-                if (tile != null)
-                {
-                    startTile = tile;
-                    tile.Type = TileType.Path;
-                }
-                isSelectStart = false;
-            }
-        }
-
-        if (isSelectEnd)
-        {
-            if (TouchManager.TouchType == TouchType.Tab)
-            {
-                if (isSelectbutton)
-                {
-                    isSelectbutton = false;
-                    return;
-                }
-
-                PathTile tile = GetTile();
-
-                if (tile != null)
-                {
-                    if (endTile.Contains(tile)) return;
-                    endTile.Add(tile);
-                    tile.Type = TileType.Path;
-                }
-
-                isSelectEnd = false;
-            }
-        }
     }
 
-    public void FindPath()
+    private void SetInitPath()
     {
-        for(int i = 0; i< endTile.Count; i++)
+        PathTile copyTile = endTile[0];
+        while(copyTile != null)
         {
-            if (pathFind.Find(tileList, startTile, endTile[i]))
-            {
-                
-            }
-            else
-            {
-                Debug.Log("Find Fail");
-            }
+            copyTile.Type = TileType.Path;
+            copyTile = copyTile.ParentTile;
         }
-        if(endTile.Count > 0)
+    }
+
+    private void ResetInitPath()
+    {
+        if (isChangedTile) return;
+
+        PathTile copyTile = endTile[0];
+        while (copyTile != null)
         {
-            var copyTile = endTile[0];
-            int idx = 0;
-            while (copyTile != null)
+            if(copyTile != startTile && copyTile != endTile[0])
             {
-                lineRenderer.positionCount++;
-                lineRenderer.SetPosition(idx++, copyTile.transform.position + Vector3.up);
-                copyTile = copyTile.ParentTile;
+                copyTile.Type = TileType.None;
+            }
+            copyTile = copyTile.ParentTile;
+        }
+
+        isChangedTile = true;
+    }
+
+    public bool FindPath(TileType type = TileType.Path)
+    {
+        bool isSuseccs = true;
+        for(int i = 0; i < endTile.Count; i++)
+        {
+            if (!pathFind.Find(tileList, startTile, endTile[i], type))
+            {
+                isSuseccs = false;
             }
         }
 
+        return isSuseccs;
     }
+
     public void SetTileType()
     {
         if (!drawMode) return;
+
+        ResetInitPath();
+
         if (TouchManager.TouchType != TouchType.Drag) return;
-        if (crewSpawner.IsSpawn) return;
 
         var tile = GetTile();
         if(tile != null && tile.Type == TileType.None)
         {
-            tile.Type = tileType;
+            tile.Type = TileType.Path;
         }
     }
     private PathTile GetTile()
@@ -166,7 +144,6 @@ public class TileManager : MonoBehaviour
         {
             for(int j = 0; j < width; j++)
             {
-
                 PathTile tile = Instantiate(prefabs, transform);
                 tile.gameObject.name = $"Tile_{i}_{j}";
                 if (i % 2 != 0)
@@ -214,16 +191,17 @@ public class TileManager : MonoBehaviour
     {
         return endTile.ToArray();
     }
+
     // Test 용 코드임
-    public void SetStartTile()
+    public void SetStartTile(Vector3 pos)
     {
-        isSelectStart = true;
-        isSelectbutton = true;
+        startTile = tileTable[pos];
+        tileTable[pos].Type = TileType.Path;
     }
     // Test 용 코드임
-    public void SetEndTile()
+    public void SetEndTile(Vector3 pos)
     {
-        isSelectEnd = true;
-        isSelectbutton = true;
+        endTile.Add(tileTable[pos]);
+        tileTable[pos].Type = TileType.Path;
     }
 }

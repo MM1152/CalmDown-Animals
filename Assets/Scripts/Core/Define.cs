@@ -31,3 +31,21 @@ public class NeighborPosition
         );
     }
 }
+
+public static class DataTableIds
+{
+    public static readonly string StringTableIds = "StringTable";
+
+}
+
+public enum Window
+{
+    EditorWindow,
+    TileEditorWindow,
+    EmployUnitWindow,
+}
+
+public enum Popup
+{
+    TextPopUp,
+}
