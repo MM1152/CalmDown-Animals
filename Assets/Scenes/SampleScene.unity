@@ -1784,6 +1784,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragSpeed: 10
   cam: {fileID: 330585545}
+  distance: 10
+  checkTime: 0.1
 --- !u!4 &913690696
 Transform:
   m_ObjectHideFlags: 0
@@ -2099,7 +2101,6 @@ MonoBehaviour:
   startTile: {fileID: 0}
   endTile: []
   crewSpawner: {fileID: 423284645}
-  gridSize: {x: 0, y: 0}
   isSelectStart: 0
   isSelectEnd: 0
   isSelectbutton: 0

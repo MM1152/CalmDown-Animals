@@ -166,22 +166,25 @@ public class TileManager : MonoBehaviour
         {
             for(int j = 0; j < width; j++)
             {
+
                 PathTile tile = Instantiate(prefabs, transform);
                 tile.gameObject.name = $"Tile_{i}_{j}";
                 if (i % 2 != 0)
                 {
                     tile.transform.position = new Vector3(
-                        NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                        NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
                         , 0
-                        , NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
+                        , NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                        
                         );
                 }
                 else
                 {
                     tile.transform.position = new Vector3(
-                        NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                        NeighborPosition.GetFloor(neighborPosition.gridSize.x * j - neighborPosition.gridSize.x * 0.5f)
                         , 0
-                        , NeighborPosition.GetFloor(neighborPosition.gridSize.x * j - neighborPosition.gridSize.x * 0.5f)
+                        ,NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+                         
                         );
                 }
                 tileList.Add(tile);
@@ -199,7 +202,6 @@ public class TileManager : MonoBehaviour
             for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
             {
                 Vector3 nPos = NeighborPosition.GetFloor(tile.transform.position + neighborPosition.nextNeighborPos[i]);
-                Debug.Log(nPos);
                 if(tileTable.ContainsKey(nPos))
                 {
                     tile.Neighbor.Add(tileTable[nPos]);
