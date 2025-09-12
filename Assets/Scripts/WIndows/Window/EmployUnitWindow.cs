@@ -11,12 +11,19 @@ public class EmployUnitWindow : GenericWindow
     public TextMeshProUGUI placedText;
 
     public Button backBNT;
-    public CrewSpawner spawner;
 
     public GameObject internHire;
     public LayerMask mask;
     private void Start()
     {
         backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
+    }
+
+    public void Update()
+    {
+        if(TouchManager.TouchType == TouchType.Tab)
+        {
+            Ray ray = new Ray(TouchManager.GetDragWorldPosition());
+        }
     }
 }
