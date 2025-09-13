@@ -7,14 +7,14 @@ public class NeighborPosition
 
     public NeighborPosition(Renderer render)
     {
-        this.gridSize = new Vector2(Mathf.Ceil(render.bounds.size.x * 10f) / 10f, Mathf.Ceil(render.bounds.size.z * 10f) / 10f);
-
-        nextNeighborPos[0] = GetFloor(new Vector3(gridSize.y, 0, -(gridSize.x - gridSize.x * 0.5f)));
-        nextNeighborPos[1] = GetFloor(new Vector3(gridSize.y, 0, (gridSize.x - gridSize.x * 0.5f)));
-        nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.y, 0, (gridSize.x - gridSize.x * 0.5f)));
-        nextNeighborPos[3] = GetFloor(new Vector3(-gridSize.y, 0, -(gridSize.x - gridSize.x * 0.5f)));
-        nextNeighborPos[4] = GetFloor(new Vector3(0, 0, gridSize.x));
-        nextNeighborPos[5] = GetFloor(new Vector3(0, 0, -gridSize.x));
+        this.gridSize = new Vector2( Mathf.Ceil(render.bounds.size.z * 10f) / 10f , Mathf.Ceil(render.bounds.size.x * 10f) / 10f);
+        Debug.Log(gridSize);
+        nextNeighborPos[0] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, gridSize.y));
+        nextNeighborPos[1] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) , 0, gridSize.y ));
+        nextNeighborPos[2] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f), 0, -gridSize.y));
+        nextNeighborPos[3] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, -gridSize.y));
+        nextNeighborPos[4] = GetFloor(new Vector3(gridSize.x, 0, 0));
+        nextNeighborPos[5] = GetFloor(new Vector3(-gridSize.x, 0 ,0));
     }
     
     public static float GetFloor(float value)
@@ -30,4 +30,27 @@ public class NeighborPosition
             Mathf.Round(value.z * 10f) / 10f
         );
     }
+}
+
+public static class DataTableIds
+{
+    public static readonly string StringTableIds = "StringTable";
+
+}
+
+public enum Window
+{
+    EditorWindow,
+    TileEditorWindow,
+    EmployUnitWindow,
+}
+
+public enum Popup
+{
+    TextPopUp,
+}
+
+public enum CrewRank
+{
+    Intern,
 }

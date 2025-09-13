@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 
+[Flags]
 public enum TileType
 {
-    None,
-    Blocked,
-    Path,
-    Crew,
+    None = 1,
+    Blocked = 1 << 1,
+    Path = 1 << 2,
+    Crew = 1 << 3,
 }
 
 public enum DrawType

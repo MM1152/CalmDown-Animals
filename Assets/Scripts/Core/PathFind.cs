@@ -9,7 +9,7 @@ public class PathFind
     private List<PathTile> closeList = new List<PathTile>();
 
 
-    public bool Find(List<PathTile> map , PathTile startTile , PathTile endTile)
+    public bool Find(List<PathTile> map , PathTile startTile , PathTile endTile , TileType checkTile = TileType.Path)
     {
         openList.Clear();
         closeList.Clear();
@@ -33,7 +33,7 @@ public class PathFind
             Debug.Log(curTile.gameObject.name);
             foreach(var nTile in curTile.Neighbor)
             {
-                if(nTile.Type == TileType.Path && !closeList.Contains(nTile))
+                if((nTile.Type & checkTile) > 0 && !closeList.Contains(nTile))
                 {
                     int G = curTile.G + 1;
                     int H = endTile - nTile;

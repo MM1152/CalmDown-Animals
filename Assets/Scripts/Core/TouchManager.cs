@@ -13,7 +13,7 @@ public class TouchManager : MonoBehaviour
 {
     public TouchType touchType;
     public static TouchType TouchType {get; private set;}
-    
+
     private Vector2 fingerTouchStartPosition;
     private float fingerTouchStartTime;
 
@@ -26,7 +26,7 @@ public class TouchManager : MonoBehaviour
 
     private bool touchFinish;
 
-    public void LateUpdate()
+    public void Update()
     {
         if (Input.touchCount == 0)
         {

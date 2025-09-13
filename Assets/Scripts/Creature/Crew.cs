@@ -1,45 +1,53 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System;
+using Unity.VisualScripting;
+
 [RequireComponent(typeof(SphereCollider))]
 public class Crew : MonoBehaviour
 {
-    public LayerMask mask;
-    
     public float attackRadius;
     public float attackInterval;
     public float lastAttackTime;
+    public CrewManager spawner;
 
     public int damage;
 
     private int killCount;
-    private bool isSpawn;
-    private bool dragAble;
 
-    public bool DragAble => dragAble;
-
-    private SphereCollider collider;
+    private PathTile underTile;
+    private new SphereCollider collider;
     public EnemyHealth target;
     public List<EnemyHealth> targets;
 
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
-        
     }
 
-    public void Spawn()
+    public void Spawn(CrewManager spawner)
     {
-        dragAble = true;
-        isSpawn = false;
-
+        this.spawner = spawner;
         collider.radius = attackRadius;
+    }
+
+    public void SetUnderTile(PathTile tile)
+    {
+        if(tile != null)
+        {
+            underTile = tile;
+        }
+
+        underTile.Type = TileType.Crew;
+    }
+    public void ResetUnderTile()
+    {
+        underTile.Type = TileType.None;
     }
 
     private void Update()
     {
-        DragDrop();   
-        if(!dragAble && target != null)
+        if(target != null)
         {
             if(target.IsDie)
             {
@@ -95,47 +103,5 @@ public class Crew : MonoBehaviour
         }
     }
 
-    private void DragDrop()
-    {
-        if (dragAble)
-        {
-            Vector3 touchPosition = Vector3.zero;
 
-            if (TouchManager.TouchType == TouchType.Drag)
-            {
-                touchPosition = TouchManager.GetDragWorldPosition();
-                transform.position = new Vector3(touchPosition.x, 1, touchPosition.z);
-                Debug.Log(touchPosition);
-                isSpawn = true;
-            }
-
-            else if (TouchManager.TouchType == TouchType.None && isSpawn)
-            {
-                dragAble = false;
-
-                Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
-                Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red , 100f);
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
-                {
-                    var find = hit.collider.GetComponent<PathTile>();
-                    if (find != null)
-                    {
-                        if (find.Type == TileType.None)
-                        {
-                            find.Type = TileType.Crew;
-                            transform.position = find.transform.position + Vector3.up * 0.5f;
-                        }
-                        else
-                        {
-                            Destroy(gameObject);
-                        }
-                    }
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
-            }
-        }
-    }
 }
