@@ -26,7 +26,7 @@ public class TileManager : MonoBehaviour
 
     [Space(10)]
     [Header("Reference")]
-    public CrewSpawner crewSpawner;
+    public CrewManager crewSpawner;
     public WindowManager windowManager;
 
     [Space(10)]

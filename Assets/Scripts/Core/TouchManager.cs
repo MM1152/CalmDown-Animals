@@ -26,7 +26,7 @@ public class TouchManager : MonoBehaviour
 
     private bool touchFinish;
 
-    public void LateUpdate()
+    public void Update()
     {
         if (Input.touchCount == 0)
         {

@@ -1235,7 +1235,7 @@ GameObject:
   - component: {fileID: 423284644}
   - component: {fileID: 423284645}
   m_Layer: 0
-  m_Name: CrewSpawnManager
+  m_Name: CrewManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1265,9 +1265,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 423284643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5800e1cf58c71a0418894613b9dc416f, type: 3}
+  m_Script: {fileID: 11500000, guid: 48163a6e2996ca74186c5c25d75e4ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
   prefabs: {fileID: 7061182922066607594, guid: 5a2c718b5b7da0349b7b6b4068d451e7, type: 3}
 --- !u!1 &444713740
 GameObject:
@@ -1679,11 +1682,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54ea571d79ec1349a0fb9409c813ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backBNT: {fileID: 1343395487}
-  internHire: {fileID: 2147013940}
   mask:
     serializedVersion: 2
     m_Bits: 32
+  backBNT: {fileID: 1343395487}
+  internHire: {fileID: 2147013940}
+  sellLayout: {fileID: 1472931348}
+  spawner: {fileID: 423284645}
 --- !u!1001 &621119184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3237,7 +3242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b90dc62e4357544a51462e44ffbb87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spanwer: {fileID: 0}
+  spanwer: {fileID: 423284645}
 --- !u!1001 &1480517739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4748,6 +4753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc3ace538828884c99c410bbd758f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rank: 0
   spawner: {fileID: 423284645}
   spawn: 0
   hireText: {fileID: 1525571568}

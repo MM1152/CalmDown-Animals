@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CrewSellingEvent : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class CrewSellingEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public CrewSpawner spanwer;
+    public CrewManager spanwer;
+    public bool SellAble { get; private set; }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-
+        SellAble = true;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
-        Crew.Sell();
+        SellAble = false;
     }
 }

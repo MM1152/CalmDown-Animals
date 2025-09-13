@@ -49,3 +49,8 @@ public enum Popup
 {
     TextPopUp,
 }
+
+public enum CrewRank
+{
+    Intern,
+}

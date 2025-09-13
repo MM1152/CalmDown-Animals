@@ -4,23 +4,19 @@ using UnityEngine.EventSystems;
 
 public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IPointerClickHandler
 {
-    public CrewSpawner spawner;
+    public CrewRank rank;
+
+    public CrewManager spawner;
     public bool spawn = false;
 
     public TextMeshProUGUI hireText;
     public TextMeshProUGUI placedText;
 
-    public void Start()
-    {
-        Crew.Init(x => placedText.text = x.ToString()
-                , x => hireText.text = x.ToString());
-    }
-
     public void OnDrag(PointerEventData eventData)
     {
-        if (Crew.hireCount - Crew.placeCount > 0 && TouchManager.TouchType == TouchType.Drag && !spawn)
+        if (spawner.GetHireCount(rank) - spawner.GetPlaceCount(rank) > 0 && TouchManager.TouchType == TouchType.Drag && !spawn)
         {
-            spawner.Spawn();
+            spawner.Spawn(rank);
             spawn = true;
         }
     }
@@ -28,11 +24,15 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
     public void OnEndDrag(PointerEventData eventData)
     {
         spawn = false;
+        placedText.text = spawner.GetPlaceCount(rank) + "";
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        spawner.Hired();
+        if(TouchManager.TouchType == TouchType.Tab && spawner.CrewHire(rank))
+        {
+            hireText.text = spawner.GetHireCount(rank) + "";
+        }
     }
 
 }
