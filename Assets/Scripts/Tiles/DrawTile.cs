@@ -22,8 +22,8 @@ public class DrawTile : Tile
             }
         }
     }
-    public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>();
-    public List<DrawTile> ConnectStartTiles { get; set; } = new List<DrawTile>();
+    public List<DrawTile> AroundTile = new List<DrawTile>();
+    public List<DrawTile> ConnectStartTiles = new List<DrawTile>();
     public DrawTile ConnectTile;
     public DrawTile UnderTile { get; set; }
     public int connectCount = 0;

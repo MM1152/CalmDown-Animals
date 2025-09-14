@@ -9,12 +9,14 @@ public class DrawManager : MonoBehaviour
         Tile,
         Arrive,
         Start,
+        Delete,
     }
 
     public GameObject prefabs;
     public DrawTile startTilePrefabs;
     public LayerMask mask;
     public TextMeshProUGUI modeText;
+    public TMP_Dropdown dropdown;
 
     private List<DrawTile> tiles = new List<DrawTile>();
     private Dictionary<Vector3, DrawTile> tileTable = new Dictionary<Vector3, DrawTile>();
@@ -28,6 +30,8 @@ public class DrawManager : MonoBehaviour
     private DrawTile arriveTile;
     private DrawTile prevArriveTile;
 
+    private List<List<DrawTile>> waveToTiles = new List<List<DrawTile>>();
+    private int level = 0;
     private DrawMode mode = DrawMode.Tile;
     public DrawMode Mode
     {
@@ -60,6 +64,9 @@ public class DrawManager : MonoBehaviour
                 case DrawMode.Start:
                     modeText.text = "시작타일 설정";
                     break;
+                case DrawMode.Delete:
+                    modeText.text = "삭제 모드";
+                    break;
             }
         }
     }
@@ -72,7 +79,9 @@ public class DrawManager : MonoBehaviour
         tile.transform.position = Vector3.zero;
 
         var find = tile.GetComponent<DrawTile>();
-        if(find != null)
+        find.connectCount = int.MaxValue;
+
+        if (find != null)
         {
             find.Draw();
             tiles.Add(find);
@@ -80,7 +89,6 @@ public class DrawManager : MonoBehaviour
             SetAroundTile(find);
         }
     }
-
     private void Update()
     {
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X))
@@ -93,23 +101,28 @@ public class DrawManager : MonoBehaviour
             if(mode == DrawMode.Start && startTileUndoStack.Count > 0)
             {
                 var undoStartTile = startTileUndoStack.Pop();
-                UndoStartTile(undoStartTile);
+                DeleteStartTile(undoStartTile);
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             Mode = DrawMode.Tile;
         }
 
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.F2))
         {
             Mode = DrawMode.Start;
         }
 
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
             Mode = DrawMode.Arrive;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            Mode = DrawMode.Delete;
         }
 
         switch (mode)
@@ -123,9 +136,28 @@ public class DrawManager : MonoBehaviour
             case DrawMode.Start:
                 UpdateDrawStartTile();
                 break;
+            case DrawMode.Delete:
+                UpdateDeleteTile();
+                break;
         }
     }
+    private void UpdateDeleteTile(){
+        if (!Input.GetMouseButtonDown(0)) return;
 
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(FindTile(ray , out DrawTile find))
+        {
+            if(find != null)
+            {
+                if (find == tiles[0]) return;
+
+                var enumer = drawTileUndoStack.Where(x => x != find);
+                drawTileUndoStack = new Stack<DrawTile>(enumer);
+
+                DeleteAroundTile(find);
+            }
+        }
+    }
     private void UpdateArriveTile()
     {
         if(prevArriveTile == null)
@@ -173,7 +205,6 @@ public class DrawManager : MonoBehaviour
             }
         }
     }
-
     private void UpdateDrawStartTile()
     {
         if (startTile == null)
@@ -211,13 +242,11 @@ public class DrawManager : MonoBehaviour
             }
         }
     }
-
-    private void UndoStartTile(DrawTile undoStartTile)
+    private void DeleteStartTile(DrawTile undoStartTile)
     {
         undoStartTile.UnderTile.gameObject.SetActive(true);
         Destroy(undoStartTile.gameObject);
     }
-
     private void UpdateDrawTile()
     {
 #if UNITY_EDITOR             
@@ -252,8 +281,6 @@ public class DrawManager : MonoBehaviour
     }
     private void DeleteAroundTile(DrawTile tile)
     {
-        if (drawTileUndoStack.Count <= 0) return;
-
         //연결된 시작타일 제거
         if (tile.ConnectStartTiles.Count > 0)
         {
@@ -274,16 +301,20 @@ public class DrawManager : MonoBehaviour
         for (int i = 0; i < tile.AroundTile.Count; i++)
         {
             tile.AroundTile[i].connectCount--;
-            if (tile.AroundTile[i].connectCount == 0)
+            if (tile.AroundTile[i].connectCount <= 0 && !tile.AroundTile[i].IsDraw)
             {
-                
                 tileTable.Remove(tile.AroundTile[i].transform.position);
                 Destroy(tile.AroundTile[i].gameObject);
             }
         }
-        tile.Undo();
+        if(tile.connectCount <= 0)
+        {
+            Destroy(tile.gameObject);
+        }else
+        {
+            tile.Undo();
+        }
     }
-
     private void SetAroundTile(DrawTile tile)
     {
         for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
@@ -308,7 +339,6 @@ public class DrawManager : MonoBehaviour
             }
         }
     }
-
     private int FindHexaSector(Vector3 center , Vector3 point)
     {
         float dx = point.x - center.x;
@@ -319,5 +349,26 @@ public class DrawManager : MonoBehaviour
         float sectorSize = Mathf.PI * 2f / 6f;
 
         return Mathf.FloorToInt(angle / sectorSize) % 6;
+    }
+    public void DrawTileToLevel(int level)
+    {
+        this.level = level;
+        int idx = -1;
+
+        for(int i = 0; i <= this.level; i++)
+        {
+            if(waveToTiles.Count == i)
+            {
+                idx = i;
+                break;
+            }
+        }
+        
+        if(idx != -1)
+        {
+            waveToTiles.Add(new List<DrawTile>());
+            dropdown.value = idx;
+            dropdown.RefreshShownValue();
+        }
     }
 }
