@@ -824,7 +824,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB418\uB3CC\uB9AC\uAE30 : ctrl + z"
+  m_text: "\uB418\uB3CC\uB9AC\uAE30 : ctrl + x"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11ed7484f62f0a84fb3344f151e0571f, type: 2}
   m_sharedMaterial: {fileID: 8790357167979352425, guid: 11ed7484f62f0a84fb3344f151e0571f, type: 2}

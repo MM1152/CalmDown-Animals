@@ -5,6 +5,8 @@ public class DrawTile : Tile
 {
     public DrawType drawType;
     public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>();
+    public List<DrawTile> ConnectStartTiles { get; set; } = new List<DrawTile>();
+    public DrawTile UnderTile { get; set; }
     public int connectCount = 0;
 
     protected bool isDraw = false;

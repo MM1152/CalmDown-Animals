@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.InputManagerEntry;
-
-
-
+using System.Linq;
 public class DrawManager : MonoBehaviour
 {
     public enum DrawMode
@@ -40,7 +36,7 @@ public class DrawManager : MonoBehaviour
 
             if(startTile != null)
             {
-                Destroy(startTile);
+                Destroy(startTile.gameObject);
                 startTile = null;
             }
 
@@ -78,13 +74,17 @@ public class DrawManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X))
         {
-            
             if (mode == DrawMode.Tile && drawTileUndoStack.Count > 0)
             {
                 var undoTile = drawTileUndoStack.Pop();
                 DeleteAroundTile(undoTile);
+            }
+            if(mode == DrawMode.Start && startTileUndoStack.Count > 0)
+            {
+                var undoStartTile = startTileUndoStack.Pop();
+                UndoStartTile(undoStartTile);
             }
         }
 
@@ -134,18 +134,29 @@ public class DrawManager : MonoBehaviour
                 int sector = FindHexaSector(hit.transform.position, mousePosInWorld);
                 Debug.Log(sector);
 
-                if (tile.AroundTile[sector].IsDraw) return;
+                if (tile.AroundTile[sector].IsDraw || !tile.AroundTile[sector].gameObject.activeSelf) return;
 
                 startTile.transform.position = tile.AroundTile[sector].transform.position;
+                startTile.transform.rotation = Quaternion.Euler(-90f, (sector + 1) * -60f, 0f);
+
+                if(Input.GetMouseButtonDown(0))
+                {
+                    var find = tile.AroundTile[sector];
+                    find.gameObject.SetActive(false);
+
+                    startTile.UnderTile = find;
+                    tile.ConnectStartTiles.Add(startTile);
+                    startTileUndoStack.Push(startTile);
+                    startTile = null;
+                }
             }
         }
     }
 
-    private void UndoStartTile()
+    private void UndoStartTile(DrawTile undoStartTile)
     {
-        var undoStartTile = startTileUndoStack.Pop();
-
-        
+        undoStartTile.UnderTile.gameObject.SetActive(true);
+        Destroy(undoStartTile.gameObject);
     }
 
     private void UpdateDrawTile()
@@ -173,7 +184,7 @@ public class DrawManager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
             var find = hit.collider.GetComponent<DrawTile>();
-            if (find != null && !find.IsDraw)
+            if (find != null && !find.IsDraw && find.drawType == DrawType.None)
             {
                 drawTile = find;
                 return true;
@@ -184,11 +195,31 @@ public class DrawManager : MonoBehaviour
     }
     private void DeleteAroundTile(DrawTile tile)
     {
-        for(int i = 0; i < tile.AroundTile.Count; i++)
+        if (drawTileUndoStack.Count <= 0) return;
+
+        //연결된 시작타일 제거
+        if (tile.ConnectStartTiles.Count > 0)
+        {
+            foreach (var connectTile in tile.ConnectStartTiles)
+            {
+                connectTile.UnderTile.gameObject.SetActive(true);
+                connectTile.gameObject.SetActive(false);
+                Destroy(connectTile);
+            }
+
+            var findTile = startTileUndoStack.Where(x => x.gameObject.activeSelf);
+            startTileUndoStack = new Stack<DrawTile>(findTile);
+
+            tile.ConnectStartTiles.Clear();
+        }
+
+        //주변 연결된 타일 제거
+        for (int i = 0; i < tile.AroundTile.Count; i++)
         {
             tile.AroundTile[i].connectCount--;
             if (tile.AroundTile[i].connectCount == 0)
             {
+                
                 tileTable.Remove(tile.AroundTile[i].transform.position);
                 Destroy(tile.AroundTile[i].gameObject);
             }

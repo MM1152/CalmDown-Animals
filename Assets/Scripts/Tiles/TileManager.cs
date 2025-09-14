@@ -131,7 +131,6 @@ public class TileManager : MonoBehaviour
             }
             return null;
         }
-
         return null;
     }
     // Test 용 코드임
@@ -152,7 +151,6 @@ public class TileManager : MonoBehaviour
                         NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
                         , 0
                         , NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
-                        
                         );
                 }
                 else
@@ -168,7 +166,6 @@ public class TileManager : MonoBehaviour
                 tileTable.Add(tile.transform.position , tile);
             }
         }
-
         FindNeighbor();
     }
 
