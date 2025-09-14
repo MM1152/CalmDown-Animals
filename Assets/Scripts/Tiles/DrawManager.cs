@@ -82,7 +82,7 @@ public class DrawManager : MonoBehaviour
         tile.transform.position = Vector3.zero;
 
         var find = tile.GetComponent<DrawTile>();
-        find.connectCount = int.MaxValue;
+        find.connectCount = 10000000;
 
         if (find != null)
         {
@@ -253,10 +253,10 @@ public class DrawManager : MonoBehaviour
                     var find = tile.AroundTile[sector];
                     find.gameObject.SetActive(false);
 
-                    startTile.UnderTile = find;
-                    tile.ConnectStartTiles.Add(startTile);
-                    startTileUndoStack.Push(startTile);
-                    startTile = null;
+                        startTile.UnderTile = find;
+                        tile.ConnectStartTiles.Add(startTile);
+                        startTileUndoStack.Push(startTile);
+                        startTile = null;
                 }
             }
         }
@@ -331,7 +331,7 @@ public class DrawManager : MonoBehaviour
                 Destroy(tile.AroundTile[i].gameObject);
             }
         }
-        if(tile.connectCount <= 0)
+        if(tile.connectCount <= 0 || allTileClear)
         {
             tiles.Remove(tile);
             waveToTiles[level].Remove(tile);
@@ -454,9 +454,9 @@ public class DrawManager : MonoBehaviour
 
         var datas = Map.mapDatas[mapIndex];
 
-
         List<DrawTile> startTiles = new List<DrawTile>();
         DrawTile arriveTile = null;
+
         for(int i = 0; i < datas.tiles.Count; i++)
         {
             waveToTiles.Add(new List<DrawTile>());
@@ -471,20 +471,23 @@ public class DrawManager : MonoBehaviour
                 } 
                 else
                 {
-                    tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
-                    waveTiles.Add(tile);
+                    if(!tileTable.ContainsKey(tileData.Position))
+                    {
+                        tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
+                        tileTable.Add(tileData.Position, tile);
+                        waveTiles.Add(tile);
+                        if(tileData.Position == Vector3.zero)
+                        {
+                            tile.connectCount = 10000000;
+                        }
+                    }else
+                    {
+                        tile = tileTable[tileData.Position];
+                    }
                 }
 
                 if (tile != null)
                 {
-                    if (!tileTable.ContainsKey(tile.transform.position))
-                    {
-                        tileTable.Add(tile.transform.position, tile);
-                    }else
-                    {
-
-                    }
-
                     tile.UpdateDrawTile(tileData);
                     tile.Draw(i);
                     SetAroundTile(tile);
