@@ -98,8 +98,8 @@ public class Map
         }
     }
 
-    public static void Get()
+    public static MapData Get(int index)
     {
-
+        return mapDatas[index];
     }
 }

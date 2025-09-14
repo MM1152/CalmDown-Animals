@@ -26,11 +26,12 @@ public class DrawTile : Tile
     }
     public List<DrawTile> AroundTile = new List<DrawTile>();
     public List<DrawTile> ConnectStartTiles = new List<DrawTile>();
-    public DrawTile ConnectTile;
+    public DrawTile ConnectTile { get; set; }
     public DrawTile UnderTile { get; set; }
+    public Vector3 ConnectPos { get; set; }
     public int connectCount = 0;
 
-    protected bool isDraw = false;
+    public bool isDraw = false;
     public virtual bool IsDraw 
     { 
         get => isDraw; 
@@ -74,6 +75,14 @@ public class DrawTile : Tile
         IsDraw = false;
         AroundTile.Clear();
         layer = -1;
+    }
+
+    public void UpdateDrawTile(Map.DrawData data)
+    {
+        transform.position = data.Position;
+        transform.eulerAngles = data.Rotation;
+        DrawType = data.DrawType;
+        ConnectPos = data.ConnectTile;
     }
 
     public void SetActive(bool isActive)

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-using System.Linq;
+using static UnityEngine.InputManagerEntry;
 public class DrawManager : MonoBehaviour
 {
     public enum DrawMode
@@ -16,7 +17,8 @@ public class DrawManager : MonoBehaviour
     public DrawTile startTilePrefabs;
     public LayerMask mask;
     public TextMeshProUGUI modeText;
-    public TMP_Dropdown dropdown;
+    public TMP_Dropdown mapLevelDropBox;
+    public TMP_Dropdown mapDataDropBox;
 
     private List<DrawTile> tiles = new List<DrawTile>();
     private Dictionary<Vector3, DrawTile> tileTable = new Dictionary<Vector3, DrawTile>();
@@ -97,13 +99,7 @@ public class DrawManager : MonoBehaviour
 
     private void Start()
     {
-        foreach(var data in Map.mapDatas)
-        {
-            Debug.Log(data.Id);
-            Debug.Log(data.tiles[0][0].Position.x);
-            Debug.Log(data.tiles[0][1].Position.x);
-            Debug.Log(data.tiles[0][2].Position.x);
-        }
+        SettingMapDataDropBox();
     }
 
     private void Update()
@@ -307,7 +303,7 @@ public class DrawManager : MonoBehaviour
         }
         return false;
     }
-    private void DeleteAroundTile(DrawTile tile)
+    private void DeleteAroundTile(DrawTile tile , bool allTileClear = false)
     {
         //연결된 시작타일 제거
         if (tile.ConnectStartTiles.Count > 0)
@@ -401,8 +397,8 @@ public class DrawManager : MonoBehaviour
         if(idx != -1)
         {
             waveToTiles.Add(new List<DrawTile>());
-            dropdown.value = idx;
-            dropdown.RefreshShownValue();
+            mapLevelDropBox.value = idx;
+            mapLevelDropBox.RefreshShownValue();
         }
 
         foreach(var tile in tiles)
@@ -416,5 +412,121 @@ public class DrawManager : MonoBehaviour
                 tile.SetActive(false);
             } 
         }
+    }
+
+    private void SettingMapDataDropBox()
+    {
+        var datas = Map.mapDatas;
+        List<string> optionList = new List<string>();
+        for(int i = 0; i < datas.Count; i++)
+        {
+            optionList.Add(datas[i].Id);
+        }
+
+        optionList.Add(" ");
+
+        mapDataDropBox.AddOptions(optionList);
+    }
+
+    public void ChangeMapToMapData(int mapIndex)
+    {
+        Clear();
+        level = 0;
+        mapLevelDropBox.value = level;
+        mapLevelDropBox.RefreshShownValue();
+
+        if (Map.mapDatas.Count <= mapIndex)
+        {
+            var tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
+            tile.layer = level;
+            tile.Draw(level);
+
+            tiles.Add(tile);
+            tileTable.Add(tile.transform.position, tile);
+
+            waveToTiles.Add(new List<DrawTile>());
+            waveToTiles[level].Add(tile);
+
+            SetAroundTile(tile);
+            return;
+
+        }
+
+        var datas = Map.mapDatas[mapIndex];
+
+        List<DrawTile> startTiles = new List<DrawTile>();
+        DrawTile arriveTile = null;
+        for(int i = 0; i < datas.tiles.Count; i++)
+        {
+            waveToTiles.Add(new List<DrawTile>());
+            List<DrawTile> waveTiles = new List<DrawTile>();
+            for (int j = 0; j < datas.tiles[i].Count; j++)
+            {
+                var tileData = datas.tiles[i][j];
+                DrawTile tile;
+                if (tileData.DrawType == DrawType.Start || tileData.DrawType == DrawType.Arrive)
+                {
+                    tile = Instantiate(startTilePrefabs, transform);
+                } 
+                else
+                {
+                    tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
+                    waveTiles.Add(tile);
+                }
+
+                if (tile != null)
+                {
+                    if (!tileTable.ContainsKey(tile.transform.position))
+                    {
+                        tileTable.Add(tile.transform.position, tile);
+                    }
+
+                    tile.UpdateDrawTile(tileData);
+                    tile.Draw(i);
+                    SetAroundTile(tile);
+                    tiles.Add(tile);
+
+
+                    if (tileData.DrawType == DrawType.Start)
+                    {
+                        startTiles.Add(tile);
+                    }
+                    else if(tileData.DrawType == DrawType.Arrive)
+                    {
+                        arriveTile = tile;
+                    }
+                }
+            }
+            waveToTiles.Add(waveTiles);
+        }
+
+        if (arriveTile != null && tileTable.ContainsKey(arriveTile.ConnectPos))
+        {
+            startTile.ConnectTile = tileTable[arriveTile.ConnectPos];
+        }
+
+        for (int i = 0; i < startTiles.Count; i++)
+        {
+            if (tileTable.ContainsKey(startTiles[i].ConnectPos))
+            {
+                startTile.ConnectTile = tileTable[startTiles[i].ConnectPos]; 
+            }
+        }
+
+        DrawTileToLevel(level);
+    }
+
+    private void Clear()
+    {
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            DeleteAroundTile(tiles[i] , true);
+        }
+
+        waveToTiles.Clear();
+        tiles.Clear();
+        tileTable.Clear();
+        drawTileUndoStack.Clear();
+        startTileUndoStack.Clear();
     }
 }
