@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +14,13 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
     public TextMeshProUGUI hireText;
     public TextMeshProUGUI placedText;
 
+    private Coroutine co;
+
+    public void Start()
+    {
+        spawner.changeUnitCount += SetTexts;
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         if (spawner.GetHireCount(rank) - spawner.GetPlaceCount(rank) > 0 && TouchManager.TouchType == TouchType.Drag && !spawn)
@@ -24,15 +33,16 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
     public void OnEndDrag(PointerEventData eventData)
     {
         spawn = false;
-        placedText.text = spawner.GetPlaceCount(rank) + "";
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(TouchManager.TouchType == TouchType.Tab && spawner.CrewHire(rank))
-        {
-            hireText.text = spawner.GetHireCount(rank) + "";
-        }
+        spawner.CrewHire(rank);
     }
 
+    private void SetTexts()
+    {
+        placedText.text = spawner.GetPlaceCount(rank) + "";
+        hireText.text = spawner.GetHireCount(rank) + "";
+    }
 }

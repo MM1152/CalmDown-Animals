@@ -9,9 +9,17 @@ public enum TouchType
     Drag,
 }
 
+public enum Phase
+{
+    None,
+    Begin,
+    Up,
+}
+
 public class TouchManager : MonoBehaviour
 {
-    public TouchType touchType;
+    public static Phase Phase { get; private set; }
+    private Phase prevPhase;
     public static TouchType TouchType {get; private set;}
 
     private Vector2 fingerTouchStartPosition;
@@ -30,12 +38,27 @@ public class TouchManager : MonoBehaviour
     {
         if (Input.touchCount == 0)
         {
-            TouchType = TouchType.None;
+            if(prevPhase != Phase.None)
+            {
+                Phase = Phase.Up;
+                prevPhase = Phase.None;
+            }
+            else
+            {
+                Phase = Phase.None;
+            }
+                TouchType = TouchType.None;
             touchFinish = true;
         }
         else if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
+
+            if(Phase == Phase.None)
+            {
+                Phase = Phase.Begin;
+            }
+
             if (touch.phase == TouchPhase.Began)
             {
                 amount = 0;
@@ -65,10 +88,15 @@ public class TouchManager : MonoBehaviour
             {
                 amount += touch.deltaPosition.magnitude;
             }
+
+            if(touch.phase == TouchPhase.Ended)
+            {
+                Phase = Phase.Up;
+            }
+            prevPhase = Phase;
             dir = (touch.position - fingerTouchStartPosition).normalized;
             pos = new Vector3(touch.position.x, touch.position.y , 10);
         }
-        touchType = TouchType;
     }
 
     public static Vector3 GetSwipeDir()

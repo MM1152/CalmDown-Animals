@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5830759031158652085}
   - component: {fileID: 7061182922066607594}
   - component: {fileID: 6468570656559470688}
+  - component: {fileID: 207002239073231371}
   m_Layer: 0
   m_Name: Crew
   m_TagString: Untagged
@@ -100,13 +101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb9ea45c06979141bda7ccdfdd4fc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 64
   attackRadius: 5
   attackInterval: 0.5
   lastAttackTime: 0
+  spawner: {fileID: 0}
   damage: 10
+  target: {fileID: 0}
+  targets: []
 --- !u!135 &6468570656559470688
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -127,4 +128,27 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &207002239073231371
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930779357347384021}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

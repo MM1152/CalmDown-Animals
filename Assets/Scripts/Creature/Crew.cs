@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 [RequireComponent(typeof(SphereCollider))]
 public class Crew : MonoBehaviour
 {
+    public CrewRank rank;
     public float attackRadius;
     public float attackInterval;
     public float lastAttackTime;

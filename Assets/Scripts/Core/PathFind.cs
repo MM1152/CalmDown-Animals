@@ -30,7 +30,6 @@ public class PathFind
             if (closeList.Contains(curTile)) continue;
 
             closeList.Add(curTile);
-            Debug.Log(curTile.gameObject.name);
             foreach(var nTile in curTile.Neighbor)
             {
                 if((nTile.Type & checkTile) > 0 && !closeList.Contains(nTile))

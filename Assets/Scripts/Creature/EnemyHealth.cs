@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -6,9 +7,13 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
 {
     protected int MaxHp { get; private set; } = 55;
     public int Hp { get; private set; }
+
     public bool IsDie { get => isDie; }
-    private bool isDie ;
+    private bool isDie;
+
     public Hpbar slider;
+
+    public event Action onDie;
 
     public void Init()
     {
@@ -32,6 +37,7 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
     public virtual void Die()
     {
         isDie = true;
+        onDie?.Invoke();
         Destroy(gameObject);
     }
 }

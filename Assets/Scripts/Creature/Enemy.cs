@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
 
             if(nTile == null)
             {
-                Destroy(gameObject);
+                health.Die();
             }
         }
     }

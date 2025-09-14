@@ -24,4 +24,12 @@ public class WindowManager : MonoBehaviour
         CurrentWindow = id;
         windows[(int)CurrentWindow].Open();
     }
+
+    public void CloseAll()
+    {
+        foreach (var window in windows)
+        {
+            window.Close();
+        }
+    }
 }

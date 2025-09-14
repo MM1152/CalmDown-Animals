@@ -8,7 +8,10 @@ public class CrewManager : MonoBehaviour
 
     public Crew prefabs;
     public Crew DragCrew { get; set; }
+    public CrewSellingEvent crewSellingEvent;
     private List<(int hire, int place)> unitInfomation = new List<(int hire, int place)>();
+
+    public event Action changeUnitCount;
 
     public bool IsDrag
     {
@@ -46,12 +49,9 @@ public class CrewManager : MonoBehaviour
     }
 
     public bool CrewHire(CrewRank rank)
-    { 
+    {
         //골드로 판단 로직 넣기
-        var info = unitInfomation[(int)CrewRank.Intern];
-        info.hire++;
-
-        unitInfomation[(int)CrewRank.Intern] = info;
+        SetHireCount(GetHireCount(rank) + 1);
         return true;
     }
 
@@ -65,25 +65,41 @@ public class CrewManager : MonoBehaviour
         return unitInfomation[(int)rank].place;
     }
 
+    private void SetHireCount(int hireCount)
+    {
+        var info = unitInfomation[(int)CrewRank.Intern];
+        info.hire = hireCount;
+        unitInfomation[(int)CrewRank.Intern] = info;
+        changeUnitCount?.Invoke();
+    }
+
+    private void SetPlaceCount(int placeCount)
+    {
+        var info = unitInfomation[(int)CrewRank.Intern];
+        info.place = placeCount;
+        unitInfomation[(int)CrewRank.Intern] = info;
+        changeUnitCount?.Invoke();
+    }
+
     private void CrewDrag()
     {
         if (TouchManager.TouchType == TouchType.Tab)
         {
-            if (DragCrew != null) DragCrew.SetUnderTile(null);
+            if (DragCrew != null)
+            {
+                DragCrew.SetUnderTile(null);
+                SetPlaceCount(GetPlaceCount(DragCrew.rank) + 1);
+            }
 
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity , ~0 , QueryTriggerInteraction.Ignore))
             {
-                
                 var find = hit.collider.GetComponent<Crew>();
                 if (find != null)
                 {
-                    var info = unitInfomation[(int)CrewRank.Intern];
-                    info.place--;
-                    unitInfomation[(int)CrewRank.Intern] = info;
-
                     find.ResetUnderTile();
                     DragCrew = find;
+                    SetPlaceCount(GetPlaceCount(DragCrew.rank) - 1);
                 }
             }
         }
@@ -103,10 +119,16 @@ public class CrewManager : MonoBehaviour
             }
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
-                Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
-                var info = unitInfomation[(int)CrewRank.Intern];
+                if(crewSellingEvent.SellAble)
+                {
+                    SetHireCount(GetHireCount(DragCrew.rank) - 1);
+                    Destroy(DragCrew.gameObject);
+                    return;
+                }
 
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+                Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
+
+                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask ))
                 {
                     var underTile = hit.collider.GetComponent<PathTile>();
                     if (underTile != null)
@@ -115,23 +137,20 @@ public class CrewManager : MonoBehaviour
                         {
                             DragCrew.transform.position = underTile.transform.position + Vector3.up * 0.5f;
                             DragCrew.SetUnderTile(underTile);
-                            info.place++;
+                            SetPlaceCount(GetPlaceCount(DragCrew.rank) + 1);
                         }
                         else
                         {
-                            info.place--;
                             Destroy(DragCrew.gameObject);
                         }
                     }
                 }
                 else
                 {
-                    info.place--;
                     Destroy(DragCrew.gameObject);
                 }
                 DragCrew = null;
                 isSpawn = false;
-                unitInfomation[(int)CrewRank.Intern] = info;
             }
         }
     }

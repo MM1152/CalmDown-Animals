@@ -15,6 +15,7 @@ public class TileManager : MonoBehaviour
     [Space(10)]
     [Header("DrawTile")]
     public PathTile prefabs;
+    public SpawnEnemyInfo InfoPrefabs;
     public int width;
     public int height;
 
@@ -23,10 +24,10 @@ public class TileManager : MonoBehaviour
     public PathTile startTile;
     public List<PathTile> endTile;
 
-
     [Space(10)]
     [Header("Reference")]
     public CrewManager crewSpawner;
+    public EnemySpawner enemySpawner;
     public WindowManager windowManager;
 
     [Space(10)]
@@ -203,5 +204,6 @@ public class TileManager : MonoBehaviour
     {
         endTile.Add(tileTable[pos]);
         tileTable[pos].Type = TileType.Path;
+        enemySpawner.SettingSpawnInfoTile(endTile[endTile.Count - 1] , neighborPosition.gridSize);
     }
 }
