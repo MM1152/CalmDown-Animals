@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class DrawTile : Tile
 {
+    public int layer = -1;
+
     private DrawType drawType;
     public DrawType DrawType
     {
@@ -61,14 +63,40 @@ public class DrawTile : Tile
         }
     }
 
-    public void Draw()
+    public void Draw(int layer)
     {
         IsDraw = true;
+        this.layer = layer;
     }
 
     public virtual void Undo()
     {
         IsDraw = false;
         AroundTile.Clear();
+        layer = -1;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        if (isActive)
+        {
+            if (IsDraw)
+            {
+                foreach (var mater in material)
+                {
+                    mater.color = new Color(1f, 1f, 1f, 1f);
+                }
+            }
+        }
+        else
+        {
+            if(IsDraw)
+            {
+                foreach (var mater in material)
+                {
+                    mater.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+                }
+            }
+        }
     }
 }

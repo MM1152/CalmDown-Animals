@@ -32,6 +32,7 @@ public class DrawManager : MonoBehaviour
 
     private List<List<DrawTile>> waveToTiles = new List<List<DrawTile>>();
     private int level = 0;
+
     private DrawMode mode = DrawMode.Tile;
     public DrawMode Mode
     {
@@ -83,11 +84,16 @@ public class DrawManager : MonoBehaviour
 
         if (find != null)
         {
-            find.Draw();
+            find.Draw(level);
             tiles.Add(find);
             tileTable.Add(find.transform.position , find);
+
+            waveToTiles.Add(new List<DrawTile>());
+            waveToTiles[level].Add(find);
+
             SetAroundTile(find);
         }
+
     }
     private void Update()
     {
@@ -147,7 +153,7 @@ public class DrawManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(FindTile(ray , out DrawTile find))
         {
-            if(find != null)
+            if(find != null && level == find.layer)
             {
                 if (find == tiles[0]) return;
 
@@ -257,10 +263,15 @@ public class DrawManager : MonoBehaviour
         if (TouchManager.TouchType != TouchType.Tab) return;
         Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
 #endif
+
         if (FindTile(ray , out DrawTile find)) 
         {
             if (find.IsDraw) return;
-            find.Draw();
+            find.Draw(level);
+            tiles.Add(find);
+
+            waveToTiles[level].Add(find);
+
             drawTileUndoStack.Push(find);
             SetAroundTile(find);
         }
@@ -309,6 +320,8 @@ public class DrawManager : MonoBehaviour
         }
         if(tile.connectCount <= 0)
         {
+            tiles.Remove(tile);
+            waveToTiles[level].Remove(tile);
             Destroy(tile.gameObject);
         }else
         {
@@ -327,7 +340,6 @@ public class DrawManager : MonoBehaviour
                 newTile.transform.position = newPosition;
                 newTile.connectCount++;
                 tile.AroundTile.Add(newTile);
-
                 if (newTile != null)
                 {
                     tileTable.Add(newTile.transform.position, newTile);
@@ -352,6 +364,11 @@ public class DrawManager : MonoBehaviour
     }
     public void DrawTileToLevel(int level)
     {
+        if(this.level != level)
+        {
+            drawTileUndoStack.Clear();
+        }
+
         this.level = level;
         int idx = -1;
 
@@ -369,6 +386,18 @@ public class DrawManager : MonoBehaviour
             waveToTiles.Add(new List<DrawTile>());
             dropdown.value = idx;
             dropdown.RefreshShownValue();
+        }
+
+        foreach(var tile in tiles)
+        {
+            if(tile.layer == level)
+            {
+                tile.SetActive(true);
+            }
+            else
+            {
+                tile.SetActive(false);
+            } 
         }
     }
 }
