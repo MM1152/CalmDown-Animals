@@ -10,11 +10,12 @@ public enum TileType
     Crew = 1 << 3,
 }
 
+[Flags]
 public enum DrawType
 {
-    None,
-    Start,
-    Arrive,
+    None = 1,
+    Start = 1 << 1,
+    Arrive = 1 << 2,
 }
 
 public class Tile : MonoBehaviour

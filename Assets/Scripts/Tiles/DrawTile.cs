@@ -3,9 +3,28 @@ using System.Collections.Generic;
 
 public class DrawTile : Tile
 {
-    public DrawType drawType;
+    private DrawType drawType;
+    public DrawType DrawType
+    {
+        get { return drawType; }
+        set
+        {
+            drawType = value;
+
+            switch (drawType)
+            {
+                case DrawType.Start:
+                    material[0].color = new Color(1f, 0f, 0f);
+                    break;
+                case DrawType.Arrive:
+                    material[0].color = new Color(0.647f, 0.165f, 0.165f);
+                    break;
+            }
+        }
+    }
     public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>();
     public List<DrawTile> ConnectStartTiles { get; set; } = new List<DrawTile>();
+    public DrawTile ConnectTile;
     public DrawTile UnderTile { get; set; }
     public int connectCount = 0;
 
@@ -35,7 +54,8 @@ public class DrawTile : Tile
     protected override void Awake()
     {
         base.Awake();
-        foreach(var mater in material)
+        drawType = DrawType.None;
+        foreach (var mater in material)
         {
             mater.color = new Color(1f, 1f, 1f, 0.3f);
         }

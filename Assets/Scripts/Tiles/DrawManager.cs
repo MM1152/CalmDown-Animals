@@ -25,6 +25,9 @@ public class DrawManager : MonoBehaviour
     private DrawTile startTile;
     private Stack<DrawTile> startTileUndoStack = new Stack<DrawTile>();
 
+    private DrawTile arriveTile;
+    private DrawTile prevArriveTile;
+
     private DrawMode mode = DrawMode.Tile;
     public DrawMode Mode
     {
@@ -38,6 +41,12 @@ public class DrawManager : MonoBehaviour
             {
                 Destroy(startTile.gameObject);
                 startTile = null;
+            }
+
+            if (prevArriveTile != null)
+            {
+                Destroy(prevArriveTile.gameObject);
+                prevArriveTile = null;
             }
 
             switch (mode)
@@ -88,8 +97,6 @@ public class DrawManager : MonoBehaviour
             }
         }
 
-        
-
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.D))
         {
             Mode = DrawMode.Tile;
@@ -100,17 +107,70 @@ public class DrawManager : MonoBehaviour
             Mode = DrawMode.Start;
         }
 
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
+        {
+            Mode = DrawMode.Arrive;
+        }
+
         switch (mode)
         {
             case DrawMode.Tile:
                 UpdateDrawTile();
                 break;
             case DrawMode.Arrive:
-                
+                UpdateArriveTile();
                 break;
             case DrawMode.Start:
                 UpdateDrawStartTile();
                 break;
+        }
+    }
+
+    private void UpdateArriveTile()
+    {
+        if(prevArriveTile == null)
+        {
+            prevArriveTile = Instantiate(startTilePrefabs, transform);
+            prevArriveTile.DrawType = DrawType.Arrive;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (FindTile(ray, out DrawTile tile))
+        {
+            if (tile != null && tile.DrawType == DrawType.None && tile.IsDraw)
+            {
+                Vector3 mousePos = Input.mousePosition;
+                Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
+
+                int sector = FindHexaSector(tile.transform.position, mousePosInWorld);
+                Debug.Log(sector);
+
+                if (tile.AroundTile[sector].IsDraw || !tile.AroundTile[sector].gameObject.activeSelf) return;
+
+                prevArriveTile.transform.position = tile.AroundTile[sector].transform.position;
+                prevArriveTile.transform.rotation = Quaternion.Euler(-90f, (sector + 1) * -60f, 0f);
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    var find = tile.AroundTile[sector];
+                    find.gameObject.SetActive(false);
+
+                    prevArriveTile.UnderTile = find;
+                    prevArriveTile.ConnectTile = tile;
+                    tile.ConnectStartTiles.Add(prevArriveTile);
+
+                    if (arriveTile != null)
+                    {
+                        arriveTile.ConnectStartTiles.Remove(arriveTile);
+                        arriveTile.UnderTile.gameObject.SetActive(true);
+                        Destroy(arriveTile.gameObject);
+                    }
+
+                    arriveTile = prevArriveTile;
+                    prevArriveTile = null;
+                }
+            }
         }
     }
 
@@ -119,19 +179,18 @@ public class DrawManager : MonoBehaviour
         if (startTile == null)
         {
             startTile = Instantiate(startTilePrefabs, transform);
+            startTile.DrawType = DrawType.Start;
         }
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+        if(FindTile(ray , out DrawTile tile))
         {
-            DrawTile tile = hit.collider.GetComponent<DrawTile>();
-            if(tile != null && tile.drawType == DrawType.None && tile.IsDraw)
+            if (tile != null && tile.DrawType == DrawType.None && tile.IsDraw)
             {
                 Vector3 mousePos = Input.mousePosition;
                 Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
 
-                int sector = FindHexaSector(hit.transform.position, mousePosInWorld);
+                int sector = FindHexaSector(tile.transform.position, mousePosInWorld);
                 Debug.Log(sector);
 
                 if (tile.AroundTile[sector].IsDraw || !tile.AroundTile[sector].gameObject.activeSelf) return;
@@ -139,7 +198,7 @@ public class DrawManager : MonoBehaviour
                 startTile.transform.position = tile.AroundTile[sector].transform.position;
                 startTile.transform.rotation = Quaternion.Euler(-90f, (sector + 1) * -60f, 0f);
 
-                if(Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0))
                 {
                     var find = tile.AroundTile[sector];
                     find.gameObject.SetActive(false);
@@ -169,9 +228,9 @@ public class DrawManager : MonoBehaviour
         if (TouchManager.TouchType != TouchType.Tab) return;
         Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
 #endif
-
         if (FindTile(ray , out DrawTile find)) 
         {
+            if (find.IsDraw) return;
             find.Draw();
             drawTileUndoStack.Push(find);
             SetAroundTile(find);
@@ -180,17 +239,15 @@ public class DrawManager : MonoBehaviour
     private bool FindTile(Ray ray , out DrawTile drawTile)
     {
         drawTile = null;
-
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
             var find = hit.collider.GetComponent<DrawTile>();
-            if (find != null && !find.IsDraw && find.drawType == DrawType.None)
+            if (find != null && find.DrawType == DrawType.None)
             {
                 drawTile = find;
                 return true;
             }
         }
-
         return false;
     }
     private void DeleteAroundTile(DrawTile tile)
