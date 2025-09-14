@@ -15,7 +15,6 @@ public class TileManager : MonoBehaviour
     [Space(10)]
     [Header("DrawTile")]
     public PathTile prefabs;
-    public SpawnEnemyInfo InfoPrefabs;
     public int width;
     public int height;
 

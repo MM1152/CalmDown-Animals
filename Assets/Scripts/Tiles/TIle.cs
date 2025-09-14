@@ -13,8 +13,8 @@ public enum TileType
 public enum DrawType
 {
     None,
-    MonsterArrive,
-    MonsterSpawn,
+    Start,
+    Arrive,
 }
 
 public class Tile : MonoBehaviour

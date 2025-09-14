@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class DrawTile : Tile
 {
-    public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>(); 
+    public DrawType drawType;
+    public List<DrawTile> AroundTile { get; set; } = new List<DrawTile>();
+    public int connectCount = 0;
 
     protected bool isDraw = false;
     public virtual bool IsDraw 

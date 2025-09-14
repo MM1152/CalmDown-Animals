@@ -8,7 +8,7 @@ using static UnityEngine.InputManagerEntry;
 
 public class DrawManager : MonoBehaviour
 {
-    private enum DrawMode
+    public enum DrawMode
     {
         Tile,
         Arrive,
@@ -16,15 +16,48 @@ public class DrawManager : MonoBehaviour
     }
 
     public GameObject prefabs;
+    public DrawTile startTilePrefabs;
     public LayerMask mask;
     public TextMeshProUGUI modeText;
 
     private List<DrawTile> tiles = new List<DrawTile>();
     private Dictionary<Vector3, DrawTile> tileTable = new Dictionary<Vector3, DrawTile>();
-    private NeighborPosition neighborPosition;
-    private Stack<DrawTile> undoStack = new Stack<DrawTile>();
-    private DrawMode mode = DrawMode.Tile;
 
+    private NeighborPosition neighborPosition;
+    private Stack<DrawTile> drawTileUndoStack = new Stack<DrawTile>();
+
+    private DrawTile startTile;
+    private Stack<DrawTile> startTileUndoStack = new Stack<DrawTile>();
+
+    private DrawMode mode = DrawMode.Tile;
+    public DrawMode Mode
+    {
+        get => mode;
+        set
+        {
+            if (mode == value) return;
+            mode = value;
+
+            if(startTile != null)
+            {
+                Destroy(startTile);
+                startTile = null;
+            }
+
+            switch (mode)
+            {
+                case DrawMode.Tile:
+                    modeText.text = "타일 그리기";
+                    break;
+                case DrawMode.Arrive:
+                    modeText.text = "도착타일 설정";
+                    break;
+                case DrawMode.Start:
+                    modeText.text = "시작타일 설정";
+                    break;
+            }
+        }
+    }
     private void Awake()
     {
         Renderer sp = prefabs.GetComponent<Renderer>();
@@ -45,50 +78,91 @@ public class DrawManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z) && mode == DrawMode.Tile)
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
         {
-            if(undoStack.Count > 0)
+            
+            if (mode == DrawMode.Tile && drawTileUndoStack.Count > 0)
             {
-                var undoTile = undoStack.Pop();
+                var undoTile = drawTileUndoStack.Pop();
                 DeleteAroundTile(undoTile);
             }
         }
 
+        
+
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.D))
         {
-            mode = DrawMode.Tile;
+            Mode = DrawMode.Tile;
         }
 
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.A))
         {
-            mode = DrawMode.Start;
+            Mode = DrawMode.Start;
         }
 
         switch (mode)
         {
             case DrawMode.Tile:
-                SelectTile();
+                UpdateDrawTile();
                 break;
             case DrawMode.Arrive:
+                
                 break;
             case DrawMode.Start:
+                UpdateDrawStartTile();
                 break;
         }
     }
 
-    private void SelectTile()
+    private void UpdateDrawStartTile()
+    {
+        if (startTile == null)
+        {
+            startTile = Instantiate(startTilePrefabs, transform);
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+        {
+            DrawTile tile = hit.collider.GetComponent<DrawTile>();
+            if(tile != null && tile.drawType == DrawType.None && tile.IsDraw)
+            {
+                Vector3 mousePos = Input.mousePosition;
+                Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
+
+                int sector = FindHexaSector(hit.transform.position, mousePosInWorld);
+                Debug.Log(sector);
+
+                if (tile.AroundTile[sector].IsDraw) return;
+
+                startTile.transform.position = tile.AroundTile[sector].transform.position;
+            }
+        }
+    }
+
+    private void UndoStartTile()
+    {
+        var undoStartTile = startTileUndoStack.Pop();
+
+        
+    }
+
+    private void UpdateDrawTile()
     {
 #if UNITY_EDITOR             
         if (!Input.GetMouseButtonDown(0)) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
 #elif UNITY_ANDROID || UNITY_IOS
         if (TouchManager.TouchType != TouchType.Tab) return;
         Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
 #endif
+
         if (FindTile(ray , out DrawTile find)) 
         {
             find.Draw();
-            undoStack.Push(find);
+            drawTileUndoStack.Push(find);
             SetAroundTile(find);
         }
     }
@@ -112,11 +186,12 @@ public class DrawManager : MonoBehaviour
     {
         for(int i = 0; i < tile.AroundTile.Count; i++)
         {
-            if (tileTable.ContainsKey(tile.AroundTile[i].transform.position))
+            tile.AroundTile[i].connectCount--;
+            if (tile.AroundTile[i].connectCount == 0)
             {
                 tileTable.Remove(tile.AroundTile[i].transform.position);
+                Destroy(tile.AroundTile[i].gameObject);
             }
-            Destroy(tile.AroundTile[i].gameObject);
         }
         tile.Undo();
     }
@@ -126,17 +201,35 @@ public class DrawManager : MonoBehaviour
         for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
         {
             Vector3 newPosition = NeighborPosition.GetFloor(neighborPosition.nextNeighborPos[i] + tile.transform.position);
+            
             if(!tileTable.ContainsKey(newPosition))
             {
                 var newTile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
                 newTile.transform.position = newPosition;
+                newTile.connectCount++;
                 tile.AroundTile.Add(newTile);
 
                 if (newTile != null)
                 {
                     tileTable.Add(newTile.transform.position, newTile);
                 }
+            }else
+            {
+                tile.AroundTile.Add(tileTable[newPosition]);
+                tileTable[newPosition].connectCount++;
             }
         }
+    }
+
+    private int FindHexaSector(Vector3 center , Vector3 point)
+    {
+        float dx = point.x - center.x;
+        float dz = point.z - center.z;
+
+        float angle = Mathf.Atan2(dz, dx);
+        if (angle < 0) angle += Mathf.PI * 2f;
+        float sectorSize = Mathf.PI * 2f / 6f;
+
+        return Mathf.FloorToInt(angle / sectorSize) % 6;
     }
 }

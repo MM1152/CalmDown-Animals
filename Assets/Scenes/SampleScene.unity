@@ -887,6 +887,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 330770915}
+  - component: {fileID: 330770916}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -909,6 +910,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 404563690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &330770916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330770914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256cd863f5c70ce4a8033fb21cdf4448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowManager: {fileID: 908200644}
 --- !u!1 &365045143
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +968,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs: {fileID: 6120004347578461865, guid: 96b5e21386141b944aa813c8657836e6, type: 3}
+  infoTile: {fileID: 1601039305128880463, guid: 6008f6493a9fec74596edeb47ae6996a, type: 3}
   tileManager: {fileID: 1911704527}
+  gameManager: {fileID: 330770916}
+  spawnCount: 1
+  copySpawnCount: 0
+  spawnInterval: 2
 --- !u!114 &373068056 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
@@ -2348,6 +2367,34 @@ PrefabInstance:
     - target: {fileID: 3311685437091037869, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
       propertyPath: m_text
       value: Start
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 330770916}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartWave
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236421449752574185, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5732839005537330542, guid: 83e3e8e7ddc5dab4c8a9fe9258b98246, type: 3}
       propertyPath: m_Pivot.x
@@ -4388,6 +4435,7 @@ MonoBehaviour:
   startTile: {fileID: 0}
   endTile: []
   crewSpawner: {fileID: 423284645}
+  enemySpawner: {fileID: 365045145}
   windowManager: {fileID: 908200644}
   isChangedTile: 0
 --- !u!4 &1911704528
