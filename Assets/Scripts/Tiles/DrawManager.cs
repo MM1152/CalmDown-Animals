@@ -93,8 +93,19 @@ public class DrawManager : MonoBehaviour
 
             SetAroundTile(find);
         }
-
     }
+
+    private void Start()
+    {
+        foreach(var data in Map.mapDatas)
+        {
+            Debug.Log(data.Id);
+            Debug.Log(data.tiles[0][0].Position.x);
+            Debug.Log(data.tiles[0][1].Position.x);
+            Debug.Log(data.tiles[0][2].Position.x);
+        }
+    }
+
     private void Update()
     {
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X))
@@ -129,6 +140,12 @@ public class DrawManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F4))
         {
             Mode = DrawMode.Delete;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            var data = Map.CreateMapData(DataTableIds.MapDataIds[0], waveToTiles);
+            Map.Save(0, data);
         }
 
         switch (mode)
