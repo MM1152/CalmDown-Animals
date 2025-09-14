@@ -454,6 +454,7 @@ public class DrawManager : MonoBehaviour
 
         var datas = Map.mapDatas[mapIndex];
 
+
         List<DrawTile> startTiles = new List<DrawTile>();
         DrawTile arriveTile = null;
         for(int i = 0; i < datas.tiles.Count; i++)
@@ -479,6 +480,9 @@ public class DrawManager : MonoBehaviour
                     if (!tileTable.ContainsKey(tile.transform.position))
                     {
                         tileTable.Add(tile.transform.position, tile);
+                    }else
+                    {
+
                     }
 
                     tile.UpdateDrawTile(tileData);
@@ -486,13 +490,14 @@ public class DrawManager : MonoBehaviour
                     SetAroundTile(tile);
                     tiles.Add(tile);
 
-
                     if (tileData.DrawType == DrawType.Start)
                     {
+                        tile.UnderTile = tileTable[tile.transform.position];
                         startTiles.Add(tile);
                     }
                     else if(tileData.DrawType == DrawType.Arrive)
                     {
+                        tile.UnderTile = tileTable[tile.transform.position];
                         arriveTile = tile;
                     }
                 }
