@@ -15,13 +15,14 @@ public class TileManager : MonoBehaviour
     [Space(10)]
     [Header("DrawTile")]
     public PathTile prefabs;
+    public DrawTile flagTilePrefabs;
     public int width;
     public int height;
 
     [Space(10)]
     [Header("PathFind")]
-    public PathTile startTile;
-    public List<PathTile> endTile;
+    public List<PathTile> startTile = new List<PathTile>();
+    public PathTile arriveTile;
 
     [Space(10)]
     [Header("Reference")]
@@ -39,6 +40,9 @@ public class TileManager : MonoBehaviour
     private NeighborPosition neighborPosition;
 
     private PathFind pathFind = new PathFind();
+    private DrawTile drawArriveTile;
+    private List<DrawTile> startTiles = new List<DrawTile>();
+
 
     private void Start()
     {
@@ -51,9 +55,6 @@ public class TileManager : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         DrawTiles();
-        SetStartTile(new Vector3(-0.6f, 0f, 2.2f));
-        SetEndTile(new Vector3(4.2f, 0f, 2.2f));
-
         FindPath(TileType.Path | TileType.None);
 
         SetInitPath();
@@ -66,7 +67,7 @@ public class TileManager : MonoBehaviour
 
     private void SetInitPath()
     {
-        PathTile copyTile = endTile[0];
+        PathTile copyTile = startTile[0];
         while(copyTile != null)
         {
             copyTile.Type = TileType.Path;
@@ -78,10 +79,10 @@ public class TileManager : MonoBehaviour
     {
         if (isChangedTile) return;
 
-        PathTile copyTile = endTile[0];
+        PathTile copyTile = startTile[0];
         while (copyTile != null)
         {
-            if(copyTile != startTile && copyTile != endTile[0])
+            if(copyTile != arriveTile && copyTile != startTile[0])
             {
                 copyTile.Type = TileType.None;
             }
@@ -94,9 +95,9 @@ public class TileManager : MonoBehaviour
     public bool FindPath(TileType type = TileType.Path)
     {
         bool isSuseccs = true;
-        for(int i = 0; i < endTile.Count; i++)
+        for(int i = 0; i < startTile.Count; i++)
         {
-            if (!pathFind.Find(tileList, startTile, endTile[i], type))
+            if (!pathFind.Find(tileList, arriveTile, startTile[i], type))
             {
                 isSuseccs = false;
             }
@@ -134,40 +135,80 @@ public class TileManager : MonoBehaviour
         return null;
     }
     // Test 용 코드임
+
     public void DrawTiles()
     {
-        tileList.Clear();
-        tileTable.Clear();
+        startTiles.Clear();
 
-        for(int i = 0; i < height; i++)
+        var mapData = Map.Get(0);
+        for(int i = 0; i < mapData.tiles[0].Count; i++)
         {
-            for(int j = 0; j < width; j++)
+            if (mapData.tiles[0][i].DrawType == DrawType.Start || mapData.tiles[0][i].DrawType == DrawType.Arrive)
             {
-                PathTile tile = Instantiate(prefabs, transform);
-                tile.gameObject.name = $"Tile_{i}_{j}";
-                if (i % 2 != 0)
+                var flagTile = Instantiate(flagTilePrefabs, transform);
+                flagTile.UpdateDrawTile(mapData.tiles[0][i]);
+                if(flagTile.DrawType == DrawType.Arrive)
                 {
-                    tile.transform.position = new Vector3(
-                        NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
-                        , 0
-                        , NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
-                        );
+                    drawArriveTile = flagTile;
                 }
-                else
+                else if (flagTile.DrawType == DrawType.Start)
                 {
-                    tile.transform.position = new Vector3(
-                        NeighborPosition.GetFloor(neighborPosition.gridSize.x * j - neighborPosition.gridSize.x * 0.5f)
-                        , 0
-                        ,NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
-                         
-                        );
+                    startTiles.Add(flagTile);
                 }
-                tileList.Add(tile);
-                tileTable.Add(tile.transform.position , tile);
+            }else
+            {
+                var pathTile = Instantiate(prefabs, transform);
+                pathTile.UpdatePathTile(mapData.tiles[0][i]);
+
+                tileList.Add(pathTile);
+                tileTable.Add(pathTile.transform.position, pathTile);
             }
         }
+
+        for(int i = 0; i < startTiles.Count; i++)
+        {
+            SetStartTile(startTiles[i].ConnectPos);
+        }
+
+        SetArriveTile(drawArriveTile.ConnectPos);
+
         FindNeighbor();
     }
+
+    //public void DrawTiles()
+    //{
+    //    tileList.Clear();
+    //    tileTable.Clear();
+
+    //    for (int i = 0; i < height; i++)
+    //    {
+    //        for (int j = 0; j < width; j++)
+    //        {
+    //            PathTile tile = Instantiate(prefabs, transform);
+    //            tile.gameObject.name = $"Tile_{i}_{j}";
+    //            if (i % 2 != 0)
+    //            {
+    //                tile.transform.position = new Vector3(
+    //                    NeighborPosition.GetFloor(neighborPosition.gridSize.x * j)
+    //                    , 0
+    //                    , NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+    //                    );
+    //            }
+    //            else
+    //            {
+    //                tile.transform.position = new Vector3(
+    //                    NeighborPosition.GetFloor(neighborPosition.gridSize.x * j - neighborPosition.gridSize.x * 0.5f)
+    //                    , 0
+    //                    , NeighborPosition.GetFloor(neighborPosition.gridSize.y * i)
+
+    //                    );
+    //            }
+    //            tileList.Add(tile);
+    //            tileTable.Add(tile.transform.position, tile);
+    //        }
+    //    }
+    //    FindNeighbor();
+    //}
 
     private void FindNeighbor()
     {
@@ -186,20 +227,20 @@ public class TileManager : MonoBehaviour
     // Test 용 코드임
     public PathTile[] GetEndTiles()
     {
-        return endTile.ToArray();
+        return startTile.ToArray();
     }
 
     // Test 용 코드임
-    public void SetStartTile(Vector3 pos)
+    public void SetArriveTile(Vector3 pos)
     {
-        startTile = tileTable[pos];
+        arriveTile = tileTable[pos];
         tileTable[pos].Type = TileType.Path;
     }
     // Test 용 코드임
-    public void SetEndTile(Vector3 pos)
+    public void SetStartTile(Vector3 pos)
     {
-        endTile.Add(tileTable[pos]);
+        startTile.Add(tileTable[pos]);
         tileTable[pos].Type = TileType.Path;
-        enemySpawner.SettingSpawnInfoTile(endTile[endTile.Count - 1] , neighborPosition.gridSize);
+        enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , neighborPosition.gridSize);
     }
 }

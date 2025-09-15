@@ -23,4 +23,10 @@ public class PathTile : Tile
         base.Awake();
         Type = TileType.None;
     }
+
+    public void UpdatePathTile(Map.DrawData data)
+    {
+        transform.position = data.Position;
+        transform.eulerAngles = data.Rotation;
+    }
 }
