@@ -929,10 +929,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wave: 1
   windowManager: {fileID: 908200644}
-  popupManager: {fileID: 908200645}
+  popupManager: {fileID: 0}
   waveText: {fileID: 2057822078}
   timerText: {fileID: 1383151320}
-  maxWave: 10
+  maxWave: 0
 --- !u!1 &365045143
 GameObject:
   m_ObjectHideFlags: 0
@@ -5220,7 +5220,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  mapSize: 0
   prefabs: {fileID: 2678013534119981226, guid: 7061f14936a04d54a8edd9bd77f342ae, type: 3}
   flagTilePrefabs: {fileID: 1814165094366285772, guid: ffdd24b6674ca1f4e8caa4644599ad99, type: 3}
   mapIdx: 0
@@ -5229,7 +5228,7 @@ MonoBehaviour:
   crewSpawner: {fileID: 423284645}
   enemySpawner: {fileID: 365045145}
   windowManager: {fileID: 908200644}
-  gameManager: {fileID: 330770916}
+  gameManager: {fileID: 0}
   isChangedTile: 0
 --- !u!4 &1911704528
 Transform:
