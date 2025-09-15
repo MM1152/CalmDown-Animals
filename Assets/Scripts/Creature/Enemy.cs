@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         {
             Vector3 dir = (nTile.transform.position - transform.position).normalized;
             transform.position += dir * speed * Time.deltaTime;
-            
+           
             if(Vector3.Distance(transform.position , nTile.transform.position) < 0.1f)
             {
                 nTile = nTile.ParentTile;
