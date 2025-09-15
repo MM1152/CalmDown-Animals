@@ -27,13 +27,14 @@ public class PopupManager : MonoBehaviour
         }
     }
 
-    public void Open(Popup id)
+    public GenericPopup Open(Popup id)
     {
         if(co != null)
         {
             StopCoroutine(co);
         }
         co = StartCoroutine(OpenCo(id));
+        return popups[(int)id];
     }
 
     public void Close()

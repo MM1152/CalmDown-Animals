@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
-using Unity.VisualScripting;
 
 [RequireComponent(typeof(SphereCollider))]
 public class Crew : MonoBehaviour
 {
+    private readonly int Ani_AttackId = Animator.StringToHash("Attack");
+
     public CrewRank rank;
     public float attackRadius;
     public float attackInterval;
@@ -18,12 +18,14 @@ public class Crew : MonoBehaviour
 
     private PathTile underTile;
     private new SphereCollider collider;
+    private Animator animator;
     public EnemyHealth target;
     public List<EnemyHealth> targets;
 
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
+        animator = GetComponent<Animator>();
     }
 
     public void Spawn(CrewManager spawner)
@@ -55,10 +57,17 @@ public class Crew : MonoBehaviour
                 targets.Remove(target);
                 target = GetTarget();
             }
+            
+            if(target != null)
+            {
+                transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+            }
 
             if (Time.time > lastAttackTime + attackInterval)
             {
                 lastAttackTime = Time.time;
+                animator.SetTrigger(Ani_AttackId);
+                transform.position = underTile.transform.position;
                 if (target.Hit(damage))
                 {
                     killCount++;

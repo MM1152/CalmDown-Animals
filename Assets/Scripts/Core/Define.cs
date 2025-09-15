@@ -41,10 +41,10 @@ public class NeighborPosition
 public static class DataTableIds
 {
     public static readonly string StringTableIds = "StringTable";
-
+    public static readonly string RoundTableIds = "RoundTable";
     public static readonly string[] MapDataIds =
     {
-        "SabanaMap.json"
+        "SabanaMap"
     };
 }
 

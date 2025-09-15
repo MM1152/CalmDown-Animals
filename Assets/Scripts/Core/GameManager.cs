@@ -6,14 +6,18 @@ public class GameManager : MonoBehaviour{
     public int wave = 1;
     private float timer = 0;
     private int timerToInt = 0;
-    
+    private bool GameFin { get; set; }
+
     public WindowManager windowManager;
+    public PopupManager popupManager;
 
     public event Action startWave;
     public event Action endWave;
 
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI timerText;
+
+    public int maxWave;
 
     public bool WaveStart { get; private set; } = false;
 
@@ -27,15 +31,26 @@ public class GameManager : MonoBehaviour{
         WaveStart = true;
         windowManager.CloseAll();
         startWave?.Invoke();
+
+
     }
 
     public void EndWave()
     {
         WaveStart = false;
         windowManager.Open(Window.EditorWindow);
-        endWave?.Invoke();
+
+        if(wave == maxWave)
+        {
+            GameFin = true;
+            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+            popup.Id = 1;
+            return;
+        }
+
         wave++;
         waveText.text = wave + " ¿þÀÌºê";
+        endWave?.Invoke();
     }
 
     private void Update()

@@ -929,8 +929,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wave: 1
   windowManager: {fileID: 908200644}
+  popupManager: {fileID: 908200645}
   waveText: {fileID: 2057822078}
   timerText: {fileID: 1383151320}
+  maxWave: 10
 --- !u!1 &365045143
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,7 +1414,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 64
-  prefabs: {fileID: 7061182922066607594, guid: 5a2c718b5b7da0349b7b6b4068d451e7, type: 3}
+  prefabs: {fileID: 8534336428000695059, guid: 4ccd6447715a6954eb7a0e2b1e52f19a, type: 3}
   crewSellingEvent: {fileID: 1472931352}
 --- !u!1 &444713740
 GameObject:
@@ -3051,6 +3053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragSpeed: 10
   cam: {fileID: 330585545}
+  isPlayEditor: 0
   distance: 10
   checkTime: 0.1
 --- !u!4 &913690696
@@ -5217,15 +5220,16 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  mapSize: 0
   prefabs: {fileID: 2678013534119981226, guid: 7061f14936a04d54a8edd9bd77f342ae, type: 3}
   flagTilePrefabs: {fileID: 1814165094366285772, guid: ffdd24b6674ca1f4e8caa4644599ad99, type: 3}
-  width: 5
-  height: 5
+  mapIdx: 0
   startTile: []
   arriveTile: {fileID: 0}
   crewSpawner: {fileID: 423284645}
   enemySpawner: {fileID: 365045145}
   windowManager: {fileID: 908200644}
+  gameManager: {fileID: 330770916}
   isChangedTile: 0
 --- !u!4 &1911704528
 Transform:

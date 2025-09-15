@@ -19,7 +19,11 @@ public static class DataTableManager
         StringTable stringTable = new StringTable();
         stringTable.Load(DataTableIds.StringTableIds);
 
+        RoundTable roundTable = new RoundTable();
+        roundTable.Load(DataTableIds.RoundTableIds);
+
         tables.Add(DataTableIds.StringTableIds , stringTable);
+        tables.Add(DataTableIds.RoundTableIds, roundTable);
     }
 
     public static T Get<T>(string id) where T : DataTable

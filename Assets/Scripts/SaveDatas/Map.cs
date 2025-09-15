@@ -2,12 +2,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using static Map;
 
 public class Map
 {
-    private readonly static string mapDataPath = "MapDatas/{0}";
+    private readonly static string mapDataPath = "Resources/MapDatas/{0}";
+    private readonly static string mapLoadPath = "MapDatas/{0}";
 
     public static List<MapData> mapDatas = new List<MapData>(); 
 
@@ -67,10 +69,10 @@ public class Map
  
     public static void Save(int mapIndex , MapData data)
     {
-        string path = string.Format(mapDataPath, DataTableIds.MapDataIds[mapIndex]);
-        string dir = Path.Combine(Application.persistentDataPath, "MapDatas");
+        string path = string.Format(mapDataPath, DataTableIds.MapDataIds[mapIndex] + ".json");
+        string dir = Path.Combine(Application.dataPath, "Resources/MapDatas");
         Debug.Log(dir);
-        string filepath = Path.Combine(Application.persistentDataPath, path);
+        string filepath = Path.Combine(Application.dataPath, path);
         string json = JsonConvert.SerializeObject(data , settings);
         
         if(!Directory.Exists(dir))
@@ -80,19 +82,21 @@ public class Map
 
         File.WriteAllText(filepath, json);
         Debug.Log($"Save {filepath}");
+        AssetDatabase.Refresh();
+        Load();
     }
 
     public static void Load()
     {
+        mapDatas.Clear();
         for(int i = 0; i < DataTableIds.MapDataIds.Length; i++)
-        {
-            string path = string.Format(mapDataPath, DataTableIds.MapDataIds[i]);
-            string fullpath = Path.Combine(Application.persistentDataPath , path);
+        {  
+            string path = string.Format(mapLoadPath, DataTableIds.MapDataIds[i]);
+            var textAsset = Resources.Load<TextAsset>(path);
 
-            if (File.Exists(fullpath))
+            if(textAsset != null)
             {
-                string json = File.ReadAllText(fullpath);
-                var data = JsonConvert.DeserializeObject<MapData>(json, settings);
+                var data = JsonConvert.DeserializeObject<MapData>(textAsset.text, settings);
                 mapDatas.Add(data);
             }
         }

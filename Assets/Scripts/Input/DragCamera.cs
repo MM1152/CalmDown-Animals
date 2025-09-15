@@ -9,7 +9,7 @@ public class DragCamera : MonoBehaviour
 
     public Camera cam;
     private Vector3 dragOrigin;
-
+    public bool isPlayEditor;
 
     [Header("Game View Used")]
     public float distance;
@@ -23,40 +23,47 @@ public class DragCamera : MonoBehaviour
         Vector3 linear = Vector3.zero;
 
 #if UNITY_EDITOR
-        //if (Input.GetMouseButton(0))
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        dragOrigin = Input.mousePosition;
-        //        timer = 0;
-        //        amount = 0;
-        //        dir = Vector3.zero;
-        //        isDrag = false;
-        //    }
+        if(isPlayEditor)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    dragOrigin = Input.mousePosition;
+                    timer = 0;
+                    amount = 0;
+                    dir = Vector3.zero;
+                    isDrag = false;
+                }
 
-        //    timer += Time.deltaTime;
+                timer += Time.deltaTime;
 
-        //    if((amount > distance && timer < checkTime) || isDrag)
-        //    {
-        //        dir = new Vector3(dragOrigin.x - Input.mousePosition.x, 0f, dragOrigin.y - Input.mousePosition.y).normalized;
-        //        linear = -dir;
-        //        isDrag = true;
-        //    }
-        //    else
-        //    {
-        //        amount += (dragOrigin - Input.mousePosition).magnitude;
-        //    }
-        //}
+                if ((amount > distance && timer < checkTime) || isDrag)
+                {
+                    dir = new Vector3(dragOrigin.x - Input.mousePosition.x, 0f, dragOrigin.y - Input.mousePosition.y).normalized;
+                    linear = -dir;
+                    isDrag = true;
+                }
+                else
+                {
+                    amount += (dragOrigin - Input.mousePosition).magnitude;
+                }
+            }
+        }
+        else
+        {
+            if (TouchManager.TouchType == TouchType.Swipe)
+            {
+                linear = TouchManager.GetSwipeDir();
+            }
+        }
 #elif UNITY_ANDROID || UNITY_IOS
         if (TouchManager.TouchType == TouchType.Swipe)
         {
             linear = TouchManager.GetSwipeDir();
         }
 #endif
-        if (TouchManager.TouchType == TouchType.Swipe)
-        {
-            linear = TouchManager.GetSwipeDir();
-        }
-        cam.transform.position += -(linear * dragSpeed * Time.deltaTime);
+
+            cam.transform.position += -(linear * dragSpeed * Time.deltaTime);
     }
 }

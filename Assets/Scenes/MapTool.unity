@@ -910,6 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragSpeed: 10
   cam: {fileID: 898015375}
+  isPlayEditor: 1
   distance: 10
   checkTime: 0.1
 --- !u!4 &409699475

@@ -11,13 +11,13 @@ public class TileManager : MonoBehaviour
     public TileType tileType;
     public bool drawMode;
     public LayerMask layerMask;
+    private int mapSize = -1;
 
     [Space(10)]
     [Header("DrawTile")]
     public PathTile prefabs;
     public DrawTile flagTilePrefabs;
-    public int width;
-    public int height;
+    public int mapIdx;
 
     [Space(10)]
     [Header("PathFind")]
@@ -29,6 +29,7 @@ public class TileManager : MonoBehaviour
     public CrewManager crewSpawner;
     public EnemySpawner enemySpawner;
     public WindowManager windowManager;
+    public GameManager gameManager;
 
     [Space(10)]
     [Header("Check")]
@@ -43,7 +44,6 @@ public class TileManager : MonoBehaviour
     private DrawTile drawArriveTile;
     private List<DrawTile> startTiles = new List<DrawTile>();
 
-
     private void Start()
     {
         isChangedTile = false;
@@ -53,6 +53,8 @@ public class TileManager : MonoBehaviour
 
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
+
+        gameManager.endWave += DrawTiles;
 
         DrawTiles();
         FindPath(TileType.Path | TileType.None);
@@ -138,15 +140,20 @@ public class TileManager : MonoBehaviour
 
     public void DrawTiles()
     {
-        startTiles.Clear();
-
-        var mapData = Map.Get(0);
-        for(int i = 0; i < mapData.tiles[0].Count; i++)
+        int mapSize = DataTableManager.Get<RoundTable>(DataTableIds.RoundTableIds).Get(gameManager.wave).Map_Size;
+        if (mapSize == this.mapSize)
         {
-            if (mapData.tiles[0][i].DrawType == DrawType.Start || mapData.tiles[0][i].DrawType == DrawType.Arrive)
+            return;
+        }
+        this.mapSize = mapSize;
+        var mapData = Map.Get(mapIdx);
+
+        for(int i = 0; i < mapData.tiles[this.mapSize].Count; i++)
+        {
+            if (mapData.tiles[this.mapSize][i].DrawType == DrawType.Start || mapData.tiles[this.mapSize][i].DrawType == DrawType.Arrive)
             {
                 var flagTile = Instantiate(flagTilePrefabs, transform);
-                flagTile.UpdateDrawTile(mapData.tiles[0][i]);
+                flagTile.UpdateDrawTile(mapData.tiles[this.mapSize][i]);
                 if(flagTile.DrawType == DrawType.Arrive)
                 {
                     drawArriveTile = flagTile;
@@ -155,10 +162,11 @@ public class TileManager : MonoBehaviour
                 {
                     startTiles.Add(flagTile);
                 }
-            }else
+            }
+            else
             {
                 var pathTile = Instantiate(prefabs, transform);
-                pathTile.UpdatePathTile(mapData.tiles[0][i]);
+                pathTile.UpdatePathTile(mapData.tiles[this.mapSize][i]);
 
                 tileList.Add(pathTile);
                 tileTable.Add(pathTile.transform.position, pathTile);

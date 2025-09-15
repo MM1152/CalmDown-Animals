@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using static UnityEngine.InputManagerEntry;
 public class DrawManager : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class DrawManager : MonoBehaviour
     private DrawTile arriveTile;
     private DrawTile prevArriveTile;
 
-    private List<List<DrawTile>> waveToTiles = new List<List<DrawTile>>();
+    public List<List<DrawTile>> waveToTiles = new List<List<DrawTile>>();
     private int level = 0;
 
     private DrawMode mode = DrawMode.Tile;
@@ -217,8 +218,7 @@ public class DrawManager : MonoBehaviour
                         arriveTile.UnderTile.gameObject.SetActive(true);
                         Destroy(arriveTile.gameObject);
                     }
-
-                    RemoveFlagTile(arriveTile);
+                    waveToTiles[level].Remove(arriveTile);
                     
                     arriveTile = prevArriveTile;
                     prevArriveTile = null;
@@ -341,21 +341,24 @@ public class DrawManager : MonoBehaviour
         for (int i = 0; i < tile.AroundTile.Count; i++)
         {
             tile.AroundTile[i].connectCount--;
-            if (tile.AroundTile[i].connectCount <= 0 && !tile.AroundTile[i].IsDraw)
+            if (tile.AroundTile[i].connectCount <= 0 /*&& !tile.AroundTile[i].IsDraw*/)
             {
                 tileTable.Remove(tile.AroundTile[i].transform.position);
                 Destroy(tile.AroundTile[i].gameObject);
             }
         }
+
         if(tile.connectCount <= 0)
         {
             tiles.Remove(tile);
-            waveToTiles[level].Remove(tile);
+            tileTable.Remove(tile.transform.position);
             Destroy(tile.gameObject);
-        }else
+        }
+        else
         {
             tile.Undo();
         }
+        waveToTiles[level].Remove(tile);
     }
     private void SetAroundTile(DrawTile tile)
     {
@@ -472,7 +475,6 @@ public class DrawManager : MonoBehaviour
         if (Map.mapDatas.Count <= mapIndex)
         {
             var tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
-            tile.layer = level;
             tile.Draw(level);
             tile.connectCount = 10000000;
 
@@ -493,16 +495,16 @@ public class DrawManager : MonoBehaviour
 
         for(int i = 0; i < datas.tiles.Count; i++)
         {
-            waveToTiles.Add(new List<DrawTile>());
             List<DrawTile> waveTiles = new List<DrawTile>();
             for (int j = 0; j < datas.tiles[i].Count; j++)
             {
                 var tileData = datas.tiles[i][j];
                 DrawTile tile;
+
                 if (tileData.DrawType == DrawType.Start || tileData.DrawType == DrawType.Arrive)
                 {
                     tile = Instantiate(startTilePrefabs, transform);
-                    waveTiles.Add(tile);
+                    tile.layer = i;
                 } 
                 else
                 {
@@ -510,7 +512,6 @@ public class DrawManager : MonoBehaviour
                     {
                         tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
                         tileTable.Add(tileData.Position, tile);
-                        waveTiles.Add(tile);
                         if(tileData.Position == Vector3.zero)
                         {
                             tile.connectCount = 10000000;
@@ -530,6 +531,7 @@ public class DrawManager : MonoBehaviour
                         SetAroundTile(tile);
                     }
                     tiles.Add(tile);
+                    waveTiles.Add(tile);
 
                     if (tileData.DrawType == DrawType.Start)
                     {
@@ -552,7 +554,6 @@ public class DrawManager : MonoBehaviour
             arriveTile.UnderTile = tileTable[arriveTile.transform.position];
             arriveTile.UnderTile.gameObject.SetActive(false);
             arriveTile.ConnectTile.ConnectStartTiles.Add(arriveTile);
-            arriveTile = prevArriveTile;
         }
 
         for (int i = 0; i < startTiles.Count; i++)

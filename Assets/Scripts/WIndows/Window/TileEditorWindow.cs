@@ -24,7 +24,8 @@ public class TileEditorWindow : GenericWindow
             manager.Open(Window.EditorWindow);
         }else
         {
-            popupManager.Open(Popup.TextPopUp);
+            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+            popup.Id = 0;
         }
     }
 
