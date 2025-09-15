@@ -218,12 +218,24 @@ public class DrawManager : MonoBehaviour
                         Destroy(arriveTile.gameObject);
                     }
 
+                    RemoveFlagTile(arriveTile);
+                    
                     arriveTile = prevArriveTile;
                     prevArriveTile = null;
+
+                    waveToTiles[level].Add(arriveTile);
                 }
             }
         }
     }
+    private void RemoveFlagTile(DrawTile tile)
+    {
+        for(int i = 0; i < waveToTiles.Count; i++)
+        {
+            waveToTiles[i].Remove(tile);
+        }
+    }
+
     private void UpdateDrawStartTile()
     {
         if (startTile == null)
@@ -253,10 +265,12 @@ public class DrawManager : MonoBehaviour
                     var find = tile.AroundTile[sector];
                     find.gameObject.SetActive(false);
 
-                        startTile.UnderTile = find;
-                        tile.ConnectStartTiles.Add(startTile);
-                        startTileUndoStack.Push(startTile);
-                        startTile = null;
+                    startTile.UnderTile = find;
+                    startTile.ConnectTile = tile;
+                    tile.ConnectStartTiles.Add(startTile);
+                    waveToTiles[level].Add(startTile);
+                    startTileUndoStack.Push(startTile);
+                    startTile = null;
                 }
             }
         }
@@ -264,6 +278,7 @@ public class DrawManager : MonoBehaviour
     private void DeleteStartTile(DrawTile undoStartTile)
     {
         undoStartTile.UnderTile.gameObject.SetActive(true);
+        RemoveFlagTile(undoStartTile);
         Destroy(undoStartTile.gameObject);
     }
     private void UpdateDrawTile()
@@ -312,6 +327,7 @@ public class DrawManager : MonoBehaviour
             {
                 connectTile.UnderTile.gameObject.SetActive(true);
                 connectTile.gameObject.SetActive(false);
+                RemoveFlagTile(connectTile);
                 Destroy(connectTile);
             }
 
@@ -331,7 +347,7 @@ public class DrawManager : MonoBehaviour
                 Destroy(tile.AroundTile[i].gameObject);
             }
         }
-        if(tile.connectCount <= 0 || allTileClear)
+        if(tile.connectCount <= 0)
         {
             tiles.Remove(tile);
             waveToTiles[level].Remove(tile);
@@ -377,6 +393,7 @@ public class DrawManager : MonoBehaviour
     }
     public void DrawTileToLevel(int level)
     {
+        int prevLevel = this.level;
         if(this.level != level)
         {
             drawTileUndoStack.Clear();
@@ -412,6 +429,23 @@ public class DrawManager : MonoBehaviour
                 tile.SetActive(false);
             } 
         }
+
+        for(int i = 0; i < waveToTiles[prevLevel].Count; i++)
+        {
+            if(waveToTiles[prevLevel][i].DrawType == DrawType.Start || waveToTiles[prevLevel][i].DrawType == DrawType.Arrive)
+            {
+                waveToTiles[prevLevel][i].UnderTile.gameObject.SetActive(true);
+                waveToTiles[prevLevel][i].gameObject.SetActive(false);
+            }
+        }
+        for (int i = 0; i < waveToTiles[level].Count; i++)
+        {
+            if (waveToTiles[level][i].DrawType == DrawType.Start || waveToTiles[level][i].DrawType == DrawType.Arrive)
+            {
+                waveToTiles[level][i].UnderTile.gameObject.SetActive(false);
+                waveToTiles[level][i].gameObject.SetActive(true);
+            }
+        }
     }
 
     private void SettingMapDataDropBox()
@@ -440,6 +474,7 @@ public class DrawManager : MonoBehaviour
             var tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
             tile.layer = level;
             tile.Draw(level);
+            tile.connectCount = 10000000;
 
             tiles.Add(tile);
             tileTable.Add(tile.transform.position, tile);
@@ -449,7 +484,6 @@ public class DrawManager : MonoBehaviour
 
             SetAroundTile(tile);
             return;
-
         }
 
         var datas = Map.mapDatas[mapIndex];
@@ -468,6 +502,7 @@ public class DrawManager : MonoBehaviour
                 if (tileData.DrawType == DrawType.Start || tileData.DrawType == DrawType.Arrive)
                 {
                     tile = Instantiate(startTilePrefabs, transform);
+                    waveTiles.Add(tile);
                 } 
                 else
                 {
@@ -489,8 +524,11 @@ public class DrawManager : MonoBehaviour
                 if (tile != null)
                 {
                     tile.UpdateDrawTile(tileData);
-                    tile.Draw(i);
-                    SetAroundTile(tile);
+                    if(tile.DrawType == DrawType.None)
+                    {
+                        tile.Draw(i);
+                        SetAroundTile(tile);
+                    }
                     tiles.Add(tile);
 
                     if (tileData.DrawType == DrawType.Start)
@@ -510,14 +548,21 @@ public class DrawManager : MonoBehaviour
 
         if (arriveTile != null && tileTable.ContainsKey(arriveTile.ConnectPos))
         {
-            startTile.ConnectTile = tileTable[arriveTile.ConnectPos];
+            arriveTile.ConnectTile = tileTable[arriveTile.ConnectPos];
+            arriveTile.UnderTile = tileTable[arriveTile.transform.position];
+            arriveTile.UnderTile.gameObject.SetActive(false);
+            arriveTile.ConnectTile.ConnectStartTiles.Add(arriveTile);
+            arriveTile = prevArriveTile;
         }
 
         for (int i = 0; i < startTiles.Count; i++)
         {
             if (tileTable.ContainsKey(startTiles[i].ConnectPos))
             {
-                startTile.ConnectTile = tileTable[startTiles[i].ConnectPos]; 
+                startTiles[i].ConnectTile = tileTable[startTiles[i].ConnectPos];
+                startTiles[i].UnderTile = tileTable[startTiles[i].transform.position];
+                startTiles[i].ConnectTile.ConnectStartTiles.Add(startTiles[i]);
+                startTiles[i].UnderTile.gameObject.SetActive(false);
             }
         }
 
@@ -530,6 +575,9 @@ public class DrawManager : MonoBehaviour
         {
             DeleteAroundTile(tiles[i] , true);
         }
+
+        tiles[0].connectCount = 0;
+        DeleteAroundTile(tiles[0]);
 
         waveToTiles.Clear();
         tiles.Clear();
