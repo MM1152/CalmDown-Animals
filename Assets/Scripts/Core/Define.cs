@@ -38,10 +38,24 @@ public class NeighborPosition
     }
 }
 
+public enum AnimalTypes
+{
+    Hyena = 212356,
+    Rabbit = 211445,
+    Red_Fox = 212434,
+    Warthog = 213335,
+    Nanger_Granti = 213423,
+}
+
 public static class DataTableIds
 {
     public static readonly string StringTableIds = "StringTable";
     public static readonly string RoundTableIds = "RoundTable";
+    public static readonly string AnimalSizeTable = "AnimalSizeTable";
+    public static readonly string AnimalSpeedTable = "AnimalSpeedTable";
+    public static readonly string AnimalInfoTable = "AnimalInfoTable";
+    public static readonly string AnimalCRRankTable = "AnimalCRRank";
+
     public static readonly string[] MapDataIds =
     {
         "SabanaMap"

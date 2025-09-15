@@ -7,8 +7,12 @@ public static class DataTableManager
         = new Dictionary<string, DataTable>();
 
     public static StringTable stringTable => Get<StringTable>(DataTableIds.StringTableIds);
-
-
+    public static RoundTable roundTable => Get<RoundTable>(DataTableIds.RoundTableIds);
+    public static AnimalInfoTable animalInfoTable => Get<AnimalInfoTable>(DataTableIds.AnimalInfoTable);
+    public static AnimalSizeTable animalSizeTable => Get<AnimalSizeTable>(DataTableIds.AnimalSizeTable);
+    public static AnimalSpeedTable animalSpeedTable => Get<AnimalSpeedTable>(DataTableIds.AnimalSpeedTable);
+    public static AnimalCRRank animalCRRankTable => Get<AnimalCRRank>(DataTableIds.AnimalCRRankTable);
+    
     static DataTableManager()
     {
         Init();
@@ -21,9 +25,25 @@ public static class DataTableManager
 
         RoundTable roundTable = new RoundTable();
         roundTable.Load(DataTableIds.RoundTableIds);
+        
+        AnimalInfoTable animalInfoTable = new AnimalInfoTable();
+        animalInfoTable.Load(DataTableIds.AnimalInfoTable);
+
+        AnimalSizeTable animalSizeTable = new AnimalSizeTable();
+        animalSizeTable.Load(DataTableIds.AnimalSizeTable);
+
+        AnimalSpeedTable animalSpeedTable = new AnimalSpeedTable();
+        animalSpeedTable.Load(DataTableIds.AnimalSpeedTable);
+
+        AnimalCRRank animalCRRankTable= new AnimalCRRank();
+        animalCRRankTable.Load(DataTableIds.AnimalCRRankTable);
 
         tables.Add(DataTableIds.StringTableIds , stringTable);
         tables.Add(DataTableIds.RoundTableIds, roundTable);
+        tables.Add(DataTableIds.AnimalInfoTable, animalInfoTable);
+        tables.Add(DataTableIds.AnimalSpeedTable, animalSpeedTable);
+        tables.Add(DataTableIds.AnimalSizeTable, animalSizeTable);
+        tables.Add(DataTableIds.AnimalCRRankTable, animalCRRankTable);
     }
 
     public static T Get<T>(string id) where T : DataTable

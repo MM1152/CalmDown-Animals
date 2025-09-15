@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -8,21 +6,29 @@ public class Enemy : MonoBehaviour
     private PathTile nTile;
     private EnemyHealth health;
     private bool spawn;
+    private float speed;
 
-    public float speed;
+    private AnimalInfoTable.Data data;
 
     public void Awake()
     {
         health = GetComponent<EnemyHealth>();
     }
 
-    public void Spawn(PathTile spawnTile)
+    public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data)
     {
+        this.data = data;
         this.spawnTile = spawnTile;
-        transform.position = this.spawnTile.transform.position;
+
+        Vector3 gridSize = spawnTile.GetComponent<Renderer>().bounds.size;
+
+        speed = gridSize.x / this.data.Time;
+
         nTile = spawnTile.ParentTile;
-        health.Init();
+        health.Init(this.data.MaxHp);
+
         spawn = true;
+        transform.position = this.spawnTile.transform.position;
     }
 
     private void Update()

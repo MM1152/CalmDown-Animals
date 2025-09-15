@@ -15,13 +15,15 @@ public class EnemySpawner : MonoBehaviour
     public float spawnInterval;
     private float lastSpawnTime;
 
+    AnimalInfoTable animalInfoTable;
+
     private List<SpawnEnemyInfo> infoTiles = new List<SpawnEnemyInfo>();
 
     private void Start()
     {
         copySpawnCount = spawnCount;
-        gameManager.endWave += () => copySpawnCount = spawnCount;
         gameManager.endWave += SetInfoTiles;
+        animalInfoTable = DataTableManager.animalInfoTable;
     }
 
     private void Update()
@@ -51,9 +53,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void SetInfoTiles()
     {
-        foreach(var info in infoTiles)
+        var spawnInfo = animalInfoTable.Get(AnimalTypes.Rabbit);
+        spawnCount = Random.Range(spawnInfo.Range_min , spawnInfo.Range_max);
+        copySpawnCount = spawnCount;
+
+        foreach (var info in infoTiles)
         {
             info.SpawnEnemyCount(copySpawnCount);
+            info.SetSpawnEnemy(spawnInfo);
         }
     }
     //Test ¿ë
@@ -61,8 +68,8 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector3 newPosition = (Vector3)(Vector3.right  * gridSize) + spawnTile.transform.position;
         var spawnInfoTile = Instantiate(infoTile, transform);
-        spawnInfoTile.SetSpawnEnemy(newPosition, null, copySpawnCount, spawnTile);
-        spawnInfoTile.Init(this);
+        spawnInfoTile.Init(this, spawnTile);
         infoTiles.Add(spawnInfoTile);
+        SetInfoTiles();
     }
 }

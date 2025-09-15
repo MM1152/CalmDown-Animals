@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour , IDamageAble
 {
-    protected int MaxHp { get; private set; } = 55;
+    protected int MaxHp { get; private set; }
     public int Hp { get; private set; }
 
     public bool IsDie { get => isDie; }
@@ -15,9 +15,10 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
 
     public event Action onDie;
 
-    public void Init()
+    public void Init(int maxHp)
     {
         isDie = false;
+        MaxHp = maxHp;
         Hp = MaxHp;
     }
 

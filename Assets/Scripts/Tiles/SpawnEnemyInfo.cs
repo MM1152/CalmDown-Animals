@@ -8,14 +8,18 @@ public class SpawnEnemyInfo : MonoBehaviour
     private PathTile spawnTile;
     private EnemySpawner spawner;
 
+    AnimalInfoTable.Data spawnAnimalInfo;
+
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void Init(EnemySpawner spawner)
+    public void Init(EnemySpawner spawner, PathTile spawnTile)
     {
         this.spawner = spawner;
+        this.spawnTile = spawnTile;
+        transform.position = spawnTile.transform.position;
     }
 
     public void SpawnEnemyCount(int count)
@@ -24,31 +28,28 @@ public class SpawnEnemyInfo : MonoBehaviour
         spawnCountText.text = spawnCount.ToString();
     }
 
-    public void SetSpawnEnemy(Vector3 position, Sprite image, int count , PathTile spawnTile)
+    public void SetSpawnEnemy(AnimalInfoTable.Data spawnAnimalInfo)
     {
-        transform.position = position;
-        spawnCount = count;
-        this.spawnTile = spawnTile;
-
+        this.spawnAnimalInfo = spawnAnimalInfo;
         spawnCountText.text = spawnCount.ToString();
     }
 
 
     //Test 용 코드임
     //Enemy 테이블 연결시 변경되어야 할듯
-    public void Spawn(Enemy spawnEnemy)
+    public void Spawn(Enemy prefabs)
     {
         if (spawnCount <= 0) return;
 
         spawnCount--;
         spawnCountText.text = spawnCount.ToString();
 
-        var enemy = Instantiate(spawnEnemy);
+        var enemy = Instantiate(prefabs);
         var health = enemy.GetComponent<EnemyHealth>();
         if(health != null)
         {
             health.onDie += spawner.CheckDieEnemy;
         }
-        enemy.Spawn(spawnTile);
+        enemy.Spawn(spawnTile , spawnAnimalInfo);
     }
 }
