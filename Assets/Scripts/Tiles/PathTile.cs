@@ -9,7 +9,7 @@ public class PathTile : Tile
     public int F => G + H;
     public List<PathTile> Neighbor  = new List<PathTile>();
     public PathTile ParentTile { get; set; } = null;
-    
+    public DrawTile ArriveDrawTile { get; set; }
 
     private float enablePercent = 0f;
 

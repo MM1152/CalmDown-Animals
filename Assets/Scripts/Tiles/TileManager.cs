@@ -207,7 +207,7 @@ public class TileManager : MonoBehaviour
             SetStartTile(drawStartTiles[i]);
         }
 
-        SetArriveTile(drawArriveTile.ConnectPos);
+        SetArriveTile(drawArriveTile);
         FindNeighbor();
     }
 
@@ -268,10 +268,11 @@ public class TileManager : MonoBehaviour
     }
 
     // Test 용 코드임
-    public void SetArriveTile(Vector3 pos)
+    public void SetArriveTile(DrawTile drawTile)
     {
-        arriveTile = tileTable[pos];
-        tileTable[pos].Type = TileType.Path;
+        arriveTile = tileTable[drawTile.ConnectPos];
+        arriveTile.Type = TileType.Path;
+        arriveTile.ArriveDrawTile = drawTile;
     }
     // Test 용 코드임
     public void SetStartTile(DrawTile drawTile)

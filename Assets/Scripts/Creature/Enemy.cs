@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,11 +6,14 @@ public class Enemy : MonoBehaviour
 {
     private PathTile nTile;
     private EnemyHealth health;
-    private bool spawn;
-    private float speed;
     private GameManager gameManager;
     private AnimalInfoTable.Data data;
 
+    private float speed;
+    private bool spawn;
+    private Vector3 endPoint;
+    private Vector3 nPos;
+    private Vector3 dir;
     public void Awake()
     {
         health = GetComponent<EnemyHealth>();
@@ -31,21 +35,39 @@ public class Enemy : MonoBehaviour
 
         spawn = true;
         transform.position = spawnPoint;
+
+        nPos = nTile.transform.position;
+        dir = (nPos - transform.position).normalized;
     }
 
     private void Update()
     {
         if(spawn && nTile != null)
         {
-            Vector3 dir = (nTile.transform.position - transform.position).normalized;
             transform.position += dir * speed * Time.deltaTime;
-           
-            if(Vector3.Distance(transform.position , nTile.transform.position) < 0.1f)
-            {
-                nTile = nTile.ParentTile;
-            }
 
-            if(nTile == null)
+            if (Vector3.Distance(transform.position , nPos) < 0.1f)
+            {
+                if (nTile.ParentTile == null)
+                {
+                    nPos = nTile.ArriveDrawTile.transform.position;
+                    dir = (nPos - transform.position).normalized;
+                    nTile = nTile.ParentTile;
+                }
+                else
+                {
+                    nTile = nTile.ParentTile;
+                    nPos = nTile.transform.position;
+                    dir = (nPos - transform.position).normalized;
+                }
+            }
+        }
+
+        else if(spawn && nTile == null)
+        {
+            transform.position += dir * speed * Time.deltaTime;
+
+            if (Vector3.Distance(nPos , transform.position) < 0.05f)
             {
                 health.Die();
                 gameManager.WaveFail();
