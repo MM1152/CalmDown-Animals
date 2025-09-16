@@ -124,7 +124,6 @@ public class TileManager : MonoBehaviour
                 {
                     editTile.Type = TileType.None;
                 }
-
                 editTiles.Clear();
             }
         } 

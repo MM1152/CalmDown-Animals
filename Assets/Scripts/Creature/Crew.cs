@@ -19,13 +19,26 @@ public class Crew : MonoBehaviour
     private PathTile underTile;
     private new SphereCollider collider;
     private Animator animator;
+    private GameManager gameManager;
+
     public EnemyHealth target;
     public List<EnemyHealth> targets;
-
+    
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
         animator = GetComponent<Animator>();
+        
+    }
+
+    private void Start()
+    {
+        var find = GameObject.FindWithTag(TagIds.GameManagerTag);
+        if (find != null)
+        {
+            gameManager = find.GetComponent<GameManager>();
+            gameManager.endWave += () => targets.Clear();
+        }
     }
 
     public void Spawn(CrewManager spawner)
@@ -86,7 +99,14 @@ public class Crew : MonoBehaviour
         {
             return null;
         }
-        return targets[0];
+        foreach(var target in targets)
+        {
+            if(target != null)
+            {
+                return target;
+            }
+        }
+        return null;
     }
 
     private void OnTriggerEnter(Collider other)

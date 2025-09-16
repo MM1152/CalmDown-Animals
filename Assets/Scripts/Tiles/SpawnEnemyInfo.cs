@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-
+using System.Collections.Generic;
 public class SpawnEnemyInfo : MonoBehaviour
 {
     private int spawnCount;
@@ -8,11 +8,33 @@ public class SpawnEnemyInfo : MonoBehaviour
     private PathTile spawnTile;
     private EnemySpawner spawner;
 
-    AnimalInfoTable.Data spawnAnimalInfo;
+    private AnimalInfoTable.Data spawnAnimalInfo;
+    private GameManager gameManager;
+    private List<Enemy> spawnList = new List<Enemy>();
 
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    private void Start()
+    {
+        var find = GameObject.FindWithTag(TagIds.GameManagerTag);
+        if(find != null)
+        {
+            gameManager = find.GetComponent<GameManager>();
+            gameManager.endWave += () =>
+            {
+                foreach(var enemy in spawnList)
+                {
+                    if(enemy != null)
+                    {
+                        Destroy(enemy.gameObject);
+                    }
+                }
+                spawnList.Clear();
+            };
+        }
     }
 
     public void Init(EnemySpawner spawner, PathTile spawnTile)
@@ -46,7 +68,9 @@ public class SpawnEnemyInfo : MonoBehaviour
 
         var enemy = Instantiate(prefabs);
         var health = enemy.GetComponent<EnemyHealth>();
-        if(health != null)
+        spawnList.Add(enemy);
+
+        if (health != null)
         {
             health.onDie += spawner.CheckDieEnemy;
         }
