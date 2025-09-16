@@ -126,18 +126,19 @@ public class TileManager : MonoBehaviour
 
         ResetInitPath();
 
-        if(TouchManager.Phase == Phase.Up)
-        {
-            bool isFail = FindPath();
-            if(!isFail)
-            {
-                foreach(var editTile in editTiles)
-                {
-                    editTile.Type = TileType.None;
-                }
-                editTiles.Clear();
-            }
-        } 
+        // ÇÑº×±×¸®±â Ãë¼Ò µÊ
+        //if(TouchManager.Phase == Phase.Up)
+        //{
+        //    bool isFail = FindPath();
+        //    if(!isFail)
+        //    {
+        //        foreach(var editTile in editTiles)
+        //        {
+        //            editTile.Type = TileType.None;
+        //        }
+        //        editTiles.Clear();
+        //    }
+        //} 
 
         if (TouchManager.TouchType != TouchType.Drag) return;
 
@@ -147,8 +148,6 @@ public class TileManager : MonoBehaviour
             tile.Type = TileType.Path;
             editTiles.Add(tile);
         }
-
-        
     }
 
     private PathTile GetTile()
@@ -169,7 +168,7 @@ public class TileManager : MonoBehaviour
 
     public void DrawTiles()
     {
-        int mapSize = DataTableManager.Get<RoundTable>(DataTableIds.RoundTableIds).Get(gameManager.wave).Map_Size;
+        int mapSize = DataTableManager.roundTable.Get(gameManager.wave).Map_Size;
         if (mapSize == this.mapSize)
         {
             return;

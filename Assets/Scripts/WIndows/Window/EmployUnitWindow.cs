@@ -19,9 +19,17 @@ public class EmployUnitWindow : GenericWindow
         backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
     }
 
-    private void OnEnable()
+    public override void Open()
     {
+        base.Open();
         sellLayout.SetActive(false);
+        DragAble.CrewDrag = true;
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        DragAble.CrewDrag = false;
     }
 
     public void Update()

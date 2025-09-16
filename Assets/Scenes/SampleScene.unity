@@ -932,7 +932,7 @@ MonoBehaviour:
   popupManager: {fileID: 908200645}
   waveText: {fileID: 2057822078}
   timerText: {fileID: 1383151320}
-  maxWave: 0
+  maxWave: 5
 --- !u!1 &365045143
 GameObject:
   m_ObjectHideFlags: 0

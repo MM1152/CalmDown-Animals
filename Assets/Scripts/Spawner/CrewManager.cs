@@ -83,12 +83,15 @@ public class CrewManager : MonoBehaviour
 
     private void CrewDrag()
     {
+        if (!DragAble.CrewDrag) return;
+
         if (TouchManager.TouchType == TouchType.Tab)
         {
             if (DragCrew != null)
             {
                 DragCrew.SetUnderTile(null);
                 SetPlaceCount(GetPlaceCount(DragCrew.rank) + 1);
+                DragCrew = null;
             }
 
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
@@ -103,12 +106,16 @@ public class CrewManager : MonoBehaviour
                 }
             }
         }
+
     }
 
     private void DragDrop()
     {
+        if (!DragAble.CrewDrag) return;
+
         if (DragCrew != null)
         {
+            DragAble.CameraDrag = false;
             Vector3 touchPosition = Vector3.zero;
 
             if (TouchManager.TouchType == TouchType.Drag)
@@ -119,7 +126,8 @@ public class CrewManager : MonoBehaviour
             }
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
-                if(crewSellingEvent.SellAble)
+                DragAble.CameraDrag = true;
+                if (crewSellingEvent.SellAble)
                 {
                     SetHireCount(GetHireCount(DragCrew.rank) - 1);
                     Destroy(DragCrew.gameObject);

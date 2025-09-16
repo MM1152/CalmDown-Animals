@@ -4,7 +4,6 @@ public enum TouchType
 {
     None,
     Tab,
-    Swipe,
     Zoom,
     Drag,
 }
@@ -26,7 +25,6 @@ public class TouchManager : MonoBehaviour
     private float fingerTouchStartTime;
 
     public float checkTime = 0.5f;
-    public float swipeAmount = 5f;
     public float amount;
 
     private static Vector2 dir;
@@ -71,14 +69,7 @@ public class TouchManager : MonoBehaviour
 
             if(Time.time > (fingerTouchStartTime + checkTime) && amount > 5)
             {
-                if (amount > swipeAmount)
-                {
-                    TouchType = TouchType.Swipe;
-                }
-                else if (amount < swipeAmount)
-                {
-                    TouchType = TouchType.Drag;
-                }
+                TouchType = TouchType.Drag;
             }
             else if (touch.phase == TouchPhase.Ended)
             {

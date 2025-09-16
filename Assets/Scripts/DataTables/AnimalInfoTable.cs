@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,15 +10,30 @@ public class AnimalInfoTable : DataTable
     public class Data
     {
         public int Animal_ID { get; set; }
-        public string Animal_name { get; set; } 
-        public int CR_ID { get; set; } 
-        public int Size_ID { get; set; } 
+        public string Animal_name { get; set; }
+        public int CR_ID { get; set; }
+        public int Size_ID { get; set; }
         public int Spd { get; set; }
         public int Range_min { get; set; }
         public int Range_max { get; set; }
+        public string Model {
+            set {
+                model = value;
 
+                Skin = Resources.Load<GameObject>(model);
+                Animator = Resources.Load<RuntimeAnimatorController>(model + "_Animator");
+                Avatar = Resources.Load<Avatar>(model + "_Avatar");
+            }
+        }
+
+        private string model;
+
+        public GameObject Skin;
+        public RuntimeAnimatorController Animator;
+        public Avatar Avatar;
+            
         public float Time => DataTableManager.animalSpeedTable.Get(Spd).Time; 
-        public int MaxHp => DataTableManager.animalCRRankTable.Get(CR_ID).Base_capture + DataTableManager.animalSizeTable.Get(Size_ID).Add_capture; 
+        public int MaxHp => DataTableManager.animalCRRankTable.Get(CR_ID).Base_capture + DataTableManager.animalSizeTable.Get(Size_ID).Add_capture;
     }
 
     private readonly Dictionary<int, Data> animalInfos = new Dictionary<int, Data>();
@@ -38,4 +55,14 @@ public class AnimalInfoTable : DataTable
     {
         return animalInfos[(int)animal];
     }
+
+    public Data RandomGet(int CR_ID)
+    {
+        var list = animalInfos.Select(x => x.Value).ToList();
+        var withCR_ID = list.Where(x => x.CR_ID == CR_ID);
+
+        int rand = UnityEngine.Random.Range(0, withCR_ID.Count());
+        return withCR_ID.ElementAt(rand);
+    }
+
 }

@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     private Vector3 endPoint;
     private Vector3 nPos;
     private Vector3 dir;
+
+    private Animator animator;
     public void Awake()
     {
         health = GetComponent<EnemyHealth>();
@@ -22,6 +24,7 @@ public class Enemy : MonoBehaviour
         {
             gameManager = gmObj.GetComponent<GameManager>();
         }
+
     }
 
     public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data , Vector3 spawnPoint)
@@ -38,6 +41,12 @@ public class Enemy : MonoBehaviour
 
         nPos = nTile.transform.position;
         dir = (nPos - transform.position).normalized;
+        transform.LookAt(nPos);
+
+        GameObject skin = Instantiate(data.Skin, transform);
+        animator = skin.AddComponent<Animator>();
+        animator.runtimeAnimatorController = data.Animator;
+        animator.avatar = data.Avatar;
     }
 
     private void Update()
@@ -53,12 +62,14 @@ public class Enemy : MonoBehaviour
                     nPos = nTile.ArriveDrawTile.transform.position;
                     dir = (nPos - transform.position).normalized;
                     nTile = nTile.ParentTile;
+                    transform.LookAt(nPos);
                 }
                 else
                 {
                     nTile = nTile.ParentTile;
                     nPos = nTile.transform.position;
                     dir = (nPos - transform.position).normalized;
+                    transform.LookAt(nPos);
                 }
             }
         }

@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
 
 public class DragCamera : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class DragCamera : MonoBehaviour
     {
         Vector3 linear = Vector3.zero;
 
+        if (!DragAble.CameraDrag) return;
+ 
 #if UNITY_EDITOR
         if(isPlayEditor)
         {
@@ -52,7 +55,7 @@ public class DragCamera : MonoBehaviour
         }
         else
         {
-            if (TouchManager.TouchType == TouchType.Swipe)
+            if (TouchManager.TouchType == TouchType.Drag)
             {
                 linear = TouchManager.GetSwipeDir();
             }
@@ -64,6 +67,6 @@ public class DragCamera : MonoBehaviour
         }
 #endif
 
-            cam.transform.position += -(linear * dragSpeed * Time.deltaTime);
+        cam.transform.position += -(linear * dragSpeed * Time.deltaTime);
     }
 }

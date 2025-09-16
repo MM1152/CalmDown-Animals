@@ -128,6 +128,7 @@ public class Crew : MonoBehaviour
             var find = other.GetComponent<EnemyHealth>();
             if(targets.Contains(find))
             {
+                target = null;
                 targets.Remove(find);
             }
         }

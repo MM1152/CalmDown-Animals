@@ -68,6 +68,12 @@ public static class TagIds
 
 }
 
+public static class DragAble
+{
+    public static bool CameraDrag = true;
+    public static bool CrewDrag;
+}
+
 public static class DataTableIds
 {
     public static readonly string StringTableIds = "StringTable";

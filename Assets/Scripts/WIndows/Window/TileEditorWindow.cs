@@ -12,7 +12,11 @@ public class TileEditorWindow : GenericWindow
     private void Awake()
     {
         backButton.onClick.AddListener(() => CheckPath());
-        editButton.onClick.AddListener(() => tileManager.drawMode = !tileManager.drawMode); 
+        editButton.onClick.AddListener(() =>
+        {
+            tileManager.drawMode = !tileManager.drawMode;
+            DragAble.CameraDrag = !tileManager.drawMode;
+        });
     }
 
     private void CheckPath()
@@ -32,6 +36,7 @@ public class TileEditorWindow : GenericWindow
     public override void Close()
     {
         tileManager.drawMode = false;
+        DragAble.CameraDrag = true;
         base.Close();
     }
 }

@@ -54,6 +54,8 @@ public class SpawnEnemyInfo : MonoBehaviour
     public void SetSpawnEnemy(AnimalInfoTable.Data spawnAnimalInfo)
     {
         this.spawnAnimalInfo = spawnAnimalInfo;
+        //Image 스프라이트 설정 필요
+
         spawnCountText.text = spawnCount.ToString();
     }
 
