@@ -1,9 +1,8 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour
 {
-
-    private PathTile spawnTile;
     private PathTile nTile;
     private EnemyHealth health;
     private bool spawn;
@@ -21,20 +20,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data)
+    public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data , Vector3 spawnPoint)
     {
         this.data = data;
-        this.spawnTile = spawnTile;
-
         Vector3 gridSize = spawnTile.GetComponent<Renderer>().bounds.size;
 
         speed = gridSize.x / this.data.Time;
-
-        nTile = spawnTile.ParentTile;
+        nTile = spawnTile;
         health.Init(this.data.MaxHp);
 
         spawn = true;
-        transform.position = this.spawnTile.transform.position;
+        transform.position = spawnPoint;
     }
 
     private void Update()

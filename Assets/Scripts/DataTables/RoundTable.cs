@@ -28,10 +28,7 @@ public class RoundTable : DataTable
         for(int i = 0; i < datas.Count; i++)
         {
             RoundData.Add(datas[i]);
-            Debug.Log(datas[i].RewardGold);
         }
-
-        Debug.Log("Load");
     }
 
     public Data Get(int round)

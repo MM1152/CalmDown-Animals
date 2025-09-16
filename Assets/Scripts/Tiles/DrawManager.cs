@@ -195,7 +195,7 @@ public class DrawManager : MonoBehaviour
                 Vector3 mousePos = Input.mousePosition;
                 Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
 
-                int sector = FindHexaSector(tile.transform.position, mousePosInWorld);
+                int sector = HexaUtility.FindHexaSector(tile.transform.position, mousePosInWorld);
                 Debug.Log(sector);
 
                 if (tile.AroundTile[sector].IsDraw || !tile.AroundTile[sector].gameObject.activeSelf) return;
@@ -252,7 +252,7 @@ public class DrawManager : MonoBehaviour
                 Vector3 mousePos = Input.mousePosition;
                 Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10));
 
-                int sector = FindHexaSector(tile.transform.position, mousePosInWorld);
+                int sector = HexaUtility.FindHexaSector(tile.transform.position, mousePosInWorld);
                 Debug.Log(sector);
 
                 if (tile.AroundTile[sector].IsDraw || !tile.AroundTile[sector].gameObject.activeSelf) return;
@@ -383,17 +383,7 @@ public class DrawManager : MonoBehaviour
             }
         }
     }
-    private int FindHexaSector(Vector3 center , Vector3 point)
-    {
-        float dx = point.x - center.x;
-        float dz = point.z - center.z;
 
-        float angle = Mathf.Atan2(dz, dx);
-        if (angle < 0) angle += Mathf.PI * 2f;
-        float sectorSize = Mathf.PI * 2f / 6f;
-
-        return Mathf.FloorToInt(angle / sectorSize) % 6;
-    }
     public void DrawTileToLevel(int level)
     {
         int prevLevel = this.level;

@@ -83,6 +83,9 @@ public class DrawTile : Tile
         transform.eulerAngles = data.Rotation;
         DrawType = data.DrawType;
         ConnectPos = data.ConnectTile;
+
+        Vector3 dir = ConnectPos - transform.position;
+        transform.position += dir * 0.28f;
     }
 
     public void SetActive(bool isActive)

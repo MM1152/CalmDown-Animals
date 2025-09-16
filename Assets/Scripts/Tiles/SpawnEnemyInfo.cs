@@ -11,7 +11,7 @@ public class SpawnEnemyInfo : MonoBehaviour
     private AnimalInfoTable.Data spawnAnimalInfo;
     private GameManager gameManager;
     private List<Enemy> spawnList = new List<Enemy>();
-
+    private Vector3 spawnPoint;
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
@@ -37,11 +37,12 @@ public class SpawnEnemyInfo : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner spawner, PathTile spawnTile)
+    public void Init(EnemySpawner spawner, PathTile spawnTile , Vector3 drawPosition , Vector3 spawnPosition)
     {
         this.spawner = spawner;
         this.spawnTile = spawnTile;
-        transform.position = spawnTile.transform.position;
+        transform.position = drawPosition;
+        spawnPoint = spawnPosition;
     }
 
     public void SpawnEnemyCount(int count)
@@ -74,6 +75,6 @@ public class SpawnEnemyInfo : MonoBehaviour
         {
             health.onDie += spawner.CheckDieEnemy;
         }
-        enemy.Spawn(spawnTile , spawnAnimalInfo);
+        enemy.Spawn(spawnTile , spawnAnimalInfo , spawnPoint);
     }
 }

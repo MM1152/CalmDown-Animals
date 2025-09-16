@@ -1,11 +1,19 @@
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 using JetBrains.Annotations;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class TileManager : MonoBehaviour
 {
+
+    //nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x* 0.5f) , 0, gridSize.y ));
+    //    nextNeighborPos[1] = GetFloor(new Vector3(-(gridSize.x - gridSize.x* 0.5f), 0, gridSize.y));
+    //    nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.x, 0 ,0));
+    //    nextNeighborPos[3] = GetFloor(new Vector3(-(gridSize.x - gridSize.x* 0.5f), 0, -gridSize.y));
+    //    nextNeighborPos[4] = GetFloor(new Vector3((gridSize.x - gridSize.x* 0.5f), 0, -gridSize.y));
+    //    nextNeighborPos[5] = GetFloor(new Vector3(gridSize.x, 0, 0));
 
     [Header("DEBUG")]
     public TileType tileType;
@@ -38,11 +46,14 @@ public class TileManager : MonoBehaviour
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
     private List<PathTile> tileList = new List<PathTile>();
     private LineRenderer lineRenderer;
-    private NeighborPosition neighborPosition;
 
+    private NeighborPosition neighborPosition;
     private PathFind pathFind = new PathFind();
+
+    //½ÇÁ¦ ¸Ê¿¡ ÂïÈ÷´Â Å¸ÀÏµé
     private DrawTile drawArriveTile;
-    private List<DrawTile> startTiles = new List<DrawTile>();
+    private List<DrawTile> drawStartTiles = new List<DrawTile>();
+
     private List<PathTile> editTiles = new List<PathTile>();
 
     private void Start()
@@ -178,7 +189,7 @@ public class TileManager : MonoBehaviour
                 }
                 else if (flagTile.DrawType == DrawType.Start)
                 {
-                    startTiles.Add(flagTile);
+                    drawStartTiles.Add(flagTile);
                 }
             }
             else
@@ -191,15 +202,15 @@ public class TileManager : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < startTiles.Count; i++)
+        for(int i = 0; i < drawStartTiles.Count; i++)
         {
-            SetStartTile(startTiles[i].ConnectPos);
+            SetStartTile(drawStartTiles[i]);
         }
 
         SetArriveTile(drawArriveTile.ConnectPos);
-
         FindNeighbor();
     }
+
 
     //public void DrawTiles()
     //{
@@ -263,10 +274,18 @@ public class TileManager : MonoBehaviour
         tileTable[pos].Type = TileType.Path;
     }
     // Test ¿ë ÄÚµåÀÓ
-    public void SetStartTile(Vector3 pos)
+    public void SetStartTile(DrawTile drawTile)
     {
-        startTile.Add(tileTable[pos]);
-        tileTable[pos].Type = TileType.Path;
-        enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , neighborPosition.gridSize);
+
+        //¿©±â´Â ¹Ù´Ú¿¡ ÂïÈù Å¸ÀÏÀÓ
+        var tile = tileTable[drawTile.ConnectPos];
+        
+        startTile.Add(tile);
+        tile.Type = TileType.Path;
+
+        Vector3 spawnPosition = drawTile.transform.position;
+        Vector3 drawPosition = spawnPosition + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.x , 0 , neighborPosition.gridSize.y));
+
+        enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
     }
 }

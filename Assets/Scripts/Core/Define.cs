@@ -38,6 +38,21 @@ public class NeighborPosition
     }
 }
 
+public static class HexaUtility
+{
+    public static int FindHexaSector(Vector3 center, Vector3 point)
+    {
+        float dx = point.x - center.x;
+        float dz = point.z - center.z;
+
+        float angle = Mathf.Atan2(dz, dx);
+        if (angle < 0) angle += Mathf.PI * 2f;
+        float sectorSize = Mathf.PI * 2f / 6f;
+
+        return Mathf.FloorToInt(angle / sectorSize % 6 + 6) % 6;
+    }
+}
+
 public enum AnimalTypes
 {
     Hyena = 212356,
