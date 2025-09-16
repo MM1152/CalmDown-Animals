@@ -47,6 +47,12 @@ public enum AnimalTypes
     Nanger_Granti = 213423,
 }
 
+public static class TagIds
+{
+    public static readonly string GameManagerTag = "GameController";
+
+}
+
 public static class DataTableIds
 {
     public static readonly string StringTableIds = "StringTable";

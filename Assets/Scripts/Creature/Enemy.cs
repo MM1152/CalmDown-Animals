@@ -2,17 +2,23 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+
     private PathTile spawnTile;
     private PathTile nTile;
     private EnemyHealth health;
     private bool spawn;
     private float speed;
-
+    private GameManager gameManager;
     private AnimalInfoTable.Data data;
 
     public void Awake()
     {
         health = GetComponent<EnemyHealth>();
+        var gmObj = GameObject.FindWithTag(TagIds.GameManagerTag);
+        if(gmObj != null)
+        {
+            gameManager = gmObj.GetComponent<GameManager>();
+        }
     }
 
     public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data)
@@ -46,6 +52,7 @@ public class Enemy : MonoBehaviour
             if(nTile == null)
             {
                 health.Die();
+                gameManager.WaveFail();
             }
         }
     }

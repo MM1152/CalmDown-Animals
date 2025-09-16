@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour{
     public TextMeshProUGUI timerText;
 
     public int maxWave;
-
     public bool WaveStart { get; private set; } = false;
 
     private void Awake()
@@ -31,24 +30,29 @@ public class GameManager : MonoBehaviour{
         WaveStart = true;
         windowManager.CloseAll();
         startWave?.Invoke();
-
-
     }
 
-    public void EndWave()
+    public void EndWave(bool waveFail = false)
     {
         WaveStart = false;
         windowManager.Open(Window.EditorWindow);
 
-        if(wave == maxWave)
+        if(wave == maxWave && !waveFail)
         {
             GameFin = true;
             var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
             popup.Id = 1;
             return;
         }
-
-        wave++;
+        else if(waveFail)
+        {
+            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+            popup.Id = 2;
+        }
+        else
+        {
+            wave++;
+        }
         waveText.text = wave + " 웨이브";
         endWave?.Invoke();
     }
@@ -64,5 +68,11 @@ public class GameManager : MonoBehaviour{
                 timerText.text = timerToInt + " 초";
             }
         }
+    }
+
+    public void WaveFail()
+    {
+        windowManager.Open(Window.EditorWindow);
+        EndWave(true);
     }
 }
