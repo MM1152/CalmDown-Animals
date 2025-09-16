@@ -47,7 +47,7 @@ public class TouchManager : MonoBehaviour
             {
                 Phase = Phase.None;
             }
-                TouchType = TouchType.None;
+            TouchType = TouchType.None;
             touchFinish = true;
         }
         else if (Input.touchCount == 1)

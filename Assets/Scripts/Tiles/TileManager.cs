@@ -43,6 +43,7 @@ public class TileManager : MonoBehaviour
     private PathFind pathFind = new PathFind();
     private DrawTile drawArriveTile;
     private List<DrawTile> startTiles = new List<DrawTile>();
+    private List<PathTile> editTiles = new List<PathTile>();
 
     private void Start()
     {
@@ -114,14 +115,32 @@ public class TileManager : MonoBehaviour
 
         ResetInitPath();
 
+        if(TouchManager.Phase == Phase.Up)
+        {
+            bool isFail = FindPath();
+            if(!isFail)
+            {
+                foreach(var editTile in editTiles)
+                {
+                    editTile.Type = TileType.None;
+                }
+
+                editTiles.Clear();
+            }
+        } 
+
         if (TouchManager.TouchType != TouchType.Drag) return;
 
         var tile = GetTile();
         if(tile != null && tile.Type == TileType.None)
         {
             tile.Type = TileType.Path;
+            editTiles.Add(tile);
         }
+
+        
     }
+
     private PathTile GetTile()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
