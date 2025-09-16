@@ -929,7 +929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wave: 1
   windowManager: {fileID: 908200644}
-  popupManager: {fileID: 0}
+  popupManager: {fileID: 908200645}
   waveText: {fileID: 2057822078}
   timerText: {fileID: 1383151320}
   maxWave: 0
