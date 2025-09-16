@@ -1,21 +1,55 @@
+using UnityEditor.Experimental.GraphView;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 public class TileEditorWindow : GenericWindow
 {
     public Button editButton;
+    public Button destroyButton;
+
     public Button deleteButton;
     public Button backButton;
 
     public PopupManager popupManager;
     public TileManager tileManager;
 
+    private bool editMode;
+    private bool destroyMode;
+
     private void Awake()
     {
         backButton.onClick.AddListener(() => CheckPath());
         editButton.onClick.AddListener(() =>
         {
-            tileManager.drawMode = !tileManager.drawMode;
-            DragAble.CameraDrag = !tileManager.drawMode;
+            if (destroyMode)
+            {
+                destroyMode = false;
+                editMode = true;
+            }
+            else
+            {
+                editMode = !editMode;
+            }
+
+            tileManager.tileType = TileType.Path;
+            tileManager.drawMode = editMode;
+            DragAble.CameraDrag = !editMode;
+        });
+        destroyButton.onClick.AddListener(() =>
+        {
+            if(editMode)
+            {
+                editMode = false;
+                destroyMode = true;
+            }
+            else
+            {
+                destroyMode = !destroyMode;
+            }
+
+            tileManager.tileType = TileType.None;
+            tileManager.drawMode = destroyMode;
+            DragAble.CameraDrag = !destroyMode;
         });
     }
 

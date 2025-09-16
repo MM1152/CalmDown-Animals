@@ -1,2 +1,2 @@
 ﻿Crew_ID,Crew_name,rank_ID,isDupli,crewCost,crewPaycheck,Equ_ID,isEquchange,Crew_capture,Crew_atkspd,Crew_info,
-30110,인턴 대원,0,TRUE,50,5,000,TRUE,12,3,"설명 txt"
+30110,"인턴 대원",0,TRUE,50,5,000,TRUE,12,3,"설명 txt"

@@ -56,6 +56,7 @@ public class TileManager : MonoBehaviour
 
     private List<PathTile> editTiles = new List<PathTile>();
 
+
     private void Start()
     {
         isChangedTile = false;
@@ -76,7 +77,7 @@ public class TileManager : MonoBehaviour
 
     private void Update()
     {
-        SetTileType();
+        SetTileType(tileType);
     }
 
     private void SetInitPath()
@@ -120,7 +121,7 @@ public class TileManager : MonoBehaviour
         return isSuseccs;
     }
 
-    public void SetTileType()
+    public void SetTileType(TileType type)
     {
         if (!drawMode) return;
 
@@ -140,13 +141,13 @@ public class TileManager : MonoBehaviour
         //    }
         //} 
 
-        if (TouchManager.TouchType != TouchType.Drag) return;
-
+        if (TouchManager.TouchType != TouchType.Drag && TouchManager.TouchType != TouchType.Tab) return;
+        TileType targetTile = type == TileType.Path ? TileType.None : TileType.Path;
         var tile = GetTile();
-        if(tile != null && tile.Type == TileType.None)
+        if(tile != null && tile.Type == targetTile)
         {
-            tile.Type = TileType.Path;
-            editTiles.Add(tile);
+            tile.Type = type;
+            //editTiles.Add(tile);
         }
     }
 

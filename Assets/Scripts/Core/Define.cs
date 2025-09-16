@@ -103,5 +103,5 @@ public enum Popup
 
 public enum CrewRank
 {
-    Intern,
+    Intern = 30110,
 }
