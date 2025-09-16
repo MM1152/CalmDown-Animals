@@ -6,7 +6,7 @@ public class CrewTable : DataTable
     public class Data
     {
         public int Crew_ID { get; set; }
-        public string Crew_Name { get; set; }
+        public string Crew_name { get; set; }
         public int rank_ID { get; set; }
         public bool isDupli { get; set; }
         public int crewCost { get; set; }
@@ -18,7 +18,7 @@ public class CrewTable : DataTable
         public string Crew_info { get; set; }
     }
 
-    private Dictionary<int, Data> crewTable = new Dictionary<int, Data>();
+    private readonly Dictionary<int, Data> crewTable = new Dictionary<int, Data>();
 
     public override void Load(string filename)
     {

@@ -1,29 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(BoxCollider))]
 public class Crew : MonoBehaviour
 {
     private readonly int Ani_AttackId = Animator.StringToHash("Attack");
 
-    public CrewRank rank;
-    public float attackRadius;
-    public float attackInterval;
-    public float lastAttackTime;
+    public CrewRank Rank => (CrewRank)data.Crew_ID;
     public CrewManager spawner;
 
-    public int damage;
-
-    private int killCount;
+    public EnemyHealth target;
+    public List<EnemyHealth> targets;
 
     private PathTile underTile;
     private new SphereCollider collider;
     private Animator animator;
     private GameManager gameManager;
 
-    public EnemyHealth target;
-    public List<EnemyHealth> targets;
-    
+    private CrewTable.Data data;
+    private float lastAttackTime;
     private void Awake()
     {
         collider = GetComponent<SphereCollider>();
@@ -41,10 +36,10 @@ public class Crew : MonoBehaviour
         }
     }
 
-    public void Spawn(CrewManager spawner)
+    public void Spawn(CrewManager spawner , CrewTable.Data data)
     {
         this.spawner = spawner;
-        collider.radius = attackRadius;
+        this.data = data;
     }
 
     public void SetUnderTile(PathTile tile)
@@ -76,14 +71,14 @@ public class Crew : MonoBehaviour
                 transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             }
 
-            if (Time.time > lastAttackTime + attackInterval)
+            if (Time.time > lastAttackTime + data.Crew_atkspd)
             {
                 lastAttackTime = Time.time;
                 animator.SetTrigger(Ani_AttackId);
                 transform.position = underTile.transform.position;
-                if (target.Hit(damage))
+                if (target.Hit(10))
                 {
-                    killCount++;
+                    Debug.Log("Kill Unit", gameObject);
                 }
             }
         }
@@ -133,6 +128,4 @@ public class Crew : MonoBehaviour
             }
         }
     }
-
-
 }

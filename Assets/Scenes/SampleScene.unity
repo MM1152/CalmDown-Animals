@@ -6229,7 +6229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc3ace538828884c99c410bbd758f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rank: 0
+  rank: 30110
   spawner: {fileID: 423284645}
   spawn: 0
   hireText: {fileID: 1525571568}

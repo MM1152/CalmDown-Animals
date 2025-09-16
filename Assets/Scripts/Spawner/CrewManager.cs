@@ -9,7 +9,7 @@ public class CrewManager : MonoBehaviour
     public Crew prefabs;
     public Crew DragCrew { get; set; }
     public CrewSellingEvent crewSellingEvent;
-    private List<(int hire, int place)> unitInfomation = new List<(int hire, int place)>();
+    private Dictionary<int , (int hire, int place)> unitInfomation = new Dictionary<int, (int hire, int place)>();
 
     public event Action changeUnitCount;
 
@@ -26,10 +26,9 @@ public class CrewManager : MonoBehaviour
 
     private void Awake()
     { 
-        int length = Enum.GetNames(typeof(CrewRank)).Length;
-        for(int i = 0; i < length; i++)
+        foreach(int crewRank in Enum.GetValues(typeof(CrewRank)))
         {
-            unitInfomation.Add((0, 0));
+            unitInfomation.Add(crewRank, (0, 0));
         }
     }
 
@@ -41,17 +40,17 @@ public class CrewManager : MonoBehaviour
 
     public void Spawn(CrewRank rank)
     {
-        (int hire, int place) data = unitInfomation[(int)CrewRank.Intern];
+        (int hire, int place) data = unitInfomation[(int)rank];
         if (data.hire - data.place <= 0) return;
 
         DragCrew = Instantiate(prefabs , transform);
-        DragCrew.Spawn(this);
+        DragCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
     }
 
     public bool CrewHire(CrewRank rank)
     {
         //골드로 판단 로직 넣기
-        SetHireCount(GetHireCount(rank) + 1);
+        SetHireCount(rank, GetHireCount(rank) + 1);
         return true;
     }
 
@@ -65,19 +64,19 @@ public class CrewManager : MonoBehaviour
         return unitInfomation[(int)rank].place;
     }
 
-    private void SetHireCount(int hireCount)
+    private void SetHireCount(CrewRank rank,int hireCount)
     {
-        var info = unitInfomation[(int)CrewRank.Intern];
+        var info = unitInfomation[(int)rank];
         info.hire = hireCount;
-        unitInfomation[(int)CrewRank.Intern] = info;
+        unitInfomation[(int)rank] = info;
         changeUnitCount?.Invoke();
     }
 
-    private void SetPlaceCount(int placeCount)
+    private void SetPlaceCount(CrewRank rank, int placeCount)
     {
-        var info = unitInfomation[(int)CrewRank.Intern];
+        var info = unitInfomation[(int)rank];
         info.place = placeCount;
-        unitInfomation[(int)CrewRank.Intern] = info;
+        unitInfomation[(int)rank] = info;
         changeUnitCount?.Invoke();
     }
 
@@ -90,7 +89,7 @@ public class CrewManager : MonoBehaviour
             if (DragCrew != null)
             {
                 DragCrew.SetUnderTile(null);
-                SetPlaceCount(GetPlaceCount(DragCrew.rank) + 1);
+                SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
                 DragCrew = null;
             }
 
@@ -102,7 +101,7 @@ public class CrewManager : MonoBehaviour
                 {
                     find.ResetUnderTile();
                     DragCrew = find;
-                    SetPlaceCount(GetPlaceCount(DragCrew.rank) - 1);
+                    SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) - 1);
                 }
             }
         }
@@ -129,14 +128,15 @@ public class CrewManager : MonoBehaviour
                 DragAble.CameraDrag = true;
                 if (crewSellingEvent.SellAble)
                 {
-                    SetHireCount(GetHireCount(DragCrew.rank) - 1);
+                    
+                    SetHireCount(DragCrew.Rank, GetHireCount(DragCrew.Rank) - 1);
                     Destroy(DragCrew.gameObject);
                     return;
                 }
 
                 Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
 
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask ))
+                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
                 {
                     var underTile = hit.collider.GetComponent<PathTile>();
                     if (underTile != null)
@@ -145,7 +145,7 @@ public class CrewManager : MonoBehaviour
                         {
                             DragCrew.transform.position = underTile.transform.position + Vector3.up * 0.5f;
                             DragCrew.SetUnderTile(underTile);
-                            SetPlaceCount(GetPlaceCount(DragCrew.rank) + 1);
+                            SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
                         }
                         else
                         {

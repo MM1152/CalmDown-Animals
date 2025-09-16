@@ -5,10 +5,12 @@ using UnityEngine.UIElements;
 public class Enemy : MonoBehaviour
 {
     private PathTile nTile;
+    private PathTile prevTile;
+
     private EnemyHealth health;
     private GameManager gameManager;
     private AnimalInfoTable.Data data;
-
+    
     private float speed;
     private bool spawn;
     private Vector3 endPoint;

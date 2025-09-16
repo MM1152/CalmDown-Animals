@@ -82,7 +82,7 @@ public static class DataTableIds
     public static readonly string AnimalSpeedTable = "AnimalSpeedTable";
     public static readonly string AnimalInfoTable = "AnimalInfoTable";
     public static readonly string AnimalCRRankTable = "AnimalCRRank";
-
+    public static readonly string CrewTable = "CrewTable";
     public static readonly string[] MapDataIds =
     {
         "SabanaMap"
