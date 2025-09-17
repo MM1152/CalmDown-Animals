@@ -1,6 +1,3 @@
-using UnityEditor.Experimental.GraphView;
-using UnityEditorInternal;
-using UnityEngine;
 using UnityEngine.UI;
 public class TileEditorWindow : GenericWindow
 {

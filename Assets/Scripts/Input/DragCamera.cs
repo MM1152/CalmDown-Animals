@@ -15,10 +15,14 @@ public class DragCamera : MonoBehaviour
     [Header("Game View Used")]
     public float distance;
     public float checkTime;
+    public float dragTime;
+
+    private float dragTimer;
     private float timer;
     private float amount;
     private Vector3 dir;
     private bool isDrag;
+
     private void Update()
     {
         Vector3 linear = Vector3.zero;
@@ -55,16 +59,22 @@ public class DragCamera : MonoBehaviour
         }
         else
         {
-            if (TouchManager.TouchType == TouchType.Drag)
+            //Debug.Log(Vector3.Distance(TouchManager.GetStartPositionInWorld(), Camera.main.transform.position));
+            if (TouchManager.TouchType == TouchType.Drag && dragTime > dragTimer)
             {
+                dragTimer += Time.deltaTime;
                 linear = TouchManager.GetSwipeDir();
+            }
+            else if(TouchManager.Phase == Phase.Up)
+            {
+                dragTimer = 0;
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
-        if (TouchManager.TouchType == TouchType.Swipe)
-        {
-            linear = TouchManager.GetSwipeDir();
-        }
+         if (TouchManager.TouchType == TouchType.Drag)
+            {
+                linear = TouchManager.GetSwipeDir();
+            }
 #endif
 
         cam.transform.position += -(linear * dragSpeed * Time.deltaTime);

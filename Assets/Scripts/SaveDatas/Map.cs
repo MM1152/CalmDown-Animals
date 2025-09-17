@@ -82,7 +82,9 @@ public class Map
 
         File.WriteAllText(filepath, json);
         Debug.Log($"Save {filepath}");
+#if UNITY_EDITOR
         AssetDatabase.Refresh();
+#endif
         Load();
     }
 

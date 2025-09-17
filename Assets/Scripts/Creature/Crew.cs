@@ -1,7 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class Crew : MonoBehaviour
 {
     private readonly int Ani_AttackId = Animator.StringToHash("Attack");
@@ -10,36 +12,27 @@ public class Crew : MonoBehaviour
     public CrewManager spawner;
 
     public EnemyHealth target;
-    public List<EnemyHealth> targets;
 
     private PathTile underTile;
-    private new SphereCollider collider;
+    private List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
+
     private Animator animator;
-    private GameManager gameManager;
 
     private CrewTable.Data data;
     private float lastAttackTime;
+    private float attackRadius;
+
     private void Awake()
     {
-        collider = GetComponent<SphereCollider>();
         animator = GetComponent<Animator>();
-        
-    }
-
-    private void Start()
-    {
-        var find = GameObject.FindWithTag(TagIds.GameManagerTag);
-        if (find != null)
-        {
-            gameManager = find.GetComponent<GameManager>();
-            gameManager.endWave += () => targets.Clear();
-        }
     }
 
     public void Spawn(CrewManager spawner , CrewTable.Data data)
     {
         this.spawner = spawner;
         this.data = data;
+        
+        attackRadius = 1;
     }
 
     public void SetUnderTile(PathTile tile)
@@ -49,11 +42,54 @@ public class Crew : MonoBehaviour
             underTile = tile;
         }
 
+        FindAroundTiles();
         underTile.Type = TileType.Crew;
     }
+
     public void ResetUnderTile()
     {
         underTile.Type = TileType.None;
+        foreach(var aroundTile in aroundTiles)
+        {
+            aroundTile.CheckOutAnimal -= CheckTargetInTile;
+        }
+        aroundTiles.Clear();
+    }
+
+    private void FindAroundTiles()
+    {
+        List<PathTile> pathties = new List<PathTile>();
+
+        for(int i = 0; i < underTile.Neighbor.Count; i++)
+        {
+            pathties.Add(underTile.Neighbor[i]);
+        }
+        
+        if (attackRadius > 1)
+        {
+            for(int i = 0; i < pathties.Count; i++)
+            {
+                for(int j = 0; j < pathties[i].Neighbor.Count; j++)
+                {
+                    if(!pathties.Contains(pathties[i].Neighbor[j]))
+                    {
+                        pathties.Add(pathties[i].Neighbor[j]);
+                    }
+                }
+            }       
+        }
+
+        aroundTiles = pathties.Select(x => x.GetComponent<InTileAnimal>()).ToList();
+
+        for(int i = 0; i < aroundTiles.Count; i++)
+        {
+            aroundTiles[i].CheckOutAnimal += CheckTargetInTile;
+        }
+    }
+
+    private void CheckTargetInTile(EnemyHealth animal)
+    {
+        if (animal == target) target = null;
     }
 
     private void Update()
@@ -62,10 +98,10 @@ public class Crew : MonoBehaviour
         {
             if(target.IsDie)
             {
-                targets.Remove(target);
-                target = GetTarget();
+                target = null;
             }
             
+
             if(target != null)
             {
                 transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
@@ -90,42 +126,17 @@ public class Crew : MonoBehaviour
 
     private EnemyHealth GetTarget()
     {
-        if(targets.Count == 0)
+        
+        foreach(var tile in aroundTiles)
         {
-            return null;
-        }
-        foreach(var target in targets)
-        {
-            if(target != null)
+            var inTileAnimal = tile.GetComponent<InTileAnimal>();
+            var animal = inTileAnimal.Get();
+
+            if(animal != null)
             {
-                return target;
+                return animal.GetComponent<EnemyHealth>();
             }
         }
         return null;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Enemy"))
-        {
-            var find = other.GetComponent<EnemyHealth>();
-
-            if(find != null)
-            {
-                targets.Add(find);
-            }
-        }    
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            var find = other.GetComponent<EnemyHealth>();
-            if(targets.Contains(find))
-            {
-                target = null;
-                targets.Remove(find);
-            }
-        }
     }
 }

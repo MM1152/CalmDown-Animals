@@ -141,6 +141,11 @@ public class TileManager : MonoBehaviour
             {
                 startTile.GetComponent<PathTileRoad>().DrawRoad(startTile.ParentTile.GetComponent<PathTileRoad>());
             }
+            else
+            {
+                //Arrive 타일일 경우 Next 경로 강제로 설정
+                startTile.GetComponent<PathTileRoad>().DrawRoad(startTile.ArriveDrawTile.InitPos);
+            }
             startTile = startTile.ParentTile;
         }
     }
@@ -322,7 +327,8 @@ public class TileManager : MonoBehaviour
         tile.Type = TileType.Path;
 
         Vector3 spawnPosition = drawTile.transform.position;
-        Vector3 drawPosition = spawnPosition + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.y , 0 , neighborPosition.gridSize.x));
+        Vector3 drawPosition = spawnPosition 
+            + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.y , 0 , neighborPosition.gridSize.x));
 
         enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
     }

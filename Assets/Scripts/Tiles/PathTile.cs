@@ -7,7 +7,8 @@ public class PathTile : Tile
     public int G { get; set; } = 100000;
     public int H { get; set; }
     public int F => G + H;
-    public List<PathTile> Neighbor  = new List<PathTile>();
+    public List<PathTile> Neighbor = new List<PathTile>();
+
     public PathTile ParentTile { get; set; } = null;
     public DrawTile ArriveDrawTile { get; set; }
 

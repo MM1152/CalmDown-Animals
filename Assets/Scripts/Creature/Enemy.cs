@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.Rendering.Universal;
 
 public class Enemy : MonoBehaviour
 {
@@ -13,14 +12,29 @@ public class Enemy : MonoBehaviour
     
     private float speed;
     private bool spawn;
+    private bool inTileSetting;
     private Vector3 endPoint;
     private Vector3 nPos;
     private Vector3 dir;
+    private Vector3 gridSize;
 
     private Animator animator;
     public void Awake()
     {
         health = GetComponent<EnemyHealth>();
+
+        health.onDie += () =>
+        {
+            if (prevTile != null)
+            {
+                prevTile.GetComponent<InTileAnimal>().OutAnimal(this);
+            }
+            if(nTile != null)
+            {
+                nTile.GetComponent<InTileAnimal>().OutAnimal(this);
+            }
+        };
+
         var gmObj = GameObject.FindWithTag(TagIds.GameManagerTag);
         if(gmObj != null)
         {
@@ -32,10 +46,12 @@ public class Enemy : MonoBehaviour
     public void Spawn(PathTile spawnTile , AnimalInfoTable.Data data , Vector3 spawnPoint)
     {
         this.data = data;
-        Vector3 gridSize = spawnTile.GetComponent<Renderer>().bounds.size;
+        gridSize = spawnTile.GetComponent<Renderer>().bounds.size;
 
         speed = gridSize.x / this.data.Time;
         nTile = spawnTile;
+        prevTile = spawnTile;
+
         health.Init(this.data.MaxHp);
 
         spawn = true;
@@ -56,9 +72,17 @@ public class Enemy : MonoBehaviour
         if(spawn && nTile != null)
         {
             transform.position += dir * speed * Time.deltaTime;
+            
+            if(Vector3.Distance(transform.position , nPos) < gridSize.x * 0.5f && !inTileSetting)
+            {
+                prevTile.GetComponent<InTileAnimal>().OutAnimal(this);
+                nTile.GetComponent<InTileAnimal>().InAnimal(this);
+                inTileSetting = true;
+            }
 
             if (Vector3.Distance(transform.position , nPos) < 0.1f)
             {
+                prevTile = nTile;
                 if (nTile.ParentTile == null)
                 {
                     nPos = nTile.ArriveDrawTile.transform.position;
@@ -73,6 +97,7 @@ public class Enemy : MonoBehaviour
                     dir = (nPos - transform.position).normalized;
                     transform.LookAt(nPos);
                 }
+                inTileSetting = false;
             }
         }
 

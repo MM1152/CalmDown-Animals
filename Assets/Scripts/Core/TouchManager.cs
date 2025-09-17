@@ -1,10 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum TouchType
 {
     None,
     Tab,
-    Zoom,
+    ZoomIn,
+    ZoomOut,
     Drag,
 }
 
@@ -20,8 +22,8 @@ public class TouchManager : MonoBehaviour
     public static Phase Phase { get; private set; }
     private Phase prevPhase;
     public static TouchType TouchType {get; private set;}
-
-    private Vector2 fingerTouchStartPosition;
+    public TouchType touchType;
+    private static Vector2 fingerTouchStartPosition;
     private float fingerTouchStartTime;
 
     public float checkTime = 0.5f;
@@ -32,6 +34,8 @@ public class TouchManager : MonoBehaviour
 
     private bool touchFinish;
 
+    private float zoomInDistance;
+    
     public void Update()
     {
         if (Input.touchCount == 0)
@@ -47,6 +51,8 @@ public class TouchManager : MonoBehaviour
             }
             TouchType = TouchType.None;
             touchFinish = true;
+            fingerTouchStartPosition = Vector3.zero;
+            zoomInDistance = 0;
         }
         else if (Input.touchCount == 1)
         {
@@ -88,6 +94,39 @@ public class TouchManager : MonoBehaviour
             dir = (touch.position - fingerTouchStartPosition).normalized;
             pos = new Vector3(touch.position.x, touch.position.y , 10);
         }
+        else if (Input.touchCount == 2)
+        {
+            Touch touch1 = Input.GetTouch(0);
+            Touch touch2 = Input.GetTouch(1);
+
+            if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began)
+            {
+                amount = 0;
+                dir = Vector2.zero;
+                pos = Vector2.zero;
+                fingerTouchStartTime = Time.time;
+                fingerTouchStartPosition = Vector3.Lerp(touch1.position , touch2.position , 0.5f);
+                TouchType = TouchType.None;
+            }
+
+            if (zoomInDistance == 0)
+            {
+                zoomInDistance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition);
+            }else
+            {
+                float distance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition); 
+                if(zoomInDistance > distance)
+                {
+                    TouchType = TouchType.ZoomOut;
+                }
+                if (zoomInDistance < distance)
+                {
+                    TouchType = TouchType.ZoomIn;
+                }
+            }
+
+        }
+        touchType = TouchType;
     }
 
     public static Vector3 GetSwipeDir()
@@ -103,5 +142,15 @@ public class TouchManager : MonoBehaviour
     public static Vector3 GetDragWorldPosition()
     {
         return Camera.main.ScreenToWorldPoint(pos);
+    }
+
+    public static Vector3 GetStartPosition()
+    {
+        return fingerTouchStartPosition;
+    }
+
+    public static Vector3 GetStartPositionInWorld()
+    {
+        return Camera.main.ScreenToWorldPoint(new Vector3(fingerTouchStartPosition.x , fingerTouchStartPosition.y , Camera.main.transform.position.y));
     }
 }
