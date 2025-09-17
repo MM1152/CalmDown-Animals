@@ -10,6 +10,8 @@ public class ZoomCamera : MonoBehaviour
     public float zoomLimitTime;
 
     public float speedToZoomZone;
+
+    private Vector3 zoomInArea;
     private void Update()
     {
         float size = 0;
@@ -24,11 +26,21 @@ public class ZoomCamera : MonoBehaviour
 
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + size, minSize, maxSize);
 
-        if (size != 0 && Camera.main.orthographicSize > minSize && Camera.main.orthographicSize < maxSize)
+        if (TouchManager.TouchType == TouchType.ZoomIn 
+            && size != 0 && Camera.main.orthographicSize > minSize 
+            && Camera.main.orthographicSize < maxSize)
         {
-            Debug.Log(TouchManager.GetStartPositionInWorld());
-            Vector3 cameraNewPos = Vector3.Scale(new Vector3(1f, 1f, 0f), TouchManager.GetStartPositionInWorld()) * speedToZoomZone * Time.deltaTime;
+            if(zoomInArea == Vector3.zero)
+            {
+                var viewPort = Camera.main.ScreenToViewportPoint(TouchManager.GetStartPosition());
+                Debug.Log(viewPort);
+                zoomInArea = new Vector3(viewPort.x - 0.5f, 0f , viewPort.y - 0.5f);
+            }
+            Vector3 cameraNewPos = zoomInArea * speedToZoomZone * Time.deltaTime;
             Camera.main.transform.position += cameraNewPos;
+        }else
+        {   
+            zoomInArea = Vector3.zero;
         }
     }
 }

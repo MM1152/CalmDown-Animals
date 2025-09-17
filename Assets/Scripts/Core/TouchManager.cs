@@ -27,15 +27,18 @@ public class TouchManager : MonoBehaviour
     private float fingerTouchStartTime;
 
     public float checkTime = 0.5f;
-    public float amount;
+    public float ckeckDragDistance;
 
+    private float amount;
     private static Vector2 dir;
     private static Vector3 pos;
 
-    private bool touchFinish;
-
     private float zoomInDistance;
+
+    private int touchId1;
+    private int touchId2;
     
+
     public void Update()
     {
         if (Input.touchCount == 0)
@@ -50,9 +53,11 @@ public class TouchManager : MonoBehaviour
                 Phase = Phase.None;
             }
             TouchType = TouchType.None;
-            touchFinish = true;
             fingerTouchStartPosition = Vector3.zero;
             zoomInDistance = 0;
+
+            touchId1 = -1;
+            touchId2 = -1;
         }
         else if (Input.touchCount == 1)
         {
@@ -73,7 +78,7 @@ public class TouchManager : MonoBehaviour
                 TouchType = TouchType.None;
             }
 
-            if(Time.time > (fingerTouchStartTime + checkTime) && amount > 5)
+            if(Time.time > (fingerTouchStartTime + checkTime) && amount > ckeckDragDistance)
             {
                 TouchType = TouchType.Drag;
             }
@@ -99,32 +104,40 @@ public class TouchManager : MonoBehaviour
             Touch touch1 = Input.GetTouch(0);
             Touch touch2 = Input.GetTouch(1);
 
-            if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began)
-            {
-                amount = 0;
-                dir = Vector2.zero;
-                pos = Vector2.zero;
-                fingerTouchStartTime = Time.time;
-                fingerTouchStartPosition = Vector3.Lerp(touch1.position , touch2.position , 0.5f);
-                TouchType = TouchType.None;
-            }
+            if(touchId1 == -1)
+                touchId1 = touch1.fingerId;
+            if (touchId2 == -1)
+                touchId2 = touch2.fingerId;
 
-            if (zoomInDistance == 0)
+            if(touchId1 != -1 && touchId2 != -1)
             {
-                zoomInDistance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition);
-            }else
-            {
-                float distance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition); 
-                if(zoomInDistance > distance)
+                if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began)
                 {
-                    TouchType = TouchType.ZoomOut;
+                    amount = 0;
+                    dir = Vector2.zero;
+                    pos = Vector2.zero;
+                    fingerTouchStartTime = Time.time;
+                    fingerTouchStartPosition = Vector3.Lerp(touch1.position, touch2.position, 0.5f);
+                    TouchType = TouchType.None;
                 }
-                if (zoomInDistance < distance)
-                {
-                    TouchType = TouchType.ZoomIn;
-                }
-            }
 
+                if (zoomInDistance == 0)
+                {
+                    zoomInDistance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition);
+                }
+                else
+                {
+                    float distance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition);
+                    if (zoomInDistance > distance)
+                    {
+                        TouchType = TouchType.ZoomOut;
+                    }
+                    if (zoomInDistance < distance)
+                    {
+                        TouchType = TouchType.ZoomIn;
+                    }
+                }
+            }  
         }
         touchType = TouchType;
     }

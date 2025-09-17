@@ -26,11 +26,13 @@ public class DragCamera : MonoBehaviour
     private void Update()
     {
         Vector3 linear = Vector3.zero;
-
         if (!DragAble.CameraDrag) return;
- 
+
+        dragSpeed = Camera.main.orthographicSize.Normalization(2, 10).ReverseNormalization(10, 30);
+        
+        
 #if UNITY_EDITOR
-        if(isPlayEditor)
+        if (isPlayEditor)
         {
             if (Input.GetMouseButton(0))
             {

@@ -3202,7 +3202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchType: 0
   checkTime: 0.05
-  amount: 0
+  ckeckDragDistance: 30
 --- !u!114 &913690698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3219,6 +3219,7 @@ MonoBehaviour:
   maxSize: 10
   zoomSpeed: 2
   zoomLimitTime: 0
+  speedToZoomZone: 2
 --- !u!1 &932587263
 GameObject:
   m_ObjectHideFlags: 0

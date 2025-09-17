@@ -70,6 +70,18 @@ public static class TagIds
 
 }
 
+public static class FloatUtility
+{
+    public static float Normalization(this float x , float max , float min)
+    {   
+        return (x - min) / (max - min);
+    }
+    public static float ReverseNormalization(this float x, float max, float min)
+    {
+        return x * (max - min) + min;
+    }
+}
+
 public static class DragAble
 {
     public static bool CameraDrag = true;
