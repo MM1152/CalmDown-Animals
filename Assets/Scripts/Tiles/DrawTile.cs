@@ -29,8 +29,9 @@ public class DrawTile : Tile
     public DrawTile ConnectTile { get; set; }
     public DrawTile UnderTile { get; set; }
     public Vector3 ConnectPos { get; set; }
-    public int connectCount = 0;
+    public Vector3 InitPos { get; set; }
 
+    public int connectCount = 0;
     public bool isDraw = false;
     public virtual bool IsDraw 
     { 
@@ -83,6 +84,7 @@ public class DrawTile : Tile
         transform.eulerAngles = data.Rotation;
         DrawType = data.DrawType;
         ConnectPos = data.ConnectTile;
+        InitPos = data.Position;
 
         Vector3 dir = ConnectPos - transform.position;
         transform.position += dir * 0.28f;

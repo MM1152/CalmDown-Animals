@@ -23,23 +23,10 @@ public class EnemySpawner : MonoBehaviour
     {
         copySpawnCount = spawnCount;
         gameManager.endWave += EndWaveToSetInfoTiles;
+
         animalInfoTable = DataTableManager.animalInfoTable;
-    }
 
-    private void Update()
-    {
-        if(gameManager.WaveStart)
-        {
-            if(lastSpawnTime + spawnInterval < Time.time)
-            {
-                lastSpawnTime = Time.time;
 
-                for(int i = 0; i < infoTiles.Count; i++)
-                {
-                    infoTiles[i].Spawn(prefabs);
-                }
-            }
-        }
     }
 
     public void CheckDieEnemy()
@@ -67,7 +54,7 @@ public class EnemySpawner : MonoBehaviour
     public void SettingSpawnInfoTile(PathTile spawnTile, Vector3 drawPosition , Vector3 enemySpawnPosition)
     {
         var spawnInfoTile = Instantiate(infoTile, transform);
-        spawnInfoTile.Init(this, spawnTile , drawPosition , enemySpawnPosition);
+        spawnInfoTile.Init(this, spawnTile , prefabs , drawPosition , enemySpawnPosition);
         infoTiles.Add(spawnInfoTile);
 
         EndWaveToSetInfoTiles();

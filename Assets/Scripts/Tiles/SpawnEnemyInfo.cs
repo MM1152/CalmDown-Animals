@@ -1,13 +1,18 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 public class SpawnEnemyInfo : MonoBehaviour
 {
     private int spawnCount;
+    private float spawnTime;
+    private float timer;
+
     private TextMeshProUGUI spawnCountText;
     private PathTile spawnTile;
     private EnemySpawner spawner;
-
+    private Enemy prefabs;
+    
     private AnimalInfoTable.Data spawnAnimalInfo;
     private GameManager gameManager;
     private List<Enemy> spawnList = new List<Enemy>();
@@ -19,6 +24,7 @@ public class SpawnEnemyInfo : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Create");
         var find = GameObject.FindWithTag(TagIds.GameManagerTag);
         if(find != null)
         {
@@ -37,10 +43,23 @@ public class SpawnEnemyInfo : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner spawner, PathTile spawnTile , Vector3 drawPosition , Vector3 spawnPosition)
+    private void Update()
+    {
+        if (gameManager.WaveStart)
+        {
+            if(Time.time > spawnTime + timer)
+            {
+                timer = Time.time;
+                Spawn();
+            }   
+        }
+    }
+
+    public void Init(EnemySpawner spawner, PathTile spawnTile , Enemy prefabs , Vector3 drawPosition , Vector3 spawnPosition)
     {
         this.spawner = spawner;
         this.spawnTile = spawnTile;
+        this.prefabs = prefabs;
         transform.position = drawPosition;
         spawnPoint = spawnPosition;
     }
@@ -54,15 +73,15 @@ public class SpawnEnemyInfo : MonoBehaviour
     public void SetSpawnEnemy(AnimalInfoTable.Data spawnAnimalInfo)
     {
         this.spawnAnimalInfo = spawnAnimalInfo;
+        spawnTime = this.spawnAnimalInfo.Spawn;
         //Image 스프라이트 설정 필요
 
         spawnCountText.text = spawnCount.ToString();
     }
 
-
     //Test 용 코드임
     //Enemy 테이블 연결시 변경되어야 할듯
-    public void Spawn(Enemy prefabs)
+    public void Spawn()
     {
         if (spawnCount <= 0) return;
 
@@ -77,6 +96,7 @@ public class SpawnEnemyInfo : MonoBehaviour
         {
             health.onDie += spawner.CheckDieEnemy;
         }
+
         enemy.Spawn(spawnTile , spawnAnimalInfo , spawnPoint);
     }
 }

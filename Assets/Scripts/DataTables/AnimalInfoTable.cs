@@ -25,6 +25,7 @@ public class AnimalInfoTable : DataTable
                 Avatar = Resources.Load<Avatar>(model + "_Avatar");
             }
         }
+        public float Spawn { get; set; }
 
         private string model;
 

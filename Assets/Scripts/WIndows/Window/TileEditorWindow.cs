@@ -46,7 +46,6 @@ public class TileEditorWindow : GenericWindow
             {
                 destroyMode = !destroyMode;
             }
-
             tileManager.tileType = TileType.None;
             tileManager.drawMode = destroyMode;
             DragAble.CameraDrag = !destroyMode;
@@ -65,6 +64,12 @@ public class TileEditorWindow : GenericWindow
             var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
             popup.Id = 0;
         }
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        tileManager.ClearRoad();
     }
 
     public override void Close()

@@ -25,6 +25,12 @@ public class PopupManager : MonoBehaviour
         {
             Close();
         }
+#if UNITY_EDITOR
+        else if (Input.GetMouseButtonDown(0))
+        {
+            Close();
+        }
+#endif
     }
 
     public GenericPopup Open(Popup id)

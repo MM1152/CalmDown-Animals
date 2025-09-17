@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class TileManager : MonoBehaviour
 {
-
     //nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x* 0.5f) , 0, gridSize.y ));
     //    nextNeighborPos[1] = GetFloor(new Vector3(-(gridSize.x - gridSize.x* 0.5f), 0, gridSize.y));
     //    nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.x, 0 ,0));
@@ -47,17 +46,16 @@ public class TileManager : MonoBehaviour
     private List<PathTile> tileList = new List<PathTile>();
     private LineRenderer lineRenderer;
 
-    private NeighborPosition neighborPosition;
+    public static NeighborPosition neighborPosition;
     private PathFind pathFind = new PathFind();
 
     //실제 맵에 찍히는 타일들
     private DrawTile drawArriveTile;
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
-
     private List<PathTile> editTiles = new List<PathTile>();
 
 
-    private void Start()
+    private void Awake()
     {
         isChangedTile = false;
 
@@ -66,12 +64,14 @@ public class TileManager : MonoBehaviour
 
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
+    }
 
+    private void Start()
+    {
         gameManager.endWave += DrawTiles;
 
         DrawTiles();
         FindPath(TileType.Path | TileType.None);
-
         SetInitPath();
     }
 
@@ -88,6 +88,7 @@ public class TileManager : MonoBehaviour
             copyTile.Type = TileType.Path;
             copyTile = copyTile.ParentTile;
         }
+
     }
 
     private void ResetInitPath()
@@ -117,8 +118,31 @@ public class TileManager : MonoBehaviour
                 isSuseccs = false;
             }
         }
+     
+        if(isSuseccs)
+        {
+            for(int i = 0; i < startTile.Count; i++)
+            {
+                var strTile = startTile[i];
+                var drawStartTile = drawStartTiles[i];
+                strTile.GetComponent<PathTileRoad>().PrevSide = PathTileRoad.FindSide(drawStartTile.InitPos, strTile.transform.position);
+            }
 
+            DrawRoads(startTile[0]);
+        }
         return isSuseccs;
+    }
+
+    private void DrawRoads(PathTile startTile)
+    {
+        while(startTile != null)
+        {
+            if(startTile.ParentTile != null)
+            {
+                startTile.GetComponent<PathTileRoad>().DrawRoad(startTile.ParentTile.GetComponent<PathTileRoad>());
+            }
+            startTile = startTile.ParentTile;
+        }
     }
 
     public void SetTileType(TileType type)
@@ -126,7 +150,7 @@ public class TileManager : MonoBehaviour
         if (!drawMode) return;
 
         ResetInitPath();
-
+        
         // 한붓그리기 취소 됨
         //if(TouchManager.Phase == Phase.Up)
         //{
@@ -144,7 +168,7 @@ public class TileManager : MonoBehaviour
         if (TouchManager.TouchType != TouchType.Drag && TouchManager.TouchType != TouchType.Tab) return;
         TileType targetTile = type == TileType.Path ? TileType.None : TileType.Path;
         var tile = GetTile();
-        if(tile != null && tile.Type == targetTile)
+        if(tile != null && tile.Type == targetTile && tile != arriveTile && !startTile.Contains(tile))
         {
             tile.Type = type;
             //editTiles.Add(tile);
@@ -261,6 +285,20 @@ public class TileManager : MonoBehaviour
             }
         }
     }
+
+    public void ClearRoad()
+    {
+        foreach(var tile in startTile)
+        {
+            var copyTile = tile;
+            while(copyTile != null)
+            {
+                copyTile.GetComponent<PathTileRoad>().Clear();
+                copyTile = copyTile.ParentTile;
+            }
+        }
+    }
+
     // Test 용 코드임
     public PathTile[] GetEndTiles()
     {
@@ -277,7 +315,6 @@ public class TileManager : MonoBehaviour
     // Test 용 코드임
     public void SetStartTile(DrawTile drawTile)
     {
-
         //여기는 바닥에 찍힌 타일임
         var tile = tileTable[drawTile.ConnectPos];
         
@@ -285,8 +322,9 @@ public class TileManager : MonoBehaviour
         tile.Type = TileType.Path;
 
         Vector3 spawnPosition = drawTile.transform.position;
-        Vector3 drawPosition = spawnPosition + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.x , 0 , neighborPosition.gridSize.y));
+        Vector3 drawPosition = spawnPosition + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.y , 0 , neighborPosition.gridSize.x));
 
         enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
     }
+
 }

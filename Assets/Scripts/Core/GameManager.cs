@@ -59,7 +59,17 @@ public class GameManager : MonoBehaviour{
 
     private void Update()
     {
-        if(WaveStart)
+#if UNITY_EDITOR
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.N))
+        {
+            EndWave();
+        }
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
+        {
+            WaveFail();
+        }
+#endif
+        if (WaveStart)
         {
             timer += Time.deltaTime;
             if(timerToInt != (int)timer)

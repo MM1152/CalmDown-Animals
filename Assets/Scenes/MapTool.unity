@@ -3575,7 +3575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkTime: 0.05
-  swipeAmount: 30
   amount: 0
 --- !u!4 &1663864377
 Transform:
