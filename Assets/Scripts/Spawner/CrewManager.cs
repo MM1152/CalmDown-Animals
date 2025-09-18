@@ -18,6 +18,7 @@ public class CrewManager : MonoBehaviour
         }
     }
     public CrewSellingEvent crewSellingEvent;
+    public PopupManager popupManager;
     private Dictionary<int , (int hire, int place)> unitInfomation = new Dictionary<int, (int hire, int place)>();
 
     public event Action changeUnitCount;
@@ -65,9 +66,18 @@ public class CrewManager : MonoBehaviour
 
     public bool CrewHire(CrewRank rank)
     {
-        //int cost = DataTableManager.crewTable.Get(rank).crewCost;
-
+        var data = DataTableManager.crewTable.Get(rank);
+        if(data != null)
+        {
+            if(gamemanager.Gold < data.crewCost)
+            {
+                var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+                popup.Id = 3;
+                return false;
+            }   
+        }
         //골드로 판단 로직 넣기
+        gamemanager.Gold -= data.crewCost;
         SetHireCount(rank, GetHireCount(rank) + 1);
         return true;
     }

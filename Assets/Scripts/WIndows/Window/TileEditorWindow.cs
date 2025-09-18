@@ -29,10 +29,16 @@ public class TileEditorWindow : GenericWindow
         inEditModeButton.onClick.AddListener(() => {
             editModeGo.SetActive(true);
             selectModeGo.SetActive(false);
+            tileManager.drawMode = false;
+            DragAble.CameraDrag = true;
         });
         backButtonInEditMode.onClick.AddListener(() => {
             editModeGo.SetActive(false);
             selectModeGo.SetActive(true);
+            editButton.IsOn = false;
+            destroyButton.IsOn = false;
+            tileManager.drawMode = false;
+            DragAble.CameraDrag = true;
         });
         editButton.GetComponent<Button>().onClick.AddListener(() =>
         {

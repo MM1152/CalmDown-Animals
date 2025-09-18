@@ -83,9 +83,22 @@ public class DragCamera : MonoBehaviour
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
-         if (TouchManager.TouchType == TouchType.Drag)
+            if (TouchManager.TouchType == TouchType.Drag)
             {
-                linear = TouchManager.GetSwipeDir();
+                if (prevPos == Vector3.zero)
+                {
+                    prevPos = TouchManager.GetDragWorldPosition();
+                }
+                else
+                {
+                    Vector3 nPos = prevPos - TouchManager.GetDragWorldPosition();
+
+                    Debug.Log(nPos);
+                    Camera.main.transform.position += nPos * dragSpeed * Time.deltaTime;
+                }
+            }else
+            {
+                prevPos = Vector3.zero;
             }
 #endif
 
