@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public enum TouchType
 {
     None,
@@ -37,7 +37,18 @@ public class TouchManager : MonoBehaviour
 
     private int touchId1;
     private int touchId2;
-    
+
+    private static bool touchInUi;
+
+    private bool TouchPositionInUi(Touch touch)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = touch.position;
+        List<RaycastResult> result = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, result);
+
+        return result.Count > 0;
+    }
 
     public void Update()
     {
@@ -58,6 +69,7 @@ public class TouchManager : MonoBehaviour
 
             touchId1 = -1;
             touchId2 = -1;
+            touchInUi = false;
         }
         else if (Input.touchCount == 1)
         {
@@ -65,6 +77,7 @@ public class TouchManager : MonoBehaviour
 
             if(Phase == Phase.None)
             {
+                touchInUi = TouchPositionInUi(touch);
                 Phase = Phase.Begin;
             }
 
@@ -99,7 +112,7 @@ public class TouchManager : MonoBehaviour
             dir = (touch.position - fingerTouchStartPosition).normalized;
             pos = new Vector3(touch.position.x, touch.position.y , 10);
         }
-        else if (Input.touchCount == 2)
+        else if (Input.touchCount == 2 && TouchType == TouchType.None)
         {
             Touch touch1 = Input.GetTouch(0);
             Touch touch2 = Input.GetTouch(1);
@@ -111,6 +124,8 @@ public class TouchManager : MonoBehaviour
 
             if(touchId1 != -1 && touchId2 != -1)
             {
+                touchInUi = TouchPositionInUi(touch1);
+                if (!touchInUi) touchInUi = TouchPositionInUi(touch2);
                 if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began)
                 {
                     amount = 0;
@@ -165,5 +180,10 @@ public class TouchManager : MonoBehaviour
     public static Vector3 GetStartPositionInWorld()
     {
         return Camera.main.ScreenToWorldPoint(new Vector3(fingerTouchStartPosition.x , fingerTouchStartPosition.y , Camera.main.transform.position.y));
+    }
+
+    public static bool TouchStartInUI()
+    {
+        return touchInUi;
     }
 }

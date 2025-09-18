@@ -11,7 +11,7 @@ public class PathTile : Tile
 
     public PathTile ParentTile { get; set; } = null;
     public DrawTile ArriveDrawTile { get; set; }
-
+    public SpawnEnemyInfo EnemyInfo { get; set; }
     private float enablePercent = 0f;
 
     public static int operator -(PathTile x , PathTile y)

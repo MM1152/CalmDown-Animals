@@ -40,6 +40,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void EndWaveToSetInfoTiles()
     {
+        // 맵 넓어지면 여기 수정해야됌
         var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_ID1);
         spawnCount = Random.Range(spawnInfo.Range_min , spawnInfo.Range_max);
         copySpawnCount = spawnCount;
@@ -51,12 +52,13 @@ public class EnemySpawner : MonoBehaviour
         }
     }
     //Test 용
-    public void SettingSpawnInfoTile(PathTile spawnTile, Vector3 drawPosition , Vector3 enemySpawnPosition)
+    public SpawnEnemyInfo SettingSpawnInfoTile(PathTile spawnTile, Vector3 drawPosition , Vector3 enemySpawnPosition)
     {
         var spawnInfoTile = Instantiate(infoTile, transform);
         spawnInfoTile.Init(this, spawnTile , prefabs , drawPosition , enemySpawnPosition);
         infoTiles.Add(spawnInfoTile);
 
         EndWaveToSetInfoTiles();
+        return spawnInfoTile;
     }
 }

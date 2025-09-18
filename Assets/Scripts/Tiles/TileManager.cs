@@ -1,9 +1,5 @@
-using JetBrains.Annotations;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TileManager : MonoBehaviour
 {
@@ -50,11 +46,13 @@ public class TileManager : MonoBehaviour
     private PathFind pathFind = new PathFind();
 
     //½ÇÁ¦ ¸Ê¿¡ ÂïÈ÷´Â Å¸ÀÏµé
-    private DrawTile drawArriveTile;
+    private DrawTile drawArriveTile = null;
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
     private List<PathTile> editTiles = new List<PathTile>();
 
-
+    //x : left , y : top , z : width , w : height 
+    public Vector4 DragAbleRect => dragAblePos;
+    private Vector4 dragAblePos = new Vector4(float.MaxValue, float.MaxValue, 0, 0);
     private void Awake()
     {
         isChangedTile = false;
@@ -126,9 +124,9 @@ public class TileManager : MonoBehaviour
                 var strTile = startTile[i];
                 var drawStartTile = drawStartTiles[i];
                 strTile.GetComponent<PathTileRoad>().PrevSide = PathTileRoad.FindSide(drawStartTile.InitPos, strTile.transform.position);
+                DrawRoads(startTile[i]);
             }
 
-            DrawRoads(startTile[0]);
         }
         return isSuseccs;
     }
@@ -203,6 +201,22 @@ public class TileManager : MonoBehaviour
         {
             return;
         }
+
+        for(int i = 0; i < drawStartTiles.Count; i++)
+        {
+            Destroy(drawStartTiles[i].gameObject);
+        }
+        drawStartTiles.Clear();
+
+        ClearRoad();
+
+        for (int i = 0; i < startTile.Count; i++)
+        {
+            startTile[i].Type = TileType.None;
+            Destroy(startTile[i].EnemyInfo.gameObject);
+        }
+        startTile.Clear();
+
         this.mapSize = mapSize;
         var mapData = Map.Get(mapIdx);
 
@@ -212,7 +226,7 @@ public class TileManager : MonoBehaviour
             {
                 var flagTile = Instantiate(flagTilePrefabs, transform);
                 flagTile.UpdateDrawTile(mapData.tiles[this.mapSize][i]);
-                if(flagTile.DrawType == DrawType.Arrive)
+                if(drawArriveTile == null && flagTile.DrawType == DrawType.Arrive)
                 {
                     drawArriveTile = flagTile;
                 }
@@ -228,18 +242,48 @@ public class TileManager : MonoBehaviour
 
                 tileList.Add(pathTile);
                 tileTable.Add(pathTile.transform.position, pathTile);
+
+                FindRect(new Vector2(pathTile.transform.position.x, pathTile.transform.position.z));
             }
         }
 
-        for(int i = 0; i < drawStartTiles.Count; i++)
+        for (int i = 0; i < drawStartTiles.Count; i++)
         {
             SetStartTile(drawStartTiles[i]);
         }
 
-        SetArriveTile(drawArriveTile);
+        if(arriveTile == null)
+        {
+            SetArriveTile(drawArriveTile);
+        }
         FindNeighbor();
     }
 
+    private void FindRect(Vector2 a)
+    {
+        if(dragAblePos.x > a.x)
+        {
+            dragAblePos.x = a.x;
+        }
+        if(dragAblePos.z < a.x)
+        {
+            dragAblePos.z = a.x;
+        }
+        if(dragAblePos.y > a.y)
+        {
+            dragAblePos.y = a.y;
+        }
+        if(dragAblePos.w < a.y)
+        {
+            dragAblePos.w = a.y;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(Vector3.zero , new Vector3((dragAblePos.z + Mathf.Abs(dragAblePos.x)) , 1 , dragAblePos.w + Mathf.Abs(dragAblePos.y)));
+    }
 
     //public void DrawTiles()
     //{
@@ -330,7 +374,8 @@ public class TileManager : MonoBehaviour
         Vector3 drawPosition = spawnPosition 
             + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.y , 0 , neighborPosition.gridSize.x));
 
-        enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
+        var spawner = enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
+        tile.EnemyInfo = spawner;
     }
 
 }

@@ -407,6 +407,10 @@ public class DrawManager : MonoBehaviour
             waveToTiles.Add(new List<DrawTile>());
             mapLevelDropBox.value = idx;
             mapLevelDropBox.RefreshShownValue();
+            if(arriveTile != null)
+            {
+                waveToTiles[level].Add(arriveTile);
+            }
         }
 
         foreach(var tile in tiles)
@@ -423,7 +427,7 @@ public class DrawManager : MonoBehaviour
 
         for(int i = 0; i < waveToTiles[prevLevel].Count; i++)
         {
-            if(waveToTiles[prevLevel][i].DrawType == DrawType.Start || waveToTiles[prevLevel][i].DrawType == DrawType.Arrive)
+            if(waveToTiles[prevLevel][i].DrawType == DrawType.Start)
             {
                 waveToTiles[prevLevel][i].UnderTile.gameObject.SetActive(true);
                 waveToTiles[prevLevel][i].gameObject.SetActive(false);
@@ -431,7 +435,7 @@ public class DrawManager : MonoBehaviour
         }
         for (int i = 0; i < waveToTiles[level].Count; i++)
         {
-            if (waveToTiles[level][i].DrawType == DrawType.Start || waveToTiles[level][i].DrawType == DrawType.Arrive)
+            if (waveToTiles[level][i].DrawType == DrawType.Start)
             {
                 waveToTiles[level][i].UnderTile.gameObject.SetActive(false);
                 waveToTiles[level][i].gameObject.SetActive(true);

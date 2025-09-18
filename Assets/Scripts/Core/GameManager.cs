@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour{
         get => wave;
         set
         {
+            if (value <= 0 || value > maxWave) return;
             wave = value;
             waveText.text = wave + "Round";
         }
@@ -60,8 +61,11 @@ public class GameManager : MonoBehaviour{
     {
         WaveStart = false;
         windowManager.Open(Window.EditorWindow);
+        Gold += DataTableManager.roundTable.Get(wave).RewardGold;
+        // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
+        endWave?.Invoke();
 
-        if(wave == maxWave && !waveFail)
+        if (wave == maxWave && !waveFail)
         {
             GameFin = true;
             var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
@@ -78,7 +82,6 @@ public class GameManager : MonoBehaviour{
             wave++;
         }
         waveText.text = wave + " 웨이브";
-        endWave?.Invoke();
     }
 
     private void Update()
@@ -106,7 +109,6 @@ public class GameManager : MonoBehaviour{
 
     public void WaveFail()
     {
-        windowManager.Open(Window.EditorWindow);
         EndWave(true);
     }
 }

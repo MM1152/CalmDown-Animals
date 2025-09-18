@@ -12,7 +12,7 @@ public class DragCamera : MonoBehaviour
     public Camera cam;
     private Vector3 dragOrigin;
     public bool isPlayEditor;
-
+    public TileManager tileManager;
     [Header("Game View Used")]
     public float distance;
     public float checkTime;
@@ -26,9 +26,18 @@ public class DragCamera : MonoBehaviour
 
     private Vector3 prevPos;
 
+    private Vector3 ClampCamera(Vector3 cameraPosition , Vector4 rect)
+    {
+        return new Vector3
+            (Mathf.Clamp(cameraPosition.x, rect.x, rect.z),
+            10,
+            Mathf.Clamp(cameraPosition.z , rect.y , rect.w));
+    }
+
     private void LateUpdate()
     {
         Vector3 linear = Vector3.zero;
+
         if (!DragAble.CameraDrag) return;
 
         dragSpeed = Camera.main.orthographicSize.Normalization(2, 10).ReverseNormalization(10, 30);
@@ -64,7 +73,7 @@ public class DragCamera : MonoBehaviour
         else
         {
             //Debug.Log(Vector3.Distance(TouchManager.GetStartPositionInWorld(), Camera.main.transform.position));
-            if (TouchManager.TouchType == TouchType.Drag)
+            if (TouchManager.TouchType == TouchType.Drag && !TouchManager.TouchStartInUI())
             {
                 if (prevPos == Vector3.zero)
                 {
@@ -73,9 +82,7 @@ public class DragCamera : MonoBehaviour
                 else
                 {
                     Vector3 nPos = prevPos - TouchManager.GetDragWorldPosition();
-
-                    Debug.Log(nPos);
-                    Camera.main.transform.position += nPos * dragSpeed * Time.deltaTime;
+                    Camera.main.transform.position = ClampCamera(Camera.main.transform.position + nPos * dragSpeed * Time.deltaTime , tileManager.DragAbleRect);
                 }
             }else
             {
