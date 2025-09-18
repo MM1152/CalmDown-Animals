@@ -1,16 +1,24 @@
+using UnityEngine;
 using UnityEngine.UI;
 public class TileEditorWindow : GenericWindow
 {
-    public Button editButton;
+    [Header("Buttons")]
+    public Button inEditModeButton;
+    public Button backButtonInEditMode;
 
+    public Button editButton;
     public Button destroyButton;
 
     public Button deleteButton;
     public Button backButton;
 
+    [Header("Reference")]
     public PopupManager popupManager;
     public TileManager tileManager;
 
+    [Header("UI Objects")]
+    public GameObject selectModeGo;
+    public GameObject editModeGo;
 
     private bool editMode;
     private bool destroyMode;
@@ -18,6 +26,8 @@ public class TileEditorWindow : GenericWindow
     private void Awake()
     {
         backButton.onClick.AddListener(() => CheckPath());
+        inEditModeButton.onClick.AddListener(() => editModeGo.SetActive(true));
+        backButtonInEditMode.onClick.AddListener(() => editModeGo.SetActive(false));
         editButton.onClick.AddListener(() =>
         {
             if (destroyMode)
@@ -68,6 +78,7 @@ public class TileEditorWindow : GenericWindow
     public override void Open()
     {
         base.Open();
+        editModeGo.gameObject.SetActive(false);
         tileManager.ClearRoad();
     }
 

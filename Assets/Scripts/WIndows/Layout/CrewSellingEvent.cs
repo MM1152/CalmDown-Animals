@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CrewSellingEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public CrewManager spanwer;
+    public TextMeshProUGUI goldText;
     public bool SellAble { get; private set; }
     public void OnEnable()
     {

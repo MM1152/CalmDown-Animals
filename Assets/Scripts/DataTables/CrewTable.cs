@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CrewTable : DataTable
@@ -35,6 +36,9 @@ public class CrewTable : DataTable
 
     public Data Get(CrewRank crew)
     {
-        return crewTable[(int)crew];
+        if(crewTable.ContainsKey((int)crew)) {
+            return crewTable[(int)crew];
+        }
+        return null;
     }
 }

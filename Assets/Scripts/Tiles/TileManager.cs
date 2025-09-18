@@ -198,7 +198,7 @@ public class TileManager : MonoBehaviour
 
     public void DrawTiles()
     {
-        int mapSize = DataTableManager.roundTable.Get(gameManager.wave).Map_Size;
+        int mapSize = DataTableManager.roundTable.Get(gameManager.Wave).Map_Size;
         if (mapSize == this.mapSize)
         {
             return;

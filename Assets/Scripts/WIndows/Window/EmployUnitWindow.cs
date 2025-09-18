@@ -10,7 +10,6 @@ public class EmployUnitWindow : GenericWindow
 
     [Header("Reference")]
     public Button backBNT;
-    public GameObject internHire;
     public GameObject sellLayout;
     public CrewManager spawner;
 

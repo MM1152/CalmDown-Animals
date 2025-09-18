@@ -40,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void EndWaveToSetInfoTiles()
     {
-        var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.wave).CR_ID1);
+        var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_ID1);
         spawnCount = Random.Range(spawnInfo.Range_min , spawnInfo.Range_max);
         copySpawnCount = spawnCount;
 

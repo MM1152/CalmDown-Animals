@@ -13,12 +13,19 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
 
     public TextMeshProUGUI hireText;
     public TextMeshProUGUI placedText;
+    public TextMeshProUGUI goldText;
 
     private Coroutine co;
 
     public void Start()
     {
         spawner.changeUnitCount += SetTexts;
+
+        var data = DataTableManager.crewTable.Get(rank);
+        if(data != null)
+        {
+            goldText.text = "x" + data.crewCost;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -42,7 +49,7 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
 
     private void SetTexts()
     {
-        placedText.text = spawner.GetPlaceCount(rank) + "";
-        hireText.text = spawner.GetHireCount(rank) + "";
+        placedText.text = "x" + spawner.GetPlaceCount(rank);
+        hireText.text = "x" + spawner.GetHireCount(rank);
     }
 }

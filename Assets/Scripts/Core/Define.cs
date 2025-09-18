@@ -108,6 +108,7 @@ public enum Window
     EditorWindow,
     TileEditorWindow,
     EmployUnitWindow,
+    DuringGameWindow,
 }
 
 public enum Popup
@@ -118,4 +119,7 @@ public enum Popup
 public enum CrewRank
 {
     Intern = 30110,
+    Newbie,
+    Senior,
+    Ace,
 }

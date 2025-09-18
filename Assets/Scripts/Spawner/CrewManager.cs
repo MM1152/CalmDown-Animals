@@ -7,7 +7,16 @@ public class CrewManager : MonoBehaviour
     public LayerMask mask;
 
     public Crew prefabs;
-    public Crew DragCrew { get; set; }
+    private Crew dragCrew;
+    public Crew DragCrew { 
+        get => dragCrew;
+        set {
+            dragCrew = value;
+            if (dragCrew == null) return;
+
+            crewSellingEvent.goldText.text = dragCrew.GetCost().ToString();
+        }
+    }
     public CrewSellingEvent crewSellingEvent;
     private Dictionary<int , (int hire, int place)> unitInfomation = new Dictionary<int, (int hire, int place)>();
 
@@ -23,6 +32,7 @@ public class CrewManager : MonoBehaviour
     }
 
     private bool isSpawn;
+    private GameManager gamemanager;
 
     private void Awake()
     { 
@@ -43,8 +53,9 @@ public class CrewManager : MonoBehaviour
         (int hire, int place) data = unitInfomation[(int)rank];
         if (data.hire - data.place <= 0) return;
 
-        DragCrew = Instantiate(prefabs , transform);
-        DragCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
+        var spawnCrew = Instantiate(prefabs , transform);
+        spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
+        DragCrew = spawnCrew;
     }
 
     public bool CrewHire(CrewRank rank)
@@ -84,8 +95,11 @@ public class CrewManager : MonoBehaviour
     {
         if (!DragAble.CrewDrag) return;
 
+
+        // 이미 필드에 소환되어있는 대원 선택시
         if (TouchManager.TouchType == TouchType.Tab)
         {
+            // 기존에 드래그하던 대원이 있다면 대원 취소
             if (DragCrew != null)
             {
                 DragCrew.SetUnderTile(null);
@@ -96,6 +110,7 @@ public class CrewManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity , ~0 , QueryTriggerInteraction.Ignore))
             {
+                // 대원 찾아서 드래그 가능한 상태로 변경
                 var find = hit.collider.GetComponent<Crew>();
                 if (find != null)
                 {
@@ -126,9 +141,10 @@ public class CrewManager : MonoBehaviour
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
                 DragAble.CameraDrag = true;
+
+                // Check if it is sellable
                 if (crewSellingEvent.SellAble)
                 {
-                    
                     SetHireCount(DragCrew.Rank, GetHireCount(DragCrew.Rank) - 1);
                     Destroy(DragCrew.gameObject);
                     return;

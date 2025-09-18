@@ -139,4 +139,10 @@ public class Crew : MonoBehaviour
         }
         return null;
     }
+    
+    public int GetCost()
+    {
+        return data.crewCost;
+    }
+
 }
