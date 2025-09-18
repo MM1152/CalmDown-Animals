@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,13 +24,14 @@ public class DragCamera : MonoBehaviour
     private Vector3 dir;
     private bool isDrag;
 
-    private void Update()
+    private Vector3 prevPos;
+
+    private void LateUpdate()
     {
         Vector3 linear = Vector3.zero;
         if (!DragAble.CameraDrag) return;
 
         dragSpeed = Camera.main.orthographicSize.Normalization(2, 10).ReverseNormalization(10, 30);
-        
         
 #if UNITY_EDITOR
         if (isPlayEditor)
@@ -62,14 +64,22 @@ public class DragCamera : MonoBehaviour
         else
         {
             //Debug.Log(Vector3.Distance(TouchManager.GetStartPositionInWorld(), Camera.main.transform.position));
-            if (TouchManager.TouchType == TouchType.Drag && dragTime > dragTimer)
+            if (TouchManager.TouchType == TouchType.Drag)
             {
-                dragTimer += Time.deltaTime;
-                linear = TouchManager.GetSwipeDir();
-            }
-            else if(TouchManager.Phase == Phase.Up)
+                if (prevPos == Vector3.zero)
+                {
+                    prevPos = TouchManager.GetDragWorldPosition();
+                }
+                else
+                {
+                    Vector3 nPos = prevPos - TouchManager.GetDragWorldPosition();
+
+                    Debug.Log(nPos);
+                    Camera.main.transform.position += nPos * dragSpeed * Time.deltaTime;
+                }
+            }else
             {
-                dragTimer = 0;
+                prevPos = Vector3.zero;
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS

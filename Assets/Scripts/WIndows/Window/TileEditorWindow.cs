@@ -6,8 +6,8 @@ public class TileEditorWindow : GenericWindow
     public Button inEditModeButton;
     public Button backButtonInEditMode;
 
-    public Button editButton;
-    public Button destroyButton;
+    public ButtonUI editButton;
+    public ButtonUI destroyButton;
 
     public Button deleteButton;
     public Button backButton;
@@ -26,9 +26,15 @@ public class TileEditorWindow : GenericWindow
     private void Awake()
     {
         backButton.onClick.AddListener(() => CheckPath());
-        inEditModeButton.onClick.AddListener(() => editModeGo.SetActive(true));
-        backButtonInEditMode.onClick.AddListener(() => editModeGo.SetActive(false));
-        editButton.onClick.AddListener(() =>
+        inEditModeButton.onClick.AddListener(() => {
+            editModeGo.SetActive(true);
+            selectModeGo.SetActive(false);
+        });
+        backButtonInEditMode.onClick.AddListener(() => {
+            editModeGo.SetActive(false);
+            selectModeGo.SetActive(true);
+        });
+        editButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             if (destroyMode)
             {
@@ -39,12 +45,13 @@ public class TileEditorWindow : GenericWindow
             {
                 editMode = !editMode;
             }
-
+            editButton.IsOn = editMode;
+            destroyButton.IsOn = destroyMode;
             tileManager.tileType = TileType.Path;
             tileManager.drawMode = editMode;
             DragAble.CameraDrag = !editMode;
         });
-        destroyButton.onClick.AddListener(() =>
+        destroyButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             if(editMode)
             {
@@ -55,6 +62,8 @@ public class TileEditorWindow : GenericWindow
             {
                 destroyMode = !destroyMode;
             }
+            editButton.IsOn = editMode;
+            destroyButton.IsOn = destroyMode;
             tileManager.tileType = TileType.None;
             tileManager.drawMode = destroyMode;
             DragAble.CameraDrag = !destroyMode;
@@ -78,6 +87,8 @@ public class TileEditorWindow : GenericWindow
     public override void Open()
     {
         base.Open();
+        editButton.IsOn = false;
+        destroyButton.IsOn = false;
         editModeGo.gameObject.SetActive(false);
         tileManager.ClearRoad();
     }

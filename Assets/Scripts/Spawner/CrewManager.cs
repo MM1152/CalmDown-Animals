@@ -42,6 +42,11 @@ public class CrewManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        gamemanager = GameObject.FindWithTag(TagIds.GameManagerTag)?.GetComponent<GameManager>();
+    }
+
     private void Update()
     {
         DragDrop();
@@ -60,6 +65,8 @@ public class CrewManager : MonoBehaviour
 
     public bool CrewHire(CrewRank rank)
     {
+        //int cost = DataTableManager.crewTable.Get(rank).crewCost;
+
         //골드로 판단 로직 넣기
         SetHireCount(rank, GetHireCount(rank) + 1);
         return true;
@@ -146,6 +153,7 @@ public class CrewManager : MonoBehaviour
                 if (crewSellingEvent.SellAble)
                 {
                     SetHireCount(DragCrew.Rank, GetHireCount(DragCrew.Rank) - 1);
+                    gamemanager.Gold += DragCrew.GetCost();
                     Destroy(DragCrew.gameObject);
                     return;
                 }
