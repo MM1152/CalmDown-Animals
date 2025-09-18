@@ -2,6 +2,7 @@ using UnityEngine.UI;
 public class TileEditorWindow : GenericWindow
 {
     public Button editButton;
+
     public Button destroyButton;
 
     public Button deleteButton;
@@ -9,6 +10,7 @@ public class TileEditorWindow : GenericWindow
 
     public PopupManager popupManager;
     public TileManager tileManager;
+
 
     private bool editMode;
     private bool destroyMode;
