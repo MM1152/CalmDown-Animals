@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -9,7 +8,7 @@ using static Map;
 public class Map
 {
     private readonly static string mapDataPath = "Resources/MapDatas/{0}";
-    private readonly static string mapLoadPath = "MapDatas/{0}";
+    private readonly static string mapLoadPath = "MapDatas/";
 
     public static List<MapData> mapDatas = new List<MapData>(); 
 
@@ -67,9 +66,9 @@ public class Map
         return data;
     }
  
-    public static void Save(int mapIndex , MapData data)
+    public static void Save(string mapName , MapData data)
     {
-        string path = string.Format(mapDataPath, DataTableIds.MapDataIds[mapIndex] + ".json");
+        string path = string.Format(mapDataPath, mapName + ".json");
         string dir = Path.Combine(Application.dataPath, "Resources/MapDatas");
         Debug.Log(dir);
         string filepath = Path.Combine(Application.dataPath, path);
@@ -91,14 +90,15 @@ public class Map
     public static void Load()
     {
         mapDatas.Clear();
-        for(int i = 0; i < DataTableIds.MapDataIds.Length; i++)
-        {  
-            string path = string.Format(mapLoadPath, DataTableIds.MapDataIds[i]);
-            var textAsset = Resources.Load<TextAsset>(path);
 
-            if(textAsset != null)
+        var textAssets = Resources.LoadAll<TextAsset>(mapLoadPath);
+
+        Debug.Log(textAssets.Length);
+        for(int i = 0; i < textAssets.Length; i++)
+        {
+            if (textAssets[i] != null)
             {
-                var data = JsonConvert.DeserializeObject<MapData>(textAsset.text, settings);
+                var data = JsonConvert.DeserializeObject<MapData>(textAssets[i].text, settings);
                 mapDatas.Add(data);
             }
         }

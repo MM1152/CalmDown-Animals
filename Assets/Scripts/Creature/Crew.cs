@@ -42,6 +42,7 @@ public class Crew : MonoBehaviour
             underTile = tile;
         }
 
+        transform.position = underTile.transform.position + Vector3.up * 0.5f;
         FindAroundTiles();
         underTile.Type = TileType.Crew;
     }

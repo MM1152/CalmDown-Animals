@@ -90,7 +90,7 @@ public class DragCamera : MonoBehaviour
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
-            if (TouchManager.TouchType == TouchType.Drag)
+            if (TouchManager.TouchType == TouchType.Drag && !TouchManager.TouchStartInUI())
             {
                 if (prevPos == Vector3.zero)
                 {
@@ -99,9 +99,7 @@ public class DragCamera : MonoBehaviour
                 else
                 {
                     Vector3 nPos = prevPos - TouchManager.GetDragWorldPosition();
-
-                    Debug.Log(nPos);
-                    Camera.main.transform.position += nPos * dragSpeed * Time.deltaTime;
+                    Camera.main.transform.position = ClampCamera(Camera.main.transform.position + nPos * dragSpeed * Time.deltaTime , tileManager.DragAbleRect);
                 }
             }else
             {

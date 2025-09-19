@@ -17,10 +17,13 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
 
     private Coroutine co;
 
-    public void Start()
+    private void Awake()
     {
         spawner.changeUnitCount += SetTexts;
+    }
 
+    public void Start()
+    {
         var data = DataTableManager.crewTable.Get(rank);
         if(data != null)
         {

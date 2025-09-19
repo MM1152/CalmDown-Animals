@@ -87,7 +87,10 @@ public class DrawTile : Tile
         InitPos = data.Position;
 
         Vector3 dir = ConnectPos - transform.position;
-        transform.position += dir * 0.28f;
+        if(DrawType != DrawType.None)
+        {
+            transform.position += dir * 0.28f;
+        }
     }
 
     public void SetActive(bool isActive)

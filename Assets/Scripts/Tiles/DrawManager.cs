@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public class DrawManager : MonoBehaviour
 {
     public enum DrawMode
@@ -12,12 +13,19 @@ public class DrawManager : MonoBehaviour
         Delete,
     }
 
+    public string Id;
+
+    [Header("Draw")]
     public GameObject prefabs;
     public DrawTile startTilePrefabs;
     public LayerMask mask;
     public TextMeshProUGUI modeText;
+
+    [Header("Reference")]
     public TMP_Dropdown mapLevelDropBox;
     public TMP_Dropdown mapDataDropBox;
+    public TMP_InputField inputFiled;
+    public Button saveButton;
 
     private List<DrawTile> tiles = new List<DrawTile>();
     private Dictionary<Vector3, DrawTile> tileTable = new Dictionary<Vector3, DrawTile>();
@@ -98,9 +106,13 @@ public class DrawManager : MonoBehaviour
 
     private void Start()
     {
+        saveButton.onClick.AddListener(() =>
+        {
+            SaveMapData();
+            SettingMapDataDropBox();
+        });
         SettingMapDataDropBox();
     }
-
     private void Update()
     {
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X))
@@ -139,8 +151,13 @@ public class DrawManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            var data = Map.CreateMapData(DataTableIds.MapDataIds[0], waveToTiles);
-            Map.Save(0, data);
+            if(string.IsNullOrEmpty(Id))
+            {
+                inputFiled.gameObject.SetActive(true);
+                return;
+            }
+            var data = Map.CreateMapData(Id, waveToTiles);
+            Map.Save(Id, data);
         }
 
         switch (mode)
@@ -157,6 +174,18 @@ public class DrawManager : MonoBehaviour
             case DrawMode.Delete:
                 UpdateDeleteTile();
                 break;
+        }
+    }
+    private void SaveMapData()
+    {
+        if (!string.IsNullOrEmpty(inputFiled.text))
+        {
+            Id = inputFiled.text;
+
+            var data = Map.CreateMapData(Id, waveToTiles);
+            Map.Save(Id, data);
+
+            inputFiled.gameObject.SetActive(false);
         }
     }
     private void UpdateDeleteTile(){
@@ -233,7 +262,6 @@ public class DrawManager : MonoBehaviour
             waveToTiles[i].Remove(tile);
         }
     }
-
     private void UpdateDrawStartTile()
     {
         if (startTile == null)
@@ -280,15 +308,9 @@ public class DrawManager : MonoBehaviour
         Destroy(undoStartTile.gameObject);
     }
     private void UpdateDrawTile()
-    {
-#if UNITY_EDITOR             
+    {          
         if (!Input.GetMouseButtonDown(0)) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-#elif UNITY_ANDROID || UNITY_IOS
-        if (TouchManager.TouchType != TouchType.Tab) return;
-        Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
-#endif
 
         if (FindTile(ray , out DrawTile find)) 
         {
@@ -318,7 +340,6 @@ public class DrawManager : MonoBehaviour
     }
     private void DeleteAroundTile(DrawTile tile , bool allTileClear = false)
     {
-        //연결된 시작타일 제거
         if (tile.ConnectStartTiles.Count > 0)
         {
             foreach (var connectTile in tile.ConnectStartTiles)
@@ -326,7 +347,7 @@ public class DrawManager : MonoBehaviour
                 connectTile.UnderTile.gameObject.SetActive(true);
                 connectTile.gameObject.SetActive(false);
                 RemoveFlagTile(connectTile);
-                Destroy(connectTile);
+                Destroy(connectTile.gameObject);
             }
 
             var findTile = startTileUndoStack.Where(x => x.gameObject.activeSelf);
@@ -381,7 +402,6 @@ public class DrawManager : MonoBehaviour
             }
         }
     }
-
     public void DrawTileToLevel(int level)
     {
         int prevLevel = this.level;
@@ -413,38 +433,41 @@ public class DrawManager : MonoBehaviour
             }
         }
 
-        foreach(var tile in tiles)
+
+        for(int i = 0; i < waveToTiles.Count; i++)
         {
-            if(tile.layer == level)
+            for(int j = 0; j < waveToTiles[i].Count; j++)
             {
-                tile.SetActive(true);
+                if(i == this.level)
+                {
+                    if (waveToTiles[i][j].DrawType == DrawType.None)
+                    {
+                        waveToTiles[i][j].SetActive(true);
+                    }
+                    else if (waveToTiles[i][j].DrawType == DrawType.Start)
+                    {
+                        waveToTiles[i][j].UnderTile.gameObject.SetActive(false);
+                        waveToTiles[i][j].gameObject.SetActive(true);
+                    }
+                }else
+                {
+                    if (waveToTiles[i][j].DrawType == DrawType.None)
+                    {
+                        waveToTiles[i][j].SetActive(false);
+                    }
+                    else if (waveToTiles[i][j].DrawType == DrawType.Start)
+                    {
+                        waveToTiles[i][j].UnderTile.gameObject.SetActive(true);
+                        waveToTiles[i][j].gameObject.SetActive(false);
+                    }
+                }
             }
-            else
-            {
-                tile.SetActive(false);
-            } 
         }
 
-        for(int i = 0; i < waveToTiles[prevLevel].Count; i++)
-        {
-            if(waveToTiles[prevLevel][i].DrawType == DrawType.Start)
-            {
-                waveToTiles[prevLevel][i].UnderTile.gameObject.SetActive(true);
-                waveToTiles[prevLevel][i].gameObject.SetActive(false);
-            }
-        }
-        for (int i = 0; i < waveToTiles[level].Count; i++)
-        {
-            if (waveToTiles[level][i].DrawType == DrawType.Start)
-            {
-                waveToTiles[level][i].UnderTile.gameObject.SetActive(false);
-                waveToTiles[level][i].gameObject.SetActive(true);
-            }
-        }
     }
-
     private void SettingMapDataDropBox()
     {
+        mapDataDropBox.ClearOptions();
         var datas = Map.mapDatas;
         List<string> optionList = new List<string>();
         for(int i = 0; i < datas.Count; i++)
@@ -456,14 +479,18 @@ public class DrawManager : MonoBehaviour
 
         mapDataDropBox.AddOptions(optionList);
     }
-
     public void ChangeMapToMapData(int mapIndex)
     {
         Clear();
         level = 0;
         mapLevelDropBox.value = level;
-        mapLevelDropBox.RefreshShownValue();
 
+        mapLevelDropBox.RefreshShownValue();
+        if (this.arriveTile != null)
+        {
+            Destroy(this.arriveTile.gameObject);
+        }
+        
         if (Map.mapDatas.Count <= mapIndex)
         {
             var tile = Instantiate(prefabs, transform).GetComponent<DrawTile>();
@@ -477,13 +504,17 @@ public class DrawManager : MonoBehaviour
             waveToTiles[level].Add(tile);
 
             SetAroundTile(tile);
+            Id = null;
             return;
         }
 
         var datas = Map.mapDatas[mapIndex];
 
+        Id = datas.Id;
         List<DrawTile> startTiles = new List<DrawTile>();
-        DrawTile arriveTile = null;
+        arriveTile = null;
+
+        bool isDrawedArriveTile = false;
 
         for(int i = 0; i < datas.tiles.Count; i++)
         {
@@ -491,12 +522,20 @@ public class DrawManager : MonoBehaviour
             for (int j = 0; j < datas.tiles[i].Count; j++)
             {
                 var tileData = datas.tiles[i][j];
-                DrawTile tile;
+                DrawTile tile = null;
 
                 if (tileData.DrawType == DrawType.Start || tileData.DrawType == DrawType.Arrive)
                 {
-                    tile = Instantiate(startTilePrefabs, transform);
-                    tile.layer = i;
+                    if(tileData.DrawType == DrawType.Arrive && !isDrawedArriveTile)
+                    {
+                        isDrawedArriveTile = true;
+                        tile = Instantiate(startTilePrefabs, transform);
+                        tile.layer = i;
+                    }else if(tileData.DrawType == DrawType.Start)
+                    {
+                        tile = Instantiate(startTilePrefabs, transform);
+                        tile.layer = i;
+                    }
                 } 
                 else
                 {
@@ -527,12 +566,12 @@ public class DrawManager : MonoBehaviour
 
                     if (tileData.DrawType == DrawType.Start)
                     {
-                        tile.UnderTile = tileTable[tile.transform.position];
+                        tile.UnderTile = tileTable[tile.InitPos];
                         startTiles.Add(tile);
                     }
                     else if(tileData.DrawType == DrawType.Arrive)
                     {
-                        tile.UnderTile = tileTable[tile.transform.position];
+                        tile.UnderTile = tileTable[tile.InitPos];
                         arriveTile = tile;
                     }
                 }
@@ -543,7 +582,7 @@ public class DrawManager : MonoBehaviour
         if (arriveTile != null && tileTable.ContainsKey(arriveTile.ConnectPos))
         {
             arriveTile.ConnectTile = tileTable[arriveTile.ConnectPos];
-            arriveTile.UnderTile = tileTable[arriveTile.transform.position];
+            arriveTile.UnderTile = tileTable[arriveTile.InitPos];
             arriveTile.UnderTile.gameObject.SetActive(false);
             arriveTile.ConnectTile.ConnectStartTiles.Add(arriveTile);
         }
@@ -553,7 +592,7 @@ public class DrawManager : MonoBehaviour
             if (tileTable.ContainsKey(startTiles[i].ConnectPos))
             {
                 startTiles[i].ConnectTile = tileTable[startTiles[i].ConnectPos];
-                startTiles[i].UnderTile = tileTable[startTiles[i].transform.position];
+                startTiles[i].UnderTile = tileTable[startTiles[i].InitPos];
                 startTiles[i].ConnectTile.ConnectStartTiles.Add(startTiles[i]);
                 startTiles[i].UnderTile.gameObject.SetActive(false);
             }
@@ -561,7 +600,6 @@ public class DrawManager : MonoBehaviour
 
         DrawTileToLevel(level);
     }
-
     private void Clear()
     {
         for (int i = 0; i < tiles.Count; i++)

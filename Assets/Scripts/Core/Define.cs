@@ -10,7 +10,7 @@ public class NeighborPosition
         this.gridSize = new Vector2(Mathf.Ceil(render.bounds.size.z * 10f) / 10f, Mathf.Ceil(render.bounds.size.x * 10f) / 10f);
         Debug.Log(render.bounds.size);
         Debug.Log(gridSize);
-        nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) , 0, gridSize.y ));
+        nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) * 0.9f , 0, gridSize.y * 0.9f ));
         nextNeighborPos[1] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, gridSize.y));
         nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.x, 0 ,0));
         nextNeighborPos[3] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, -gridSize.y));

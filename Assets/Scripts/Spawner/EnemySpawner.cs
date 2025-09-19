@@ -25,8 +25,6 @@ public class EnemySpawner : MonoBehaviour
         gameManager.endWave += EndWaveToSetInfoTiles;
 
         animalInfoTable = DataTableManager.animalInfoTable;
-
-
     }
 
     public void CheckDieEnemy()

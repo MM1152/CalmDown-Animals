@@ -19,6 +19,7 @@ public class TileEditorWindow : GenericWindow
     [Header("UI Objects")]
     public GameObject selectModeGo;
     public GameObject editModeGo;
+    public GameObject editModeOutline;
 
     private bool editMode;
     private bool destroyMode;
@@ -39,6 +40,7 @@ public class TileEditorWindow : GenericWindow
             destroyButton.IsOn = false;
             tileManager.drawMode = false;
             DragAble.CameraDrag = true;
+            editModeOutline.SetActive(false);
         });
         editButton.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -51,11 +53,7 @@ public class TileEditorWindow : GenericWindow
             {
                 editMode = !editMode;
             }
-            editButton.IsOn = editMode;
-            destroyButton.IsOn = destroyMode;
-            tileManager.tileType = TileType.Path;
-            tileManager.drawMode = editMode;
-            DragAble.CameraDrag = !editMode;
+            UpdateSetting(editMode, destroyMode, TileType.Path);
         });
         destroyButton.GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -68,12 +66,18 @@ public class TileEditorWindow : GenericWindow
             {
                 destroyMode = !destroyMode;
             }
-            editButton.IsOn = editMode;
-            destroyButton.IsOn = destroyMode;
-            tileManager.tileType = TileType.None;
-            tileManager.drawMode = destroyMode;
-            DragAble.CameraDrag = !destroyMode;
+            UpdateSetting(editMode, destroyMode, TileType.None);
         });
+    }
+
+    private void UpdateSetting(bool editMode, bool destroyMode, TileType tileType)
+    {
+        editButton.IsOn = editMode;
+        destroyButton.IsOn = destroyMode;
+        tileManager.tileType = tileType;
+        tileManager.drawMode = editMode || destroyMode ? true : false;
+        DragAble.CameraDrag = !tileManager.drawMode;
+        editModeOutline.SetActive(tileManager.drawMode);
     }
 
     private void CheckPath()

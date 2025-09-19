@@ -87,6 +87,9 @@ public class TileManager : MonoBehaviour
             copyTile = copyTile.ParentTile;
         }
 
+        //처음 크루 설치
+        // 공짜로 설치 하고, 타일 위치는 -0.6 , 1.1
+        crewSpawner.SetStartUnit(CrewRank.Intern, tileTable[new Vector3(-0.6f , 0f , 1.1f)]);
     }
 
     private void ResetInitPath()

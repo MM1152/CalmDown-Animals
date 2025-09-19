@@ -54,7 +54,7 @@ public class CrewManager : MonoBehaviour
         CrewDrag();
     }
 
-    public void Spawn(CrewRank rank)
+    public void Spawn(CrewRank rank) 
     {
         (int hire, int place) data = unitInfomation[(int)rank];
         if (data.hire - data.place <= 0) return;
@@ -62,6 +62,16 @@ public class CrewManager : MonoBehaviour
         var spawnCrew = Instantiate(prefabs , transform);
         spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
         DragCrew = spawnCrew;
+    }
+
+    public void SetStartUnit(CrewRank rank, PathTile underTile)
+    {
+        var spawnCrew = Instantiate(prefabs, transform);
+        spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
+        spawnCrew.SetUnderTile(underTile);
+
+        SetHireCount(rank, 1);
+        SetPlaceCount(rank, 1);
     }
 
     public bool CrewHire(CrewRank rank)
@@ -177,7 +187,6 @@ public class CrewManager : MonoBehaviour
                     {
                         if (underTile.Type == TileType.None)
                         {
-                            DragCrew.transform.position = underTile.transform.position + Vector3.up * 0.5f;
                             DragCrew.SetUnderTile(underTile);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
                         }
