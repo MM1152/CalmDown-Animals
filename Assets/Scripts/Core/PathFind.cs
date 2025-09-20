@@ -30,6 +30,7 @@ public class PathFind
             if (closeList.Contains(curTile)) continue;
 
             closeList.Add(curTile);
+            
             foreach(var nTile in curTile.Neighbor)
             {
                 if((nTile.Type & checkTile) > 0 && !closeList.Contains(nTile))
@@ -44,6 +45,7 @@ public class PathFind
                     nTile.H = H;
 
                     nTile.ParentTile = curTile;
+                    curTile.IsSelectedPath = true;
                     openList.EnQueue(nTile);
                 } 
             }

@@ -65,7 +65,7 @@ public class PathTileRoad : MonoBehaviour
         this.nextTile = nTile;
 
         NextSide = FindSide(transform.position, nTile.transform.position);
-        SetNextTilePrevSide(nTile , nextSide);
+        SetNextTilePrevSide(nTile , NextSide);
 
         DrawRoads();
     }
@@ -85,7 +85,7 @@ public class PathTileRoad : MonoBehaviour
     private void DrawRoads()
     {
         meshFillter.sharedMesh = roadMeshs[1];
-        if (prevSide == nextSide) return;
+        if (PrevSide == NextSide) return;
 
         int count = 0;
         for (int i = 0; i <= 5; i++)
@@ -98,12 +98,13 @@ public class PathTileRoad : MonoBehaviour
 
         if (count == 1)
         {
-            if (!((nextSide == Sides.TopRight && prevSide == Sides.TopLeft) 
-                || (nextSide == Sides.TopLeft && prevSide == Sides.Left)
-                || (nextSide == Sides.Left && prevSide == Sides.BottomLeft)
-                || (nextSide == Sides.BottomRight && prevSide == Sides.BottomLeft)
-                || (nextSide == Sides.BottomLeft && prevSide == Sides.Right)
-                || (nextSide == Sides.Right && prevSide == Sides.TopRight))) 
+            if (!((NextSide == Sides.TopRight && prevSide == Sides.TopLeft) 
+                || (NextSide == Sides.TopLeft && prevSide == Sides.Left)
+                || (NextSide == Sides.Left && prevSide == Sides.BottomLeft)
+                /*|| (nextSide == Sides.BottomRight && prevSide == Sides.BottomLeft)*/
+                /*|| (NextSide == Sides.BottomLeft && prevSide == Sides.Right)*/
+                || (NextSide == Sides.BottomLeft && prevSide == Sides.BottomRight)
+                || (NextSide == Sides.Right && prevSide == Sides.TopRight))) 
             {
                 transform.eulerAngles += new Vector3(0f, 240f, 0f);
             }
@@ -145,16 +146,16 @@ public class PathTileRoad : MonoBehaviour
             meshFillter.sharedMesh = roadMeshs[6];
             transform.eulerAngles += Vector3.up * 180f;
         }
-
+        
     }
 
 
     public void SetNextTilePrevSide(PathTileRoad nTile , Sides nextSide)
     {
-        nTile.PrevSide |= nextSide;
+        nTile.PrevSide |= NextSide;
     }
 
-    public static Sides  FindSide(Vector3 prevTile, Vector3 nTile)
+    public static Sides FindSide(Vector3 prevTile, Vector3 nTile)
     {
         Vector3 side = nTile - prevTile;
         for(int i = 0; i < TileManager.neighborPosition.nextNeighborPos.Length; i++)

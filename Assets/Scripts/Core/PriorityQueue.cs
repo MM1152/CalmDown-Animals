@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 public class PriorityQueue<T> : IEnumerable<T>
 {
-    public class Friend
-    {
-        protected List<T> GetQueue(PriorityQueue<T> target) => target.priority_queue;
-    }
-
     private List<T> priority_queue = new List<T>();
     private IComparer<T> comparer;
 
     public PriorityQueue(IComparer<T> comparer)
     {
         this.comparer = comparer;
+    }
+
+    public int Count()
+    {
+        return priority_queue.Count;
     }
 
     public void EnQueue(T item)

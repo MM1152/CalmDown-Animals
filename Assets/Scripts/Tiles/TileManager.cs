@@ -109,6 +109,14 @@ public class TileManager : MonoBehaviour
         isChangedTile = true;
     }
 
+    public void ClearTileSelectedPath() 
+    {
+        foreach (var tile in tileList)
+        {
+            tile.IsSelectedPath = false;
+        }
+    }
+
     public bool FindPath(TileType type = TileType.Path)
     {
         bool isSuseccs = true;
@@ -122,7 +130,7 @@ public class TileManager : MonoBehaviour
      
         if(isSuseccs)
         {
-            for(int i = 0; i < startTile.Count; i++)
+            for (int i = 0; i < startTile.Count; i++)
             {
                 var strTile = startTile[i];
                 var drawStartTile = drawStartTiles[i];
@@ -130,6 +138,13 @@ public class TileManager : MonoBehaviour
                 DrawRoads(startTile[i]);
             }
 
+            foreach (var tile in tileList)
+            {
+                if (tile.GetComponent<PathTileRoad>().PrevSide == PathTileRoad.Sides.None && tile.Type == TileType.Path)
+                {
+                    tile.Type = TileType.None;
+                }
+            }
         }
         return isSuseccs;
     }
@@ -177,7 +192,6 @@ public class TileManager : MonoBehaviour
         if(tile != null && tile.Type == targetTile && tile != arriveTile && !startTile.Contains(tile))
         {
             tile.Type = type;
-            //editTiles.Add(tile);
         }
     }
 

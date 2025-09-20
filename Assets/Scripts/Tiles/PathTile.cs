@@ -14,6 +14,8 @@ public class PathTile : Tile
     public SpawnEnemyInfo EnemyInfo { get; set; }
     private float enablePercent = 0f;
 
+    public bool IsSelectedPath { get; set; }
+
     public static int operator -(PathTile x , PathTile y)
     {
         return (int)Mathf.Round(Mathf.Abs(x.transform.position.x - y.transform.position.x) + Mathf.Abs(x.transform.position.z - y.transform.position.z));
