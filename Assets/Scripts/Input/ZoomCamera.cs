@@ -15,7 +15,7 @@ public class ZoomCamera : MonoBehaviour
     private void Update()
     {
         float size = 0;
-        if (!DragAble.CameraDrag) return;
+        //if (!DragAble.CameraDrag) return;
         if (TouchManager.TouchType == TouchType.ZoomOut)
         {
             size = Camera.main.orthographicSize * zoomSpeed * Time.deltaTime;

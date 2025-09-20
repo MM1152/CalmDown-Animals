@@ -29,6 +29,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void CheckDieEnemy()
     {
+        //FIX : 여기 수정 해야됨 모든 동물 수 카운트 이후 0 되면 종료되도록 구현 해ㅐ주어야함.
+            
         copySpawnCount--;
         if(copySpawnCount == 0)
         {
@@ -38,15 +40,17 @@ public class EnemySpawner : MonoBehaviour
 
     private void EndWaveToSetInfoTiles()
     {
+        copySpawnCount = 0;
         // 맵 넓어지면 여기 수정해야됌
-        var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_ID1);
-        spawnCount = Random.Range(spawnInfo.Range_min , spawnInfo.Range_max);
-        copySpawnCount = spawnCount;
-
-        foreach (var info in infoTiles)
+        //var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_ID1);
+        for (int i = 0; i < infoTiles.Count; i++)
         {
-            info.SpawnEnemyCount(copySpawnCount);
-            info.SetSpawnEnemy(spawnInfo);
+            var spawnInfo = animalInfoTable.RandomGet(1);
+            spawnCount = Random.Range(spawnInfo.Range_min, spawnInfo.Range_max);
+            copySpawnCount += spawnCount;
+            gameManager.allCountSpawnAnimals += spawnCount;
+            infoTiles[i].SpawnEnemyCount(spawnCount);
+            infoTiles[i].SetSpawnEnemy(spawnInfo);
         }
     }
     //Test 용

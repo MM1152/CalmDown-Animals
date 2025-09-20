@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class DrawManager : MonoBehaviour
@@ -566,11 +567,13 @@ public class DrawManager : MonoBehaviour
 
                     if (tileData.DrawType == DrawType.Start)
                     {
+                        tile.transform.position = tile.InitPos;
                         tile.UnderTile = tileTable[tile.InitPos];
                         startTiles.Add(tile);
                     }
                     else if(tileData.DrawType == DrawType.Arrive)
                     {
+                        tile.transform.position = tile.InitPos;
                         tile.UnderTile = tileTable[tile.InitPos];
                         arriveTile = tile;
                     }

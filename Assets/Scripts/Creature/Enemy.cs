@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
     private PathTile nTile;
     private PathTile prevTile;
 
-    private EnemyHealth health;
+    public EnemyHealth health;
     private GameManager gameManager;
     private AnimalInfoTable.Data data;
     

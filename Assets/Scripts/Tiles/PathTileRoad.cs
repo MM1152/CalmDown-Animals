@@ -112,6 +112,19 @@ public class PathTileRoad : MonoBehaviour
         }
         if(count == 2)
         {
+            if(nextSide == Sides.BottomRight && prevSide == (Sides.Left | Sides.BottomRight))
+            {
+                meshFillter.sharedMesh = roadMeshs[4];
+                transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
+            if(nextSide == Sides.TopRight && prevSide == (Sides.Left | Sides.TopRight))
+            {
+                meshFillter.sharedMesh = roadMeshs[5];
+                transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
+
             bool prevBitChecker = false;
             for(int i = 0; i < 5; i++)
             {
@@ -148,11 +161,11 @@ public class PathTileRoad : MonoBehaviour
         }
         
     }
-
+        
 
     public void SetNextTilePrevSide(PathTileRoad nTile , Sides nextSide)
     {
-        nTile.PrevSide |= NextSide;
+        nTile.PrevSide |= nextSide;
     }
 
     public static Sides FindSide(Vector3 prevTile, Vector3 nTile)

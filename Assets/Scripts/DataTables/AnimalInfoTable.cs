@@ -62,7 +62,7 @@ public class AnimalInfoTable : DataTable
         var list = animalInfos.Select(x => x.Value).ToList();
         var withCR_ID = list.Where(x => x.CR_ID == CR_ID);
 
-        int rand = UnityEngine.Random.Range(0, withCR_ID.Count());
+        int rand = UnityEngine.Random.Range(0, withCR_ID.Count() - 1) ;
         return withCR_ID.ElementAt(rand);
     }
 

@@ -2260,9 +2260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc63684713a1ecd439b31bfb20844faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
-  vector2: {x: 0, y: 0}
-  UnitsToMove: 0
 --- !u!114 &156319394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3411,9 +3408,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc63684713a1ecd439b31bfb20844faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
-  vector2: {x: 0, y: 0}
-  UnitsToMove: 0
 --- !u!114 &240338294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12207,8 +12201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73804e2b6e5ae1946948ec510ee00e67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSize: 2
-  maxSize: 10
+  minSize: 5
+  maxSize: 15
   zoomSpeed: 2
   zoomLimitTime: 0
   speedToZoomZone: 2
@@ -22205,9 +22199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc63684713a1ecd439b31bfb20844faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
-  vector2: {x: 0, y: 0}
-  UnitsToMove: 0
 --- !u!114 &1529924090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24784,9 +24775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc63684713a1ecd439b31bfb20844faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 79471667}
-  vector2: {x: 0, y: 0}
-  UnitsToMove: 0
 --- !u!114 &1744464450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27464,9 +27452,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc63684713a1ecd439b31bfb20844faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 1826751375}
-  vector2: {x: 0, y: 0}
-  UnitsToMove: 0
 --- !u!114 &2022615999
 MonoBehaviour:
   m_ObjectHideFlags: 0

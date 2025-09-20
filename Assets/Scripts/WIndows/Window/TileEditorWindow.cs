@@ -28,7 +28,6 @@ public class TileEditorWindow : GenericWindow
     {
         backButton.onClick.AddListener(() => CheckPath());
         inEditModeButton.onClick.AddListener(() => {
-            tileManager.ClearTileSelectedPath();
             editModeGo.SetActive(true);
             selectModeGo.SetActive(false);
             tileManager.drawMode = false;

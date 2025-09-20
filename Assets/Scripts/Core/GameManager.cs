@@ -44,8 +44,10 @@ public class GameManager : MonoBehaviour{
     public int maxWave;
     public bool WaveStart { get; private set; } = false;
 
+    public int allCountSpawnAnimals;
     private void Awake()
     {
+        allCountSpawnAnimals = 0;
         waveText.text = wave + " Round";
         goldText.text = gold.ToString();
     }
@@ -81,6 +83,7 @@ public class GameManager : MonoBehaviour{
         {
             wave++;
         }
+
         waveText.text = wave + " ¿þÀÌºê";
     }
 

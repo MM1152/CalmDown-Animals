@@ -14,6 +14,7 @@ public class TileManager : MonoBehaviour
     public TileType tileType;
     public bool drawMode;
     public LayerMask layerMask;
+    public int allAnimalSpawnCount;
     private int mapSize = -1;
 
     [Space(10)]
@@ -67,7 +68,7 @@ public class TileManager : MonoBehaviour
     private void Start()
     {
         gameManager.endWave += DrawTiles;
-
+        gameManager.endWave += () => ChangeToBlockedTile(gameManager.allCountSpawnAnimals);
         DrawTiles();
         FindPath(TileType.Path | TileType.None);
         SetInitPath();
@@ -109,14 +110,6 @@ public class TileManager : MonoBehaviour
         isChangedTile = true;
     }
 
-    public void ClearTileSelectedPath() 
-    {
-        foreach (var tile in tileList)
-        {
-            tile.IsSelectedPath = false;
-        }
-    }
-
     public bool FindPath(TileType type = TileType.Path)
     {
         bool isSuseccs = true;
@@ -134,7 +127,7 @@ public class TileManager : MonoBehaviour
             {
                 var strTile = startTile[i];
                 var drawStartTile = drawStartTiles[i];
-                strTile.GetComponent<PathTileRoad>().PrevSide = PathTileRoad.FindSide(drawStartTile.InitPos, strTile.transform.position);
+                strTile.GetComponent<PathTileRoad>().PrevSide |= PathTileRoad.FindSide(drawStartTile.InitPos, strTile.transform.position);
                 DrawRoads(startTile[i]);
             }
 
@@ -395,4 +388,23 @@ public class TileManager : MonoBehaviour
         tile.EnemyInfo = spawner;
     }
 
+    public void ChangeToBlockedTile(int allEnemySpawnCount)
+    {
+        if (!DataTableManager.roundTable.Get(gameManager.Wave).IsUnavail) return;
+
+        float percent = Random.Range(0f, 1f);
+
+        foreach (var tile in tileList)
+        {
+            var intileAnimal = tile.GetComponent<InTileAnimal>();
+            if (intileAnimal.killStack == 0) continue;
+
+            float changePercent = intileAnimal.killStack / (float)allEnemySpawnCount * 0.3f;
+
+            if(percent <= changePercent)
+            {
+                tile.Type = TileType.Blocked;
+            }
+        }
+    }
 }
