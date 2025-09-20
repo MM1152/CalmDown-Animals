@@ -1,52 +1,70 @@
-using CsvHelper;
-using JetBrains.Annotations;
 using System;
 using UnityEngine;
-
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using NUnit.Framework.Constraints;
 public class PathTileRoad : MonoBehaviour
 {
+    public Mesh[] roadMeshs;
+    public MeshFilter meshFillter;
+    [Flags]
     public enum Sides
     {
-        None = -1,
-        TopRight ,
-        TopLeft,
-        Left,
-        BottomLeft,
-        BottomRight,
-        Right,
+        None = 0,
+        TopRight = 1,
+        TopLeft = 1 << 1,
+        Left = 1 << 2,
+        BottomLeft = 1 << 3,
+        BottomRight = 1 << 4,
+        Right = 1 << 5,
     }
-
-
-   
     public PathTileRoad nextTile;
 
-    public GameObject roundRoad;
-    public GameObject cornerRoad;
-    public GameObject straightRoad;
-
-    private GameObject currentDrawRoad;
-
     public Sides prevSide;
-    public Sides nextSide;
-    //미리 오브젝트 돌려주기 용 프로퍼티
     public Sides PrevSide
     {
         get => prevSide;
         set
         {
             prevSide = value;
-            Vector3 angle = new Vector3(0f, 120 - (60f * (int)prevSide), 0f);
-            straightRoad.transform.eulerAngles = angle;
         }
     }
+    public Sides nextSide;
+    public Sides NextSide
+    {
+        get => nextSide;
+        set
+        {
+            nextSide = value;
+
+            if (nextSide == Sides.TopRight)
+                transform.eulerAngles = Vector3.up * -60f;
+            if (nextSide == Sides.TopLeft)
+                transform.eulerAngles = Vector3.up * -120f;
+            if (nextSide == Sides.Left)
+                transform.eulerAngles = Vector3.up * 180f;
+            if (nextSide == Sides.BottomLeft)
+                transform.eulerAngles = Vector3.up * 120f;
+            if (nextSide == Sides.BottomRight)
+                transform.eulerAngles = Vector3.up * 60f;
+            if (nextSide == Sides.Right)
+                transform.eulerAngles = Vector3.zero;
+        }
+            
+    }
+    //미리 오브젝트 돌려주기 용 프로퍼티
+    private void Awake()
+    {
+        meshFillter = GetComponent<MeshFilter>();
+    }
+
     public void DrawRoad(PathTileRoad nTile)
     {
-        //LEFT = 120
-        //BOTTOMLEFT = 180
         if (nTile == null) return;
 
         this.nextTile = nTile;
-        nextSide = FindSide(transform.position, nTile.transform.position);
+
+        NextSide = FindSide(transform.position, nTile.transform.position);
         SetNextTilePrevSide(nTile , nextSide);
 
         DrawRoads();
@@ -54,74 +72,99 @@ public class PathTileRoad : MonoBehaviour
 
     public void DrawRoad(Vector3 nPos)
     {
-        nextSide = FindSide(transform.position, nPos);
+        NextSide = FindSide(transform.position, nPos);
         DrawRoads();
+    }
+
+    public void Clear()
+    {
+        prevSide = Sides.None;
+        meshFillter.mesh = roadMeshs[0];
     }
 
     private void DrawRoads()
     {
-        if (nextSide == PrevSide)
+        meshFillter.sharedMesh = roadMeshs[1];
+        if (prevSide == nextSide) return;
+
+        int count = 0;
+        for (int i = 0; i <= 5; i++)
         {
-            straightRoad.SetActive(true);
+            if ((prevSide & (Sides)(1 << i)) > 0)
+            {
+                count++;
+            }
         }
-        else
+
+        if (count == 1)
         {
-            // LEFT -> BOTTOMLEFT = 0
-            // BOTTOMLEFT -> LEFT = 180
-            // LEFT -> TOPLEFT = 240
-            // TOPLEFT -> TOPRIGHT = 300
-            // TOPRIGHT -> TOPLEFT = 120
-            // TOPLEFT -> LEFT = 60
-
-            if (prevSide == Sides.BottomLeft && nextSide == Sides.Left)
+            if (!((nextSide == Sides.TopRight && prevSide == Sides.TopLeft) 
+                || (nextSide == Sides.TopLeft && prevSide == Sides.Left)
+                || (nextSide == Sides.Left && prevSide == Sides.BottomLeft)
+                || (nextSide == Sides.BottomRight && prevSide == Sides.BottomLeft)
+                || (nextSide == Sides.BottomLeft && prevSide == Sides.Right)
+                || (nextSide == Sides.Right && prevSide == Sides.TopRight))) 
             {
-                cornerRoad.transform.eulerAngles = new Vector3(0, 180, 0);
+                transform.eulerAngles += new Vector3(0f, 240f, 0f);
             }
-            else if (prevSide == Sides.Left && nextSide == Sides.TopLeft)
-            {
-                cornerRoad.transform.eulerAngles = new Vector3(0, 240, 0);
-            }
-            else if (prevSide == Sides.TopLeft && nextSide == Sides.TopRight)
-            {
-                cornerRoad.transform.eulerAngles = new Vector3(0, 300, 0);
-            }
-            else if (prevSide == Sides.TopRight && nextSide == Sides.TopLeft)
-            {
-                cornerRoad.transform.eulerAngles = new Vector3(0, 120, 0);
-            }
-            else if (prevSide == Sides.TopLeft && nextSide == Sides.Left)
-            {
-                cornerRoad.transform.eulerAngles = new Vector3(0, 60, 0);
-            }
-
-
-            cornerRoad.SetActive(true);
+            meshFillter.sharedMesh = roadMeshs[2];
         }
+        if(count == 2)
+        {
+            bool prevBitChecker = false;
+            for(int i = 0; i < 5; i++)
+            {
+                bool curBitChecker = false;
+
+                if (((int)prevSide & (1 << i)) > 0)
+                {
+                    curBitChecker = true;
+                }  
+
+                if(prevBitChecker && curBitChecker)
+                {
+                    int converseSide = (int)(prevSide & ~nextSide);
+
+                    if(converseSide > (int)nextSide)
+                    {
+                        meshFillter.sharedMesh = roadMeshs[4];
+                    }
+                    else
+                    {
+                        meshFillter.sharedMesh = roadMeshs[5];
+                    }
+                    return;
+                }
+
+                prevBitChecker = curBitChecker;
+            }
+            meshFillter.sharedMesh = roadMeshs[3];
+        }
+        if(count == 3)
+        {
+            meshFillter.sharedMesh = roadMeshs[6];
+            transform.eulerAngles += Vector3.up * 180f;
+        }
+
     }
+
 
     public void SetNextTilePrevSide(PathTileRoad nTile , Sides nextSide)
     {
-        nTile.PrevSide = nextSide;
+        nTile.PrevSide |= nextSide;
     }
 
-    public static Sides FindSide(Vector3 prevTile, Vector3 nTile)
+    public static Sides  FindSide(Vector3 prevTile, Vector3 nTile)
     {
         Vector3 side = nTile - prevTile;
-        Debug.Log(side);
         for(int i = 0; i < TileManager.neighborPosition.nextNeighborPos.Length; i++)
         {
             if(side == TileManager.neighborPosition.nextNeighborPos[i])
             {
-                return (Sides)i;
+                return (Sides)(1 << i);
             }
         }
 
         return Sides.None;
-    }
-    public void Clear()
-    {
-        roundRoad.SetActive(false);
-        cornerRoad.SetActive(false);
-        straightRoad.SetActive(false);
     }
 }

@@ -89,7 +89,7 @@ public class TileManager : MonoBehaviour
 
         //처음 크루 설치
         // 공짜로 설치 하고, 타일 위치는 -0.6 , 1.1
-        crewSpawner.SetStartUnit(CrewRank.Intern, tileTable[new Vector3(-0.6f , 0f , 1.1f)]);
+        crewSpawner.SetStartUnit(CrewRank.Intern, tileTable[new Vector3(-1.1f, 0f , 1.9f)]);
     }
 
     private void ResetInitPath()
@@ -330,7 +330,7 @@ public class TileManager : MonoBehaviour
             for(int i = 0; i < neighborPosition.nextNeighborPos.Length; i++)
             {
                 Vector3 nPos = NeighborPosition.GetFloor(tile.transform.position + neighborPosition.nextNeighborPos[i]);
-                if(tileTable.ContainsKey(nPos))
+                if (tileTable.ContainsKey(nPos) && !tile.Neighbor.Contains(tileTable[nPos]))
                 {
                     tile.Neighbor.Add(tileTable[nPos]);
                 }

@@ -31,7 +31,7 @@ public class SpawnEnemyInfo : MonoBehaviour
             gameManager.endWave += () =>
             {
                 foreach(var enemy in spawnList)
-                {
+                {   
                     if(enemy != null)
                     {
                         Destroy(enemy.gameObject);

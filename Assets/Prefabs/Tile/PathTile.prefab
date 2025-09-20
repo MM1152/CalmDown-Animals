@@ -61,11 +61,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 389d5010c2746414c8d7802f26578667, type: 3}
---- !u!1 &162525737543437798 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 389d5010c2746414c8d7802f26578667, type: 3}
-  m_PrefabInstance: {fileID: 162525737543469894}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &162525737543602630 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 389d5010c2746414c8d7802f26578667, type: 3}
@@ -132,11 +127,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3d26f07af1522f49b927edb00ec941a, type: 3}
---- !u!1 &625492792772272228 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: c3d26f07af1522f49b927edb00ec941a, type: 3}
-  m_PrefabInstance: {fileID: 625492792772372164}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &625492792772508740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: c3d26f07af1522f49b927edb00ec941a, type: 3}
@@ -208,11 +198,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9506a8b63914f464d8847b4808103f22, type: 3}
   m_PrefabInstance: {fileID: 6203403827409154167}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6203403827409123031 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 9506a8b63914f464d8847b4808103f22, type: 3}
-  m_PrefabInstance: {fileID: 6203403827409154167}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7948904073201991224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -276,11 +261,11 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: 7c8eca8ad21e87b4ca86092ecbfb815e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: cf051fba995609b459f0eb4baf4bb478, type: 2}
+      objectReference: {fileID: -6545801570897300931, guid: f710d34b206bb8c489f0be4df062c321, type: 3}
     - target: {fileID: 3300000, guid: 7c8eca8ad21e87b4ca86092ecbfb815e, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: a415174bfd1c4214c8fa8a3dd313aba6, type: 3}
+      objectReference: {fileID: 703726867841230225, guid: f710d34b206bb8c489f0be4df062c321, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -336,7 +321,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.45
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0.042686194}
 --- !u!114 &2678013534119981226
 MonoBehaviour:
@@ -363,10 +348,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53c98aadbdcee84784e38ebb9ec0919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadMeshs:
+  - {fileID: 703726867841230225, guid: f710d34b206bb8c489f0be4df062c321, type: 3}
+  - {fileID: -4834173543892134579, guid: 860718ff3434c9d4a967c80daaf42f7f, type: 3}
+  - {fileID: -195117725110335826, guid: 575eee5470fd8ee4982584356a00ebeb, type: 3}
+  - {fileID: 6417722243447716879, guid: 14968df6a5ed6464f8ba86606708880d, type: 3}
+  - {fileID: 6054479668292126026, guid: 25942c2c89374854786e55d2421377c3, type: 3}
+  - {fileID: -2359130784434930340, guid: 35ecdf16e12d3e04b999850c42f67ff9, type: 3}
+  - {fileID: 4852995666286988526, guid: da83f719e0d4d4a48af04ad17e927256, type: 3}
+  meshFillter: {fileID: 0}
   nextTile: {fileID: 0}
-  roundRoad: {fileID: 6203403827409123031}
-  cornerRoad: {fileID: 625492792772272228}
-  straightRoad: {fileID: 162525737543437798}
   prevSide: 0
   nextSide: 0
 --- !u!114 &816899663365008062
@@ -381,4 +372,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82248e46ea65bef4f8171d9b89d7d09c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 0}
   list: []

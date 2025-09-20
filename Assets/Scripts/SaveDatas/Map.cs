@@ -93,7 +93,6 @@ public class Map
 
         var textAssets = Resources.LoadAll<TextAsset>(mapLoadPath);
 
-        Debug.Log(textAssets.Length);
         for(int i = 0; i < textAssets.Length; i++)
         {
             if (textAssets[i] != null)

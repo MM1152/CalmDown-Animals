@@ -4,18 +4,18 @@ public class NeighborPosition
 {
     public Vector2 gridSize;
     public readonly Vector3[] nextNeighborPos = new Vector3[6];
-
+    public float spaceZ = 0.95f;
+    public float spaceX = 0.9f;
+    
     public NeighborPosition(Renderer render)
     {
         this.gridSize = new Vector2(Mathf.Ceil(render.bounds.size.z * 10f) / 10f, Mathf.Ceil(render.bounds.size.x * 10f) / 10f);
-        Debug.Log(render.bounds.size);
-        Debug.Log(gridSize);
-        nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) * 0.9f , 0, gridSize.y * 0.9f ));
-        nextNeighborPos[1] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, gridSize.y));
-        nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.x, 0 ,0));
-        nextNeighborPos[3] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, -gridSize.y));
-        nextNeighborPos[4] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f), 0, -gridSize.y));
-        nextNeighborPos[5] = GetFloor(new Vector3(gridSize.x, 0, 0));
+        nextNeighborPos[0] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) * spaceX, 0, gridSize.y * spaceZ));
+        nextNeighborPos[1] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f) * spaceX, 0, gridSize.y * spaceZ));
+        nextNeighborPos[2] = GetFloor(new Vector3(-gridSize.x * spaceX, 0 ,0));
+        nextNeighborPos[3] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f) * spaceX, 0, -gridSize.y * spaceZ));
+        nextNeighborPos[4] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) * spaceX, 0, -gridSize.y * spaceZ));
+        nextNeighborPos[5] = GetFloor(new Vector3(gridSize.x * spaceX, 0, 0));
 
         //nextNeighborPos[0] = GetFloor(new Vector3(-(gridSize.x - gridSize.x * 0.5f), 0, gridSize.y));
         //nextNeighborPos[1] = GetFloor(new Vector3((gridSize.x - gridSize.x * 0.5f) , 0, gridSize.y ));
