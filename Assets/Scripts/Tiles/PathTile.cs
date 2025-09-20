@@ -14,6 +14,7 @@ public class PathTile : Tile
     public SpawnEnemyInfo EnemyInfo { get; set; }
 
     public bool IsSelectedPath { get; set; }
+    public bool SetAbleBlockedTile { get; set; }
 
     public static int operator -(PathTile x , PathTile y)
     {
@@ -30,5 +31,41 @@ public class PathTile : Tile
     {
         transform.position = data.Position;
         transform.eulerAngles = data.Rotation;
+    }
+
+    public void UpdateBlockedTile()
+    {
+        foreach(var neighbor in Neighbor)
+        {
+            if (neighbor.SetAbleBlockedTile)
+            {
+                return;
+            }
+        }
+
+        Type = TileType.Blocked;
+        foreach (var neighbor in Neighbor)
+        {
+            if(neighbor.Type == TileType.Blocked)
+            {
+                neighbor.SetAbleBlockedTile = true;
+                SetAbleBlockedTile = true;
+                return;
+            }
+        }
+    }
+
+    public void DeleteBlockedTile()
+    {
+        Type = TileType.None;
+        foreach (var neighbor in Neighbor)
+        {
+            if (neighbor.Type == TileType.Blocked)
+            {
+                neighbor.SetAbleBlockedTile = false;
+                SetAbleBlockedTile = true;
+                return;
+            }
+        }
     }
 }

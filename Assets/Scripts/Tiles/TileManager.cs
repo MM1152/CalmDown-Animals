@@ -45,7 +45,7 @@ public class TileManager : MonoBehaviour
 
     public static NeighborPosition neighborPosition;
     private PathFind pathFind = new PathFind();
-
+    
     //실제 맵에 찍히는 타일들
     private DrawTile drawArriveTile = null;
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
@@ -403,7 +403,7 @@ public class TileManager : MonoBehaviour
 
             if(percent <= changePercent)
             {
-                tile.Type = TileType.Blocked;
+                tile.UpdateBlockedTile();
             }
         }
     }

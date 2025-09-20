@@ -2,8 +2,9 @@ using System;
 using UnityEngine;
 using TMPro;
 
-public class GameManager : MonoBehaviour{
-
+public class GameManager : MonoBehaviour
+{
+    public TileManager tileManager;
     private int wave = 1;
     public int Wave
     {
@@ -54,6 +55,13 @@ public class GameManager : MonoBehaviour{
 
     public void StartWave()
     {
+        if(!tileManager.FindPath())
+        {
+            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+            popup.Id = 4;
+            return;
+        }
+
         WaveStart = true;
         windowManager.Open(Window.DuringGameWindow);
         startWave?.Invoke();
