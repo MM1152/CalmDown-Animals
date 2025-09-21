@@ -5100,6 +5100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256cd863f5c70ce4a8033fb21cdf4448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileManager: {fileID: 1911704527}
   windowManager: {fileID: 908200644}
   popupManager: {fileID: 908200645}
   waveText: {fileID: 2057822078}
@@ -5107,6 +5108,7 @@ MonoBehaviour:
   goldText: {fileID: 1759496810}
   paymentText: {fileID: 1542046542}
   maxWave: 10
+  allCountSpawnAnimals: 0
 --- !u!1 &335895326
 GameObject:
   m_ObjectHideFlags: 0
@@ -26396,6 +26398,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  allAnimalSpawnCount: 0
   prefabs: {fileID: 2678013534119981226, guid: 7061f14936a04d54a8edd9bd77f342ae, type: 3}
   flagTilePrefabs: {fileID: 1814165094366285772, guid: ffdd24b6674ca1f4e8caa4644599ad99, type: 3}
   mapIdx: 0
