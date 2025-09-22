@@ -20,7 +20,7 @@ public class Crew : MonoBehaviour
     private Animator animator;
 
     public Weapon weapon;
-    //0.68 , 0.65 , 0.53 -90 , 90
+    //0.037 , 0.131 , 0  , 90
     private CrewTable.Data data;
     private float lastAttackTime;
     public int attackRadius;
@@ -69,7 +69,7 @@ public class Crew : MonoBehaviour
 
         if (attackRadius > 1)
         {
-            List<PathTile> copyTiles = pathTiles;
+            List<PathTile> copyTiles = new List<PathTile>(pathTiles);
             for (int i = 0; i < attackRadius; i++)
             {
                 List<PathTile> saveAroundTile = new List<PathTile>();

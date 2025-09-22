@@ -31635,14 +31635,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'QuickRigCharacter2_RightLeg'\n\tTransform 'QuickRigCharacter2_LeftForeArm'\n\tTransform
-    'QuickRigCharacter2_Spine1'\n\tTransform 'QuickRigCharacter2_LeftArm'\n\tTransform
-    'QuickRigCharacter2_LeftLeg'\n\tTransform 'QuickRigCharacter2_LeftUpLeg'\n\tTransform
-    'QuickRigCharacter2_Spine'\n\tTransform 'QuickRigCharacter2_LeftFoot'\n\tTransform
-    'QuickRigCharacter2_RightArm'\n\tTransform 'QuickRigCharacter2_LeftShoulder'\n\tand
-    more ...\n\tFrom animation clip 'mixamo.com'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -31686,6 +31679,7 @@ MonoBehaviour:
   - {fileID: 2834905301561269334}
   - {fileID: 4385273227701970576}
   - {fileID: 1047929472803174812}
+  aroundTiles: []
   attackRadius: 0
 --- !u!136 &2792894437572387382
 CapsuleCollider:
@@ -49758,15 +49752,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8375614399072232294, guid: 7c95b2625733a30488f622a3470168d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.68
+      value: 0.385
       objectReference: {fileID: 0}
     - target: {fileID: 8375614399072232294, guid: 7c95b2625733a30488f622a3470168d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.65
+      value: 0.529
       objectReference: {fileID: 0}
     - target: {fileID: 8375614399072232294, guid: 7c95b2625733a30488f622a3470168d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.53
+      value: 0.176
       objectReference: {fileID: 0}
     - target: {fileID: 8375614399072232294, guid: 7c95b2625733a30488f622a3470168d6, type: 3}
       propertyPath: m_LocalRotation.w

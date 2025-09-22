@@ -31616,6 +31616,8 @@ MonoBehaviour:
   weapons:
   - {fileID: 6139921436801358462}
   - {fileID: 7889151525779140545}
+  aroundTiles: []
+  attackRadius: 0
 --- !u!136 &2792894437572387382
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31655,6 +31657,8 @@ MonoBehaviour:
   followPos: {fileID: 6757888969679096068}
   netPoint: {fileID: 5327189933872195107}
   boxTrap: {fileID: 4833628891620143019}
+  gunLeftHand: {fileID: 0}
+  gunRightHand: {fileID: 0}
 --- !u!1 &6106149041683927240
 GameObject:
   m_ObjectHideFlags: 0
@@ -49700,11 +49704,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9048151682537370726, guid: 2a1974946ae457745988bb6d11481fd1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.25
+      value: 0.251
       objectReference: {fileID: 0}
     - target: {fileID: 9048151682537370726, guid: 2a1974946ae457745988bb6d11481fd1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.55
+      value: 0.262
       objectReference: {fileID: 0}
     - target: {fileID: 9048151682537370726, guid: 2a1974946ae457745988bb6d11481fd1, type: 3}
       propertyPath: m_LocalPosition.z
