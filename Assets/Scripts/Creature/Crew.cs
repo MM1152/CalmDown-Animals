@@ -57,7 +57,6 @@ public class Crew : MonoBehaviour
         }
         aroundTiles.Clear();
     }
-
     private void FindAroundTiles()
     {
         List<PathTile> pathties = new List<PathTile>();
@@ -88,7 +87,6 @@ public class Crew : MonoBehaviour
             aroundTiles[i].CheckOutAnimal += CheckTargetInTile;
         }
     }
-
     private void CheckTargetInTile(EnemyHealth animal)
     {
         if (animal == target) target = null;
@@ -125,6 +123,8 @@ public class Crew : MonoBehaviour
         {
             target = GetTarget();
         }
+    
+        
     }
 
     private EnemyHealth GetTarget()

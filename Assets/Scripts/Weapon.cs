@@ -17,6 +17,11 @@ public class Weapon
         return weaponDatas[equipmentId];
     }
 
+    public int GetWeaponId()
+    {
+        return curEquipmentId;
+    }
+
     public int GetCaptureDmg()
     {
         return weaponDatas[curEquipmentId].Equ_capture;

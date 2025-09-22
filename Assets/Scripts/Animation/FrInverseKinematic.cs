@@ -1,6 +1,3 @@
-using System.Collections;
-using Unity.Android.Gradle;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FrInverseKinematic : MonoBehaviour
@@ -13,19 +10,45 @@ public class FrInverseKinematic : MonoBehaviour
     public Transform netPoint;
     private Animator animator;
     private Coroutine co;
+
+    public Transform boxTrap;
+    //0.25 , 0.55 , 0.226 boxTrap rot.z = 90
+    //0.074 ,-0.006,-0.045 Net
+
+    private Crew crew;
     void Awake()
     {
         animator = GetComponent<Animator>();
-        //0.074 ,-0.006,-0.045
+        crew = GetComponent<Crew>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if(crew.weapon.GetWeaponId() == 0)
         {
-            animator.SetTrigger(Ani_AttackId);
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                animator.SetTrigger(Ani_AttackId);
+            }
+            netPoint.transform.position = followPos.transform.position;
+            netPoint.transform.rotation = rotationPos.rotation;
         }
-        netPoint.transform.position = followPos.transform.position;
-        netPoint.transform.rotation = rotationPos.rotation;
+        else if(crew.weapon.GetWeaponId() == 1)
+        {
+
+
+        }
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if(crew.weapon.GetWeaponId() == 1)
+        {
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, boxTrap.position);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, boxTrap.position);
+        }
+
     }
 }
