@@ -112,4 +112,10 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
+    public AnimalSize GetSize()
+    {
+        Debug.Log("Size : " + (AnimalSize)(1 << data.Size_ID));
+        return (AnimalSize)(1 << data.Size_ID);
+    }
 }

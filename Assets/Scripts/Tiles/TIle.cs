@@ -39,7 +39,6 @@ public class Tile : MonoBehaviour
                     material[0].color = Color.black;
                     break;
                 case TileType.Path:
-                    material[0].color = Color.green;
                     break;
                 case TileType.Crew:
                     material[0].color = Color.blue;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class InTileAnimal : MonoBehaviour
 {
@@ -36,8 +37,9 @@ public class InTileAnimal : MonoBehaviour
         killStack++;
     }
 
-    public Enemy Get()
+    public Enemy Get(AnimalSize size)
     {
+        var newList = list.Where(x => (int)(x.GetSize() & size) > 1).ToList();
         if(list.Count > 0)
         {
             return list[0];

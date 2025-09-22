@@ -51,4 +51,8 @@ public class Weapon
     {
         return weaponDatas[curEquipmentId].name;
     }
+    public AnimalSize GetCaptureSize()
+    {
+        return weaponDatas[curEquipmentId].CaptureSize;
+    }
 }

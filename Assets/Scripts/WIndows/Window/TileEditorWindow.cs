@@ -67,6 +67,7 @@ public class TileEditorWindow : GenericWindow
                 destroyMode = !destroyMode;
             }
             UpdateSetting(editMode, destroyMode, TileType.None);
+            
         });
     }
 
@@ -97,6 +98,7 @@ public class TileEditorWindow : GenericWindow
     public override void Open()
     {
         base.Open();
+        tileManager.InEditorWindow = true;
         editButton.IsOn = false;
         destroyButton.IsOn = false;
         editModeGo.gameObject.SetActive(false);
@@ -105,6 +107,7 @@ public class TileEditorWindow : GenericWindow
 
     public override void Close()
     {
+        tileManager.InEditorWindow = false;
         tileManager.drawMode = false;
         DragAble.CameraDrag = true;
         base.Close();

@@ -152,7 +152,7 @@ public class Crew : MonoBehaviour
         foreach(var tile in aroundTiles)
         {
             var inTileAnimal = tile.GetComponent<InTileAnimal>();
-            var animal = inTileAnimal.Get();
+            var animal = inTileAnimal.Get(weapon.GetCaptureSize());
 
             if(animal != null)
             {

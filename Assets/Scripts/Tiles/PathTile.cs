@@ -10,6 +10,7 @@ public class PathTile : Tile
     public int F => G + H;
     public List<PathTile> Neighbor = new List<PathTile>();
 
+    private TileManager tileManager;
     public PathTile ParentTile { get; set; } = null;
     public DrawTile ArriveDrawTile { get; set; }
     public SpawnEnemyInfo EnemyInfo { get; set; }
@@ -30,10 +31,30 @@ public class PathTile : Tile
         Type = TileType.None;
     }
 
-    public void UpdatePathTile(Map.DrawData data)
+    public void UpdatePathTile(Map.DrawData data , TileManager tileManager)
     {
         transform.position = data.Position;
         transform.eulerAngles = data.Rotation;
+
+        this.tileManager = tileManager;
+    }
+
+    private void Update()
+    {
+        if(this.tileManager.InEditorWindow)
+        {
+            if(Type == TileType.Path)
+            {
+                material[0].color = Color.green;
+            }
+        }
+        else
+        {
+            if (Type == TileType.Path)
+            {
+                material[0].color = Color.white;
+            }
+        }
     }
 
     public void UpdateBlockedTile()

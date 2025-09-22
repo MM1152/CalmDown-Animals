@@ -13,6 +13,7 @@ public class TileManager : MonoBehaviour
     [Header("DEBUG")]
     public TileType tileType;
     public bool drawMode;
+    public bool InEditorWindow { get; set; }
     public LayerMask layerMask;
     public int allAnimalSpawnCount;
     private int mapSize = -1;
@@ -79,6 +80,9 @@ public class TileManager : MonoBehaviour
     {
         SetTileType(tileType);
     }
+
+
+
 
     private void SetInitPath()
     {
@@ -249,7 +253,7 @@ public class TileManager : MonoBehaviour
             else
             {
                 var pathTile = Instantiate(prefabs, transform);
-                pathTile.UpdatePathTile(mapData.tiles[this.mapSize][i]);
+                pathTile.UpdatePathTile(mapData.tiles[this.mapSize][i] , this);
 
                 tileList.Add(pathTile);
                 tileTable.Add(pathTile.transform.position, pathTile);
@@ -288,12 +292,6 @@ public class TileManager : MonoBehaviour
         {
             dragAblePos.w = a.y;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Vector3.zero , new Vector3((dragAblePos.z + Mathf.Abs(dragAblePos.x)) , 1 , dragAblePos.w + Mathf.Abs(dragAblePos.y)));
     }
 
     //public void DrawTiles()
