@@ -125,9 +125,9 @@ public enum Popup
 public enum CrewRank
 {
     Intern = 30110,
-    Newbie,
-    Senior,
-    Ace,
+    Newbie = 31110,
+    Senior = 32110,
+    Ace = 33110,
 }
 
 [Flags]

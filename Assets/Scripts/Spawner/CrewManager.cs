@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class CrewManager : MonoBehaviour
 {
+    private readonly string FormatingPath = "Enemy/{0}";
+    private readonly string Intern = "InternCrew";
+    private readonly string Rookie = "RookieCrew";
+    private readonly string Senior = "SeniorCrew";
+    private readonly string Ace = "AceCrew";
+    
     public LayerMask mask;
 
-    public Crew prefabs;
+    public Dictionary<CrewRank , Crew> prefabs = new Dictionary<CrewRank, Crew>();
     private Crew dragCrew;
     public Crew DragCrew { 
         get => dragCrew;
@@ -41,6 +47,11 @@ public class CrewManager : MonoBehaviour
         {
             unitInfomation.Add(crewRank, (0, 0));
         }
+
+        prefabs.Add(CrewRank.Intern, Resources.Load<Crew>(string.Format(FormatingPath, Intern)));
+        prefabs.Add(CrewRank.Newbie, Resources.Load<Crew>(string.Format(FormatingPath, Rookie)));
+        prefabs.Add(CrewRank.Senior, Resources.Load<Crew>(string.Format(FormatingPath, Senior)));
+        prefabs.Add(CrewRank.Ace, Resources.Load<Crew>(string.Format(FormatingPath, Ace)));
     }
 
     private void Start()
@@ -59,14 +70,14 @@ public class CrewManager : MonoBehaviour
         (int hire, int place) data = unitInfomation[(int)rank];
         if (data.hire - data.place <= 0) return;
 
-        var spawnCrew = Instantiate(prefabs , transform);
+        var spawnCrew = Instantiate(prefabs[rank] , transform);
         spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
         DragCrew = spawnCrew;
     }
 
     public void SetStartUnit(CrewRank rank, PathTile underTile)
     {
-        var spawnCrew = Instantiate(prefabs, transform);
+        var spawnCrew = Instantiate(prefabs[rank], transform);
         spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
         spawnCrew.SetUnderTile(underTile);
 

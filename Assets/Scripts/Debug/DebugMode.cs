@@ -48,7 +48,7 @@ public class DebugMode : MonoBehaviour
             speedup = !speedup;
             if(speedup)
             {
-                Time.timeScale = 2f;
+                Time.timeScale = 5f;
             }else
             {
                 Time.timeScale = 1f;

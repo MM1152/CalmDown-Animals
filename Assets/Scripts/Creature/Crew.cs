@@ -8,18 +8,19 @@ public class Crew : MonoBehaviour
 {
     private readonly int Ani_AttackId = Animator.StringToHash("Attack");
     private readonly int Ani_PlantTrap = Animator.StringToHash("PlantTrap");
+    private readonly int Ani_ShootGun = Animator.StringToHash("ShootGun");
 
     public CrewRank Rank => (CrewRank)data.Crew_ID;
     public CrewManager spawner;
     public EnemyHealth target;
     public List<GameObject> weapons;
     private PathTile underTile;
-    private List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
+    public List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
 
     private Animator animator;
 
     public Weapon weapon;
-
+    //0.68 , 0.65 , 0.53 -90 , 90
     private CrewTable.Data data;
     private float lastAttackTime;
     public int attackRadius;
@@ -33,7 +34,7 @@ public class Crew : MonoBehaviour
         this.spawner = spawner;
         this.data = data;
         weapon = new Weapon(data.rank_ID , weapons , this);
-        weapon.Equip(data.Equ_ID);
+        weapon.Equip(data.equType_ID);
     }
 
     public void SetUnderTile(PathTile tile)
@@ -72,17 +73,18 @@ public class Crew : MonoBehaviour
             for (int i = 0; i < attackRadius; i++)
             {
                 List<PathTile> saveAroundTile = new List<PathTile>();
-                for(int j = 0; j < copyTiles.Count; j++)
+                foreach(var tile in copyTiles)
                 {
-                    for(int k = 0; k < copyTiles[j].Neighbor.Count; k++)
+                    for (int k = 0; k < tile.Neighbor.Count; k++)
                     {
-                        if (!pathTiles.Contains(pathTiles[j].Neighbor[k]))
+                        if (!pathTiles.Contains(tile.Neighbor[k]))
                         {
-                            pathTiles.Add(pathTiles[j].Neighbor[k]);
-                            saveAroundTile.Add(pathTiles[j].Neighbor[k]);
+                            pathTiles.Add(tile.Neighbor[k]);
+                            saveAroundTile.Add(tile.Neighbor[k]);
                         }
                     }
                 }
+ 
                 copyTiles = saveAroundTile;
             }       
         }
@@ -125,7 +127,11 @@ public class Crew : MonoBehaviour
                 else if (weapon.GetWeaponId() == 1)
                 {
                     animator.SetTrigger(Ani_PlantTrap);
-                }    
+                }
+                else if (weapon.GetWeaponId() == 2)
+                {
+                    animator.SetTrigger(Ani_ShootGun);
+                }
                 transform.position = underTile.transform.position;
                 if (target.Hit(weapon.GetCaptureDmg()))
                 {

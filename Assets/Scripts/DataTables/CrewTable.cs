@@ -12,11 +12,12 @@ public class CrewTable : DataTable
         public bool isDupli { get; set; }
         public int crewCost { get; set; }
         public int crewPaycheck { get; set; }
-        public int Equ_ID { get; set; }
+        public int equType_ID { get; set; }
         public bool isEquchange { get; set; }
         public int Crew_capture { get; set; }
         public float Crew_atkspd { get; set; }
         public string Crew_info { get; set; }
+
     }
 
     private readonly Dictionary<int, Data> crewTable = new Dictionary<int, Data>();

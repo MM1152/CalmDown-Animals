@@ -12,9 +12,12 @@ public class FrInverseKinematic : MonoBehaviour
     private Coroutine co;
 
     public Transform boxTrap;
+
+    public Transform gunLeftHand;
+    public Transform gunRightHand;
     //0.25 , 0.55 , 0.226 boxTrap rot.z = 90
     //0.074 ,-0.006,-0.045 Net
-
+    //-0.036, ,0.22 ,0.021 , -90 , 0 , 90
     private Crew crew;
     void Awake()
     {
@@ -30,6 +33,10 @@ public class FrInverseKinematic : MonoBehaviour
             netPoint.transform.rotation = rotationPos.rotation;
         }
 
+        if(crew.weapon.GetWeaponId() == 2)
+        {
+            netPoint.transform.position = followPos.transform.position;
+        }
     }
 
     private void OnAnimatorIK(int layerIndex)
@@ -42,6 +49,13 @@ public class FrInverseKinematic : MonoBehaviour
             //animator.SetIKPosition(AvatarIKGoal.RightHand, boxTrap.position);
             //animator.SetIKPosition(AvatarIKGoal.LeftHand, boxTrap.position);
         }
+        else if(crew.weapon.GetWeaponId() == 2)
+        {
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 
+            animator.SetIKPosition(AvatarIKGoal.RightHand , gunRightHand.position);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand , gunLeftHand.position);
+        }
     }
 }
