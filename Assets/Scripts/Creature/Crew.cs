@@ -7,10 +7,12 @@ using UnityEngine;
 public class Crew : MonoBehaviour
 {
     private readonly int Ani_AttackId = Animator.StringToHash("Attack");
+    private readonly int Ani_PlantTrap = Animator.StringToHash("PlantTrap");
 
     public CrewRank Rank => (CrewRank)data.Crew_ID;
     public CrewManager spawner;
     public EnemyHealth target;
+    public List<GameObject> weapons;
     private PathTile underTile;
     private List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
 
@@ -20,8 +22,7 @@ public class Crew : MonoBehaviour
 
     private CrewTable.Data data;
     private float lastAttackTime;
-    private float attackRadius;
-    
+    public int attackRadius;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -31,9 +32,8 @@ public class Crew : MonoBehaviour
     {
         this.spawner = spawner;
         this.data = data;
-        weapon = new Weapon(data.rank_ID);
+        weapon = new Weapon(data.rank_ID , weapons , this);
         weapon.Equip(data.Equ_ID);
-        attackRadius = 1;
     }
 
     public void SetUnderTile(PathTile tile)
@@ -57,30 +57,37 @@ public class Crew : MonoBehaviour
         }
         aroundTiles.Clear();
     }
-    private void FindAroundTiles()
+    public void FindAroundTiles()
     {
-        List<PathTile> pathties = new List<PathTile>();
-
-        for(int i = 0; i < underTile.Neighbor.Count; i++)
+        if (underTile == null) return;
+        List<PathTile> pathTiles = new List<PathTile>();
+        for (int i = 0; i < underTile.Neighbor.Count; i++)
         {
-            pathties.Add(underTile.Neighbor[i]);
+            pathTiles.Add(underTile.Neighbor[i]);
         }
-        
+
         if (attackRadius > 1)
         {
-            for(int i = 0; i < pathties.Count; i++)
+            List<PathTile> copyTiles = pathTiles;
+            for (int i = 0; i < attackRadius; i++)
             {
-                for(int j = 0; j < pathties[i].Neighbor.Count; j++)
+                List<PathTile> saveAroundTile = new List<PathTile>();
+                for(int j = 0; j < copyTiles.Count; j++)
                 {
-                    if(!pathties.Contains(pathties[i].Neighbor[j]))
+                    for(int k = 0; k < copyTiles[j].Neighbor.Count; k++)
                     {
-                        pathties.Add(pathties[i].Neighbor[j]);
+                        if (!pathTiles.Contains(pathTiles[j].Neighbor[k]))
+                        {
+                            pathTiles.Add(pathTiles[j].Neighbor[k]);
+                            saveAroundTile.Add(pathTiles[j].Neighbor[k]);
+                        }
                     }
                 }
+                copyTiles = saveAroundTile;
             }       
         }
 
-        aroundTiles = pathties.Select(x => x.GetComponent<InTileAnimal>()).ToList();
+        aroundTiles = pathTiles.Select(x => x.GetComponent<InTileAnimal>()).ToList();
 
         for(int i = 0; i < aroundTiles.Count; i++)
         {
@@ -107,12 +114,20 @@ public class Crew : MonoBehaviour
                 transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             }
 
-            if (Time.time > lastAttackTime + data.Crew_atkspd)
+            if (Time.time > lastAttackTime + data.Crew_atkspd + weapon.GetCaptureSpeed())
             {
                 lastAttackTime = Time.time;
-                animator.SetTrigger(Ani_AttackId);
+
+                if (weapon.GetWeaponId() == 0)
+                {
+                    animator.SetTrigger(Ani_AttackId);
+                }
+                else if (weapon.GetWeaponId() == 1)
+                {
+                    animator.SetTrigger(Ani_PlantTrap);
+                }    
                 transform.position = underTile.transform.position;
-                if (target.Hit(10))
+                if (target.Hit(weapon.GetCaptureDmg()))
                 {
                     underTile.CrewKillCount++;
                     Debug.Log("Kill Unit", gameObject);
@@ -123,8 +138,6 @@ public class Crew : MonoBehaviour
         {
             target = GetTarget();
         }
-    
-        
     }
 
     private EnemyHealth GetTarget()
