@@ -21030,6 +21030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crew Recruit
       objectReference: {fileID: 0}
+    - target: {fileID: 6852252606837783663, guid: 55d5c94f3fdca4945b2b6a83a6ac6d85, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7030509687073168344, guid: 55d5c94f3fdca4945b2b6a83a6ac6d85, type: 3}
       propertyPath: m_Color.b
       value: 0.16862746
@@ -28600,6 +28604,10 @@ PrefabInstance:
     - target: {fileID: 4918874554584149366, guid: 8b85a30656ae6a94ea4fd5579f4f8113, type: 3}
       propertyPath: m_Name
       value: Game Start
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918874554584149366, guid: 8b85a30656ae6a94ea4fd5579f4f8113, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5011600546440771767, guid: 8b85a30656ae6a94ea4fd5579f4f8113, type: 3}
       propertyPath: m_Color.b
