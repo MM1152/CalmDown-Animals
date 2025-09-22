@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 537ab1978eb6e6f4981ac085d6c7fdb6
+timeCreated: 1471276387
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 69654
+  packageName: '[Affordable Assets] Sniper Rifle'
+  packageVersion: 1.0
+  assetPath: Assets/SniperRifle/Materials/2048/Rifle_Black_2048.mat
+  uploadId: 134087

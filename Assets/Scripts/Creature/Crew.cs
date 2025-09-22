@@ -10,18 +10,18 @@ public class Crew : MonoBehaviour
 
     public CrewRank Rank => (CrewRank)data.Crew_ID;
     public CrewManager spawner;
-
     public EnemyHealth target;
-
     private PathTile underTile;
     private List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
 
     private Animator animator;
 
+    public Weapon weapon;
+
     private CrewTable.Data data;
     private float lastAttackTime;
     private float attackRadius;
-
+    
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -31,7 +31,8 @@ public class Crew : MonoBehaviour
     {
         this.spawner = spawner;
         this.data = data;
-        
+        weapon = new Weapon(data.rank_ID);
+        weapon.Equip(data.Equ_ID);
         attackRadius = 1;
     }
 
@@ -115,6 +116,7 @@ public class Crew : MonoBehaviour
                 transform.position = underTile.transform.position;
                 if (target.Hit(10))
                 {
+                    underTile.CrewKillCount++;
                     Debug.Log("Kill Unit", gameObject);
                 }
             }
@@ -146,4 +148,13 @@ public class Crew : MonoBehaviour
         return data.crewCost;
     }
 
+    public int GetRank()
+    {
+        return data.Crew_ID;
+    }
+
+    public int GetPayCheck()
+    {
+        return data.crewPaycheck;
+    }
 }

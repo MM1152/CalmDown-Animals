@@ -12,5 +12,6 @@ public class EditorWindow : GenericWindow
     {
         editTileBNT.onClick.AddListener(() => manager.Open(Window.TileEditorWindow));
         employUnitBNT.onClick.AddListener(() => manager.Open(Window.EmployUnitWindow));
+        readyUnitBNT.onClick.AddListener(() => manager.Open(Window.CrewReadyWindow));
     }
 }

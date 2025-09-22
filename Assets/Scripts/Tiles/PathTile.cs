@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 
 public class PathTile : Tile
@@ -12,9 +13,11 @@ public class PathTile : Tile
     public PathTile ParentTile { get; set; } = null;
     public DrawTile ArriveDrawTile { get; set; }
     public SpawnEnemyInfo EnemyInfo { get; set; }
+    public TextMeshProUGUI changeToBlockedPercent;
 
     public bool IsSelectedPath { get; set; }
     public bool SetAbleBlockedTile { get; set; }
+    public int CrewKillCount { get; set; }
 
     public static int operator -(PathTile x , PathTile y)
     {

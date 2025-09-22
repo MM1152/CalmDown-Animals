@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class NeighborPosition
@@ -85,6 +86,7 @@ public static class FloatUtility
 public static class DragAble
 {
     public static bool CameraDrag = true;
+    public static bool CrewTab = false;
     public static bool CrewDrag;
 }
 
@@ -97,6 +99,9 @@ public static class DataTableIds
     public static readonly string AnimalInfoTable = "AnimalInfoTable";
     public static readonly string AnimalCRRankTable = "AnimalCRRank";
     public static readonly string CrewTable = "CrewTable";
+    public static readonly string EquipmentInfo = "EquipmentInfo";
+    public static readonly string EquipmentType = "EquipmentType";
+
     public static readonly string[] MapDataIds =
     {
         "SabanaMap"
@@ -109,6 +114,7 @@ public enum Window
     TileEditorWindow,
     EmployUnitWindow,
     DuringGameWindow,
+    CrewReadyWindow,
 }
 
 public enum Popup
@@ -122,4 +128,14 @@ public enum CrewRank
     Newbie,
     Senior,
     Ace,
+}
+
+[Flags]
+public enum AnimalSize
+{
+    UltraSmall = 1,
+    Small = 1 << 1,
+    Midium = 1 << 2,
+    Large = 1 << 3,
+    ExtraLarge = 1 << 4,
 }

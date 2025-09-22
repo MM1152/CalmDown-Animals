@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2fc4de1f0b269b84cb38b508c82dfdd2
+timeCreated: 1471276875
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 69654
+  packageName: '[Affordable Assets] Sniper Rifle'
+  packageVersion: 1.0
+  assetPath: Assets/SniperRifle/Materials/Scope/1024/Scope_1024.mat
+  uploadId: 134087

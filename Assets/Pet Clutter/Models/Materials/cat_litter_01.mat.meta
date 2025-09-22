@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e1a8a92b699cdab498e5de9c0385b8b1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 144546
+  packageName: Pet Clutter
+  packageVersion: 1.1
+  assetPath: Assets/Pet Clutter/Models/Materials/cat_litter_01.mat
+  uploadId: 424532

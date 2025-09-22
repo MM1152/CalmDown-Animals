@@ -16,7 +16,8 @@ public class TileManager : MonoBehaviour
     public LayerMask layerMask;
     public int allAnimalSpawnCount;
     private int mapSize = -1;
-
+    public float changeToPathTileInBlock;
+    public float changeToCrewTileInBlock;
     [Space(10)]
     [Header("DrawTile")]
     public PathTile prefabs;
@@ -397,13 +398,23 @@ public class TileManager : MonoBehaviour
         foreach (var tile in tileList)
         {
             var intileAnimal = tile.GetComponent<InTileAnimal>();
-            if (intileAnimal.killStack == 0) continue;
-
-            float changePercent = intileAnimal.killStack / (float)allEnemySpawnCount * 0.3f;
+            float changePercent = intileAnimal.killStack / (float)allEnemySpawnCount * changeToPathTileInBlock;
+            tile.changeToBlockedPercent.text = Mathf.RoundToInt(changePercent * 100f) + "%";
 
             if(percent <= changePercent)
             {
                 tile.UpdateBlockedTile();
+                intileAnimal.killStack = 0;
+                continue;
+            }
+
+            changePercent = tile.CrewKillCount / (float)allEnemySpawnCount * changeToCrewTileInBlock;
+
+            if(percent <= changePercent)
+            {
+                tile.UpdateBlockedTile();
+                tile.CrewKillCount = 0;
+                continue;
             }
         }
     }

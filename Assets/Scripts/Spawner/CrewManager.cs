@@ -118,21 +118,26 @@ public class CrewManager : MonoBehaviour
         changeUnitCount?.Invoke();
     }
 
+    public void ClearDragCrew()
+    {
+        if (DragCrew != null)
+        {
+            DragCrew.SetUnderTile(null);
+            SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
+            DragCrew = null;
+        }
+    }
+
     private void CrewDrag()
     {
-        if (!DragAble.CrewDrag) return;
+        if (!DragAble.CrewDrag && !DragAble.CrewTab) return;
 
 
         // 이미 필드에 소환되어있는 대원 선택시
-        if (TouchManager.TouchType == TouchType.Tab)
+        if (TouchManager.TouchType == TouchType.Tab && !TouchManager.TouchStartInUI())
         {
             // 기존에 드래그하던 대원이 있다면 대원 취소
-            if (DragCrew != null)
-            {
-                DragCrew.SetUnderTile(null);
-                SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
-                DragCrew = null;
-            }
+            ClearDragCrew();
 
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity , ~0 , QueryTriggerInteraction.Ignore))

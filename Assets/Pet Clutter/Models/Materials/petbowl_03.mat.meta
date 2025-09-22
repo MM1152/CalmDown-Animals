@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f1b4ace43c761ea4b91bf49686bd0e76
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 144546
+  packageName: Pet Clutter
+  packageVersion: 1.1
+  assetPath: Assets/Pet Clutter/Models/Materials/petbowl_03.mat
+  uploadId: 424532
