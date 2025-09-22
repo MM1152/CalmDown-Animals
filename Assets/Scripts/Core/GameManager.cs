@@ -51,6 +51,21 @@ public class GameManager : MonoBehaviour
         allCountSpawnAnimals = 0;
         waveText.text = wave + " Round";
         goldText.text = gold.ToString();
+
+    }
+
+    private void Start()
+    {
+        if (SaveLoadManager.Load())
+        {
+            Gold = SaveLoadManager.Data.gold;
+            Wave = SaveLoadManager.Data.wave;
+            tileManager.DrawTiles(SaveLoadManager.Data.mapSize);
+        }
+        else
+        {
+            tileManager.DataLoadFail();
+        }
     }
 
     public void StartWave()
@@ -92,6 +107,11 @@ public class GameManager : MonoBehaviour
             wave++;
         }
 
+        SaveLoadManager.Data.gold = gold;
+        SaveLoadManager.Data.wave = wave;
+        SaveLoadManager.Data.mapid = tileManager.mapIdx;
+        SaveLoadManager.Data.mapSize = tileManager.mapSize;
+
         waveText.text = wave + " ¿þÀÌºê";
     }
 
@@ -105,6 +125,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
         {
             WaveFail();
+        }
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            SaveLoadManager.Save();
         }
 #endif
         if (WaveStart)

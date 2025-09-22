@@ -25,7 +25,7 @@ public class CrewManager : MonoBehaviour
     }
     public CrewSellingEvent crewSellingEvent;
     public PopupManager popupManager;
-    private Dictionary<int , (int hire, int place)> unitInfomation = new Dictionary<int, (int hire, int place)>();
+    private Dictionary<CrewRank , (int hire, int place)> unitInfomation = new Dictionary<CrewRank, (int hire, int place)>();
 
     public event Action changeUnitCount;
 
@@ -43,9 +43,9 @@ public class CrewManager : MonoBehaviour
 
     private void Awake()
     { 
-        foreach(int crewRank in Enum.GetValues(typeof(CrewRank)))
+        foreach(var crewRank in Enum.GetValues(typeof(CrewRank)))
         {
-            unitInfomation.Add(crewRank, (0, 0));
+            unitInfomation.Add((CrewRank)crewRank, (0, 0));
         }
 
         prefabs.Add(CrewRank.Intern, Resources.Load<Crew>(string.Format(FormatingPath, Intern)));
@@ -67,7 +67,7 @@ public class CrewManager : MonoBehaviour
 
     public void Spawn(CrewRank rank) 
     {
-        (int hire, int place) data = unitInfomation[(int)rank];
+        (int hire, int place) data = unitInfomation[rank];
         if (data.hire - data.place <= 0) return;
 
         var spawnCrew = Instantiate(prefabs[rank] , transform);
@@ -105,27 +105,27 @@ public class CrewManager : MonoBehaviour
 
     public int GetHireCount(CrewRank rank)
     {
-        return unitInfomation[(int)rank].hire;
+        return unitInfomation[rank].hire;
     }
 
     public int GetPlaceCount(CrewRank rank)
     {
-        return unitInfomation[(int)rank].place;
+        return unitInfomation[rank].place;
     }
 
     private void SetHireCount(CrewRank rank,int hireCount)
     {
-        var info = unitInfomation[(int)rank];
+        var info = unitInfomation[rank];
         info.hire = hireCount;
-        unitInfomation[(int)rank] = info;
+        unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
     }
 
     private void SetPlaceCount(CrewRank rank, int placeCount)
     {
-        var info = unitInfomation[(int)rank];
+        var info = unitInfomation[rank];
         info.place = placeCount;
-        unitInfomation[(int)rank] = info;
+        unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
     }
 

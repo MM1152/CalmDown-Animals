@@ -1,4 +1,7 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.WebSockets;
 using UnityEngine;
 
 public class TileManager : MonoBehaviour
@@ -16,7 +19,7 @@ public class TileManager : MonoBehaviour
     public bool InEditorWindow { get; set; }
     public LayerMask layerMask;
     public int allAnimalSpawnCount;
-    private int mapSize = -1;
+    public int mapSize = -1;
     public float changeToPathTileInBlock;
     public float changeToCrewTileInBlock;
     [Space(10)]
@@ -71,6 +74,10 @@ public class TileManager : MonoBehaviour
     {
         gameManager.endWave += DrawTiles;
         gameManager.endWave += () => ChangeToBlockedTile(gameManager.allCountSpawnAnimals);
+    }
+
+    public void DataLoadFail()
+    {
         DrawTiles();
         FindPath(TileType.Path | TileType.None);
         SetInitPath();
@@ -80,9 +87,6 @@ public class TileManager : MonoBehaviour
     {
         SetTileType(tileType);
     }
-
-
-
 
     private void SetInitPath()
     {
@@ -136,6 +140,8 @@ public class TileManager : MonoBehaviour
                 DrawRoads(startTile[i]);
             }
 
+            SaveLoadManager.Data.pathTile = editTiles.Select(x => x.transform.position).ToList();
+
             foreach (var tile in tileList)
             {
                 if (tile.GetComponent<PathTileRoad>().PrevSide == PathTileRoad.Sides.None && tile.Type == TileType.Path)
@@ -143,6 +149,8 @@ public class TileManager : MonoBehaviour
                     tile.Type = TileType.None;
                 }
             }
+
+            editTiles.Clear();
         }
         return isSuseccs;
     }
@@ -159,6 +167,10 @@ public class TileManager : MonoBehaviour
             {
                 //Arrive 타일일 경우 Next 경로 강제로 설정
                 startTile.GetComponent<PathTileRoad>().DrawRoad(startTile.ArriveDrawTile.InitPos);
+            }
+            if(!editTiles.Contains(startTile))
+            {
+                editTiles.Add(startTile);
             }
             startTile = startTile.ParentTile;
         }
@@ -208,6 +220,59 @@ public class TileManager : MonoBehaviour
         return null;
     }
     // Test 용 코드임
+
+    public void DrawTiles(int mapSize)
+    {
+        this.mapSize = mapSize;
+        var mapData = Map.Get(0);
+        for (int i = 0; i <= mapSize; i++)
+        {
+            for (int j = 0; j < mapData.tiles[i].Count; j++)
+            {
+                if ((i == mapSize && mapData.tiles[i][j].DrawType == DrawType.Start) || mapData.tiles[i][j].DrawType == DrawType.Arrive)
+                {
+                    var flagTile = Instantiate(flagTilePrefabs, transform);
+                    flagTile.UpdateDrawTile(mapData.tiles[i][j]);
+                    if (drawArriveTile == null && flagTile.DrawType == DrawType.Arrive)
+                    {
+                        drawArriveTile = flagTile;
+                    }
+                    else if (flagTile.DrawType == DrawType.Start)
+                    {
+                        drawStartTiles.Add(flagTile);
+                    }
+                }
+                else if (mapData.tiles[i][j].DrawType == DrawType.None)
+                {
+                    var pathTile = Instantiate(prefabs, transform);
+                    pathTile.UpdatePathTile(mapData.tiles[i][j], this);
+
+                    tileList.Add(pathTile);
+                    tileTable.Add(pathTile.transform.position, pathTile);
+
+                    FindRect(new Vector2(pathTile.transform.position.x, pathTile.transform.position.z));
+                }
+                FindNeighbor();
+            }
+            
+        }
+
+        if (arriveTile == null)
+        {
+            SetArriveTile(drawArriveTile);
+        }
+        for (int i = 0; i < drawStartTiles.Count; i++)
+        {
+            SetStartTile(drawStartTiles[i]);
+        }
+
+        foreach(var pos in SaveLoadManager.Data.pathTile)
+        {
+            tileTable[pos].Type = TileType.Path;
+        }
+
+        FindPath();
+    }
 
     public void DrawTiles()
     {

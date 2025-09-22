@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
 
     private List<SpawnEnemyInfo> infoTiles = new List<SpawnEnemyInfo>();
 
-    private void Start()
+    private void Awake()
     {
         copySpawnCount = spawnCount;
         gameManager.endWave += EndWaveToSetInfoTiles;

@@ -18,7 +18,7 @@ public class EquipmentType : DataTable
     public override void Load(string filename)
     {
         var path = string.Format(FormatPath, filename);
-        var textAssets = Resources.Load<TextAsset>(path);
+        var textAssets = Resources.Load<TextAsset>(path);   
         var datas = LoadCsv<Data>(textAssets.text);
 
         foreach(var data in datas)
@@ -26,8 +26,8 @@ public class EquipmentType : DataTable
             if(!equipmentType.ContainsKey(data.equType_ID))
             {
                 equipmentType.Add(data.equType_ID, data);
-                data.captureAbleSize |= (AnimalSize)(1 << data.Size_ID);
-            }else
+            }
+            if(data.iscaptrue)
             {
                 equipmentType[data.equType_ID].captureAbleSize |= (AnimalSize)(1 << data.Size_ID);
             }
