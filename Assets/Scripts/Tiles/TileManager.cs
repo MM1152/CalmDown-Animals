@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TileManager : MonoBehaviour
@@ -68,6 +69,8 @@ public class TileManager : MonoBehaviour
 
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
+
+        mapIdx = Random.Range(0, Map.Count());
     }
 
     private void Start()
@@ -255,6 +258,17 @@ public class TileManager : MonoBehaviour
                 FindNeighbor();
             }
             
+        }
+
+        crewSpawner.unitInfomation = SaveLoadManager.Data.employCrewCount;
+        
+        foreach(var rank in SaveLoadManager.Data.crewSpawn.Keys)
+        {
+            foreach(var pos in SaveLoadManager.Data.crewSpawn[rank])
+            {
+                crewSpawner.Spawn(rank);
+                crewSpawner.CrewForcingSpawn(rank , tileTable[pos]);
+            }
         }
 
         if (arriveTile == null)
@@ -471,14 +485,14 @@ public class TileManager : MonoBehaviour
                 continue;
             }
 
-            changePercent = tile.CrewKillCount / (float)allEnemySpawnCount * changeToCrewTileInBlock;
+            //changePercent = tile.CrewKillCount / (float)allEnemySpawnCount * changeToCrewTileInBlock;
 
-            if(percent <= changePercent)
-            {
-                tile.UpdateBlockedTile();
-                tile.CrewKillCount = 0;
-                continue;
-            }
+            //if(percent <= changePercent)
+            //{
+            //    tile.UpdateBlockedTile();
+            //    tile.CrewKillCount = 0;
+            //    continue;
+            //}
         }
     }
 }

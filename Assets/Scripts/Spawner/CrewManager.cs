@@ -25,7 +25,9 @@ public class CrewManager : MonoBehaviour
     }
     public CrewSellingEvent crewSellingEvent;
     public PopupManager popupManager;
-    private Dictionary<CrewRank , (int hire, int place)> unitInfomation = new Dictionary<CrewRank, (int hire, int place)>();
+
+    public Dictionary<CrewRank , (int hire, int place)> unitInfomation = new Dictionary<CrewRank, (int hire, int place)>();
+    private Dictionary<CrewRank, List<Vector3>> placePosition = new Dictionary<CrewRank, List<Vector3>>();
 
     public event Action changeUnitCount;
 
@@ -46,6 +48,7 @@ public class CrewManager : MonoBehaviour
         foreach(var crewRank in Enum.GetValues(typeof(CrewRank)))
         {
             unitInfomation.Add((CrewRank)crewRank, (0, 0));
+            placePosition.Add((CrewRank)crewRank, new List<Vector3>());
         }
 
         prefabs.Add(CrewRank.Intern, Resources.Load<Crew>(string.Format(FormatingPath, Intern)));
@@ -57,6 +60,11 @@ public class CrewManager : MonoBehaviour
     private void Start()
     {
         gamemanager = GameObject.FindWithTag(TagIds.GameManagerTag)?.GetComponent<GameManager>();
+        gamemanager.endWave += () =>
+        {
+            SaveLoadManager.Data.employCrewCount = unitInfomation;
+            SaveLoadManager.Data.crewSpawn = placePosition;
+        };
     }
 
     private void Update()
@@ -73,6 +81,17 @@ public class CrewManager : MonoBehaviour
         var spawnCrew = Instantiate(prefabs[rank] , transform);
         spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
         DragCrew = spawnCrew;
+    }
+
+    public void CrewForcingSpawn(CrewRank rank , PathTile underTile)
+    {
+        var spawnCrew = Instantiate(prefabs[rank], transform);
+        spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
+        spawnCrew.SetUnderTile(underTile);
+        spawnCrew.Spawn(this , DataTableManager.crewTable.Get(rank));
+        spawnCrew.SetUnderTile(underTile);
+
+        DragCrew = null;
     }
 
     public void SetStartUnit(CrewRank rank, PathTile underTile)
@@ -119,6 +138,7 @@ public class CrewManager : MonoBehaviour
         info.hire = hireCount;
         unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
+
     }
 
     private void SetPlaceCount(CrewRank rank, int placeCount)
@@ -127,12 +147,14 @@ public class CrewManager : MonoBehaviour
         info.place = placeCount;
         unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
+
     }
 
     public void ClearDragCrew()
     {
         if (DragCrew != null)
         {
+            placePosition[DragCrew.Rank].Add(DragCrew.UnderTile.transform.position);
             DragCrew.SetUnderTile(null);
             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
             DragCrew = null;
@@ -204,6 +226,7 @@ public class CrewManager : MonoBehaviour
                         if (underTile.Type == TileType.None)
                         {
                             DragCrew.SetUnderTile(underTile);
+                            placePosition[DragCrew.Rank].Add(underTile.transform.position);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
                         }
                         else

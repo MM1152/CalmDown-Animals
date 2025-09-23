@@ -339,8 +339,9 @@ public class DrawManager : MonoBehaviour
         }
         return false;
     }
-    private void DeleteAroundTile(DrawTile tile , bool allTileClear = false)
+    private bool DeleteAroundTile(DrawTile tile , bool allTileClear = false)
     {
+        bool isDelete = false;
         if (tile.ConnectStartTiles.Count > 0)
         {
             foreach (var connectTile in tile.ConnectStartTiles)
@@ -373,12 +374,15 @@ public class DrawManager : MonoBehaviour
             tiles.Remove(tile);
             tileTable.Remove(tile.transform.position);
             Destroy(tile.gameObject);
+            isDelete = true;
         }
-        else
+        else if(!allTileClear)
         {
             tile.Undo();
+            waveToTiles[level].Remove(tile);
         }
-        waveToTiles[level].Remove(tile);
+
+        return isDelete;
     }
     private void SetAroundTile(DrawTile tile)
     {
@@ -524,7 +528,6 @@ public class DrawManager : MonoBehaviour
             {
                 var tileData = datas.tiles[i][j];
                 DrawTile tile = null;
-
                 if (tileData.DrawType == DrawType.Start || tileData.DrawType == DrawType.Arrive)
                 {
                     if(tileData.DrawType == DrawType.Arrive && !isDrawedArriveTile)
@@ -561,6 +564,8 @@ public class DrawManager : MonoBehaviour
                     {
                         tile.Draw(i);
                         SetAroundTile(tile);
+                        tile.gameObject.name = $"{i + j}";
+
                     }
                     tiles.Add(tile);
                     waveTiles.Add(tile);
@@ -607,11 +612,24 @@ public class DrawManager : MonoBehaviour
     {
         for (int i = 0; i < tiles.Count; i++)
         {
-            DeleteAroundTile(tiles[i] , true);
+            if(DeleteAroundTile(tiles[i], true))
+            {
+                i--;
+            }
         }
 
-        tiles[0].connectCount = 0;
-        DeleteAroundTile(tiles[0]);
+        //for (int i = 0; i < tiles.Count; i++)
+        //{
+        //    foreach(var aroundTile in tiles[i].AroundTile)
+        //    {
+        //        aroundTile.connectCount--;
+        //        if(aroundTile.connectCount <= 0)
+        //        {
+        //            Destroy(aroundTile);
+        //        }
+        //    } 
+        //}
+
 
         waveToTiles.Clear();
         tiles.Clear();

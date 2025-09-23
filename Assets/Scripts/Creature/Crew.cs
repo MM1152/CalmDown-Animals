@@ -15,6 +15,7 @@ public class Crew : MonoBehaviour
     public EnemyHealth target;
     public List<GameObject> weapons;
     private PathTile underTile;
+    public PathTile UnderTile => underTile;
     public List<InTileAnimal> aroundTiles = new List<InTileAnimal>();
 
     private Animator animator;

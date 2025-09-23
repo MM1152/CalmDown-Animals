@@ -107,4 +107,9 @@ public class Map
     {
         return mapDatas[index];
     }
+
+    public static int Count()
+    {
+        return mapDatas.Count;
+    }
 }
