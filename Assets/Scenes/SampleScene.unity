@@ -6667,10 +6667,10 @@ RectTransform:
   - {fileID: 1024440919}
   m_Father: {fileID: 1369696392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 65.582855, y: -67.265}
-  m_SizeDelta: {x: 131.16571, y: 134.53}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &345282383
 MonoBehaviour:
@@ -7161,10 +7161,10 @@ RectTransform:
   - {fileID: 71837512}
   m_Father: {fileID: 1369696392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 193.49713, y: -67.265}
-  m_SizeDelta: {x: 124.66284, y: 134.53}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &387618426
 MonoBehaviour:
@@ -8098,6 +8098,7 @@ MonoBehaviour:
     m_Bits: 64
   crewSellingEvent: {fileID: 1472931352}
   popupManager: {fileID: 908200645}
+  gamemanager: {fileID: 330770916}
 --- !u!1 &438434895
 GameObject:
   m_ObjectHideFlags: 0
@@ -17663,10 +17664,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 345282382}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -30}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 65.582855, y: -67.265}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024440920
 MonoBehaviour:

@@ -39,21 +39,18 @@ public class PathTile : Tile
         this.tileManager = tileManager;
     }
 
-    private void Update()
+    public void ChangeColor()
     {
-        if(this.tileManager.InEditorWindow)
+        if (Type == TileType.Path)
         {
-            if(Type == TileType.Path)
-            {
-                material[0].color = Color.green;
-            }
+            material[0].color = Color.green;
         }
-        else
+    }
+    public void ResetColor()
+    {
+        if (Type == TileType.Path)
         {
-            if (Type == TileType.Path)
-            {
-                material[0].color = Color.white;
-            }
+            material[0].color = Color.white;
         }
     }
 

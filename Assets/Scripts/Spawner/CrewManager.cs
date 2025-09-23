@@ -31,8 +31,14 @@ public class CrewManager : MonoBehaviour
     private Dictionary<CrewRank, List<Vector3>> placePosition = new Dictionary<CrewRank, List<Vector3>>();
 
     public event Action changeUnitCount;
-
     private List<Crew> placedCrews = new List<Crew>();
+    private int Payment {
+        get => gamemanager.Payment;
+        set
+        {
+            gamemanager.Payment = value;
+        }
+    }
 
     public bool IsDrag
     {
@@ -44,7 +50,7 @@ public class CrewManager : MonoBehaviour
     }
 
     private bool isSpawn;
-    private GameManager gamemanager;
+    public GameManager gamemanager;
 
     private void Awake()
     { 
@@ -62,11 +68,12 @@ public class CrewManager : MonoBehaviour
 
     private void Start()
     {
-        gamemanager = GameObject.FindWithTag(TagIds.GameManagerTag)?.GetComponent<GameManager>();
         gamemanager.endWave += () =>
         {
             SaveLoadManager.Data.employCrewCount = unitInfomation;
             SaveLoadManager.Data.crewSpawn = placePosition;
+
+            gamemanager.Gold -= Payment;
         };
     }
 
@@ -150,10 +157,20 @@ public class CrewManager : MonoBehaviour
     private void SetPlaceCount(CrewRank rank, int placeCount)
     {
         var info = unitInfomation[rank];
+
+        bool more = placeCount > info.place;
+
         info.place = placeCount;
         unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
 
+        if(more)
+        {
+            Payment += DataTableManager.crewTable.Get(rank).crewPaycheck;
+        }else
+        {
+            Payment -= DataTableManager.crewTable.Get(rank).crewPaycheck;
+        }
     }
 
     public void ClearDragCrew()
@@ -162,6 +179,7 @@ public class CrewManager : MonoBehaviour
         {
             placePosition[DragCrew.Rank].Add(DragCrew.UnderTile.transform.position);
             DragCrew.SetUnderTile(null);
+            DragCrew.UnShowAttackRadius();
             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
             DragCrew = null;
         }
@@ -185,6 +203,7 @@ public class CrewManager : MonoBehaviour
                 var find = hit.collider.GetComponent<Crew>();
                 if (find != null)
                 {
+                    find.ShowAttackRaius();
                     find.ResetUnderTile();
                     DragCrew = find;
                     SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) - 1);
@@ -220,6 +239,7 @@ public class CrewManager : MonoBehaviour
                 touchPosition = TouchManager.GetDragWorldPosition();
                 DragCrew.transform.position = new Vector3(touchPosition.x, 1, touchPosition.z);
                 isSpawn = true;
+                DragCrew.UnShowAttackRadius();
             }
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
@@ -258,6 +278,7 @@ public class CrewManager : MonoBehaviour
                 {
                     Destroy(DragCrew.gameObject);
                 }
+                DragCrew.UnShowAttackRadius();
                 DragCrew = null;
                 isSpawn = false;
             }

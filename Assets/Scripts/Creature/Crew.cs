@@ -38,6 +38,28 @@ public class Crew : MonoBehaviour
         weapon.Equip(data.equType_ID);
     }
 
+    public void ShowAttackRaius()
+    {
+        foreach(var aroundtile in aroundTiles)
+        {
+            if(aroundtile.GetComponent<PathTile>().Type == TileType.Path)
+            {
+                aroundtile.ChangeColor(Color.red);
+            }
+        }
+    }
+
+    public void UnShowAttackRadius()
+    {
+        foreach (var aroundtile in aroundTiles)
+        {
+            if (aroundtile.GetComponent<PathTile>().Type == TileType.Path)
+            {
+                aroundtile.ResetColor();
+            }
+        }
+    }
+
     public void SetUnderTile(PathTile tile)
     {
         if(tile != null)
@@ -57,11 +79,14 @@ public class Crew : MonoBehaviour
         {
             aroundTile.CheckOutAnimal -= CheckTargetInTile;
         }
-        aroundTiles.Clear();
     }
     public void FindAroundTiles()
     {
         if (underTile == null) return;
+
+        UnShowAttackRadius();
+        ResetUnderTile();
+
         List<PathTile> pathTiles = new List<PathTile>();
         for (int i = 0; i < underTile.Neighbor.Count; i++)
         {
@@ -96,6 +121,8 @@ public class Crew : MonoBehaviour
         {
             aroundTiles[i].CheckOutAnimal += CheckTargetInTile;
         }
+
+        ShowAttackRaius();
     }
     private void CheckTargetInTile(EnemyHealth animal)
     {

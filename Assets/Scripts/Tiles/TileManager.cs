@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using Unity.Android.Types;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -205,6 +206,29 @@ public class TileManager : MonoBehaviour
         if(tile != null && tile.Type == targetTile && tile != arriveTile && !startTile.Contains(tile))
         {
             tile.Type = type;
+            if (tile.Type == TileType.Path) tile.ChangeColor();
+        }
+    }
+
+    public void ChangeToColorPathTiles()
+    {
+        for (int i = 0; i < tileList.Count; i++)
+        {
+            if (tileList[i].Type == TileType.Path)
+            {
+                tileList[i].ChangeColor();
+            }
+        }
+    }
+
+    public void ResetToColorPathTiles()
+    {
+        for (int i = 0; i < tileList.Count; i++)
+        {
+            if (tileList[i].Type == TileType.Path)
+            {
+                tileList[i].ResetColor();
+            }
         }
     }
 

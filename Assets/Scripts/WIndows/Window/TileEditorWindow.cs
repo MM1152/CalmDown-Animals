@@ -103,6 +103,7 @@ public class TileEditorWindow : GenericWindow
         editButton.IsOn = false;
         destroyButton.IsOn = false;
         editModeGo.gameObject.SetActive(false);
+        tileManager.ChangeToColorPathTiles();
         tileManager.ClearRoad();
     }
 
@@ -110,6 +111,7 @@ public class TileEditorWindow : GenericWindow
     {
         tileManager.InEditorWindow = false;
         tileManager.drawMode = false;
+        tileManager.ResetToColorPathTiles();
         DragAble.CameraDrag = true;
         base.Close();
     }

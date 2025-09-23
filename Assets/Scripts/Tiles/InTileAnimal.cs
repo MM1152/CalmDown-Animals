@@ -11,6 +11,13 @@ public class InTileAnimal : MonoBehaviour
     public int killStack = 0;
 
     public event Action<EnemyHealth> CheckOutAnimal;
+    private MeshRenderer mesh;
+    private Color prevColor = Color.white;
+    private void Awake()
+    {
+        mesh = GetComponent<MeshRenderer>();
+        
+    }
 
     private void Start()
     {
@@ -37,12 +44,23 @@ public class InTileAnimal : MonoBehaviour
         killStack++;
     }
 
+    public void ChangeColor(Color color)
+    {
+        prevColor = mesh.materials[0].color;
+        mesh.materials[0].color = color; 
+    }
+
+    public void ResetColor()
+    {
+        mesh.materials[0].color = Color.white;
+    }
+
     public Enemy Get(AnimalSize size)
     {
         var newList = list.Where(x => (int)(x.GetSize() & size) > 1).ToList();
-        if(list.Count > 0)
+        if(newList.Count > 0)
         {
-            return list[0];
+            return newList[0];
         }
         return null;
     }

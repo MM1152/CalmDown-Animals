@@ -27,6 +27,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private int payment = 0;
+    public int Payment
+    {
+        get => payment;
+        set
+        {
+            payment = value;
+            paymentText.text = $"-{payment}";
+        }
+    }
+
     private float timer = 0;
     private int timerToInt = 0;
     private bool GameFin { get; set; }
@@ -137,7 +148,13 @@ public class GameManager : MonoBehaviour
             if(timerToInt != (int)timer)
             {
                 timerToInt = (int)timer;
-                timerText.text = timerToInt + " √ ";
+                if(timerToInt % 60 < 10)
+                {
+                    timerText.text = $"{timerToInt / 60}:0{timerToInt % 60}";
+                }else
+                {
+                    timerText.text = $"{timerToInt / 60}:{timerToInt % 60}";
+                }
             }
         }
     }

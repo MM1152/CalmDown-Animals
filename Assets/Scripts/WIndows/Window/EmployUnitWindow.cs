@@ -30,6 +30,12 @@ public class EmployUnitWindow : GenericWindow
     public override void Close()
     {
         base.Close();
+        if(spawner.DragCrew != null)
+        {
+            spawner.DragCrew.SetUnderTile(null);
+            spawner.DragCrew.UnShowAttackRadius();
+            spawner.DragCrew = null;
+        }
         DragAble.CrewDrag = false;
     }
 
