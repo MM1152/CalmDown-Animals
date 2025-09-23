@@ -12,10 +12,12 @@ public class EmployUnitWindow : GenericWindow
     public Button backBNT;
     public GameObject sellLayout;
     public CrewManager spawner;
+    public Button clearCrewsBNT;
 
     private void Start()
     {
         backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
+        clearCrewsBNT.onClick.AddListener(() => spawner.ClearAllCrews());
     }
 
     public override void Open()

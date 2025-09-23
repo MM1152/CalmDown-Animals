@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,8 @@ public class CrewManager : MonoBehaviour
     private Dictionary<CrewRank, List<Vector3>> placePosition = new Dictionary<CrewRank, List<Vector3>>();
 
     public event Action changeUnitCount;
+
+    private List<Crew> placedCrews = new List<Crew>();
 
     public bool IsDrag
     {
@@ -91,6 +94,8 @@ public class CrewManager : MonoBehaviour
         spawnCrew.Spawn(this , DataTableManager.crewTable.Get(rank));
         spawnCrew.SetUnderTile(underTile);
 
+        placedCrews.Add(spawnCrew);
+
         DragCrew = null;
     }
 
@@ -102,6 +107,7 @@ public class CrewManager : MonoBehaviour
 
         SetHireCount(rank, 1);
         SetPlaceCount(rank, 1);
+        placedCrews.Add(spawnCrew);
     }
 
     public bool CrewHire(CrewRank rank)
@@ -182,10 +188,22 @@ public class CrewManager : MonoBehaviour
                     find.ResetUnderTile();
                     DragCrew = find;
                     SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) - 1);
+                    placedCrews.Remove(DragCrew);
                 }
             }
         }
+    }
 
+    public void ClearAllCrews()
+    {
+        foreach(var placedCrew in placedCrews)
+        {
+            Destroy(placedCrew.gameObject);
+            placedCrew.ResetUnderTile();
+            SetPlaceCount(placedCrew.Rank, GetPlaceCount(placedCrew.Rank) - 1);
+        }
+
+        placedCrews.Clear();
     }
 
     private void DragDrop()
@@ -228,6 +246,7 @@ public class CrewManager : MonoBehaviour
                             DragCrew.SetUnderTile(underTile);
                             placePosition[DragCrew.Rank].Add(underTile.transform.position);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
+                            placedCrews.Add(DragCrew);
                         }
                         else
                         {

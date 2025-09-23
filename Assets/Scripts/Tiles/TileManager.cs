@@ -352,6 +352,17 @@ public class TileManager : MonoBehaviour
         }
         FindNeighbor();
     }
+    
+    public void ClearAllTiles()
+    {
+        foreach(var tile in tileList)
+        {
+            if(!startTile.Contains(tile) && arriveTile != tile && tile.Type == TileType.Path)
+            {
+                tile.Type = TileType.None;
+            }
+        }
+    }
 
     private void FindRect(Vector2 a)
     {

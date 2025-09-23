@@ -11,7 +11,7 @@ public class TileEditorWindow : GenericWindow
 
     public Button deleteButton;
     public Button backButton;
-
+    public Button deleteAllTilesBNT;
     [Header("Reference")]
     public PopupManager popupManager;
     public TileManager tileManager;
@@ -42,6 +42,7 @@ public class TileEditorWindow : GenericWindow
             DragAble.CameraDrag = true;
             editModeOutline.SetActive(false);
         });
+        deleteAllTilesBNT.onClick.AddListener(() => tileManager.ClearAllTiles());
         editButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             if (destroyMode)
