@@ -77,7 +77,7 @@ public class TileManager : MonoBehaviour
     private void Start()
     {
         gameManager.endWave += DrawTiles;
-        gameManager.endWave += () => ChangeToBlockedTile(gameManager.allCountSpawnAnimals);
+        gameManager.endWave += () => ChangeToBlockedTile(gameManager.AllAnimalSpawnCount);
     }
 
     public void DataLoadFail()

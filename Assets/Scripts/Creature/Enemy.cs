@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -61,8 +62,10 @@ public class Enemy : MonoBehaviour
         dir = (nPos - transform.position).normalized;
         transform.LookAt(nPos);
 
+        Debug.Log(data.Animal_name);
+
         GameObject skin = Instantiate(data.Skin, transform);
-        animator = skin.AddComponent<Animator>();
+        animator = skin.GetOrAddComponent<Animator>();
         animator.runtimeAnimatorController = data.Animator;
         animator.avatar = data.Avatar;
     }
@@ -108,7 +111,7 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(nPos , transform.position) < 0.05f)
             {
                 health.Die();
-                gameManager.WaveFail();
+                gameManager.EscapeAnimals();
             }
         }
     }

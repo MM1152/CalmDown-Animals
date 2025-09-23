@@ -5,6 +5,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TileManager tileManager;
+    public EnemySpawner enemySpawner;
     private int wave = 1;
     public int Wave
     {
@@ -56,10 +57,23 @@ public class GameManager : MonoBehaviour
     public int maxWave;
     public bool WaveStart { get; private set; } = false;
 
-    public int allCountSpawnAnimals;
+    public int AllAnimalSpawnCount
+    {
+        get => allAnimalSpawnCount;
+        set 
+        {
+            currentSpawnCount = value - allAnimalSpawnCount;
+            allAnimalSpawnCount = value;
+        }
+    }
+    private int allAnimalSpawnCount;
+
+    private int currentSpawnCount;
+    private int escapeCount;
+
     private void Awake()
     {
-        allCountSpawnAnimals = 0;
+        AllAnimalSpawnCount = 0;
         waveText.text = wave + " Round";
         goldText.text = gold.ToString();
 
@@ -98,6 +112,7 @@ public class GameManager : MonoBehaviour
         WaveStart = false;
         windowManager.Open(Window.EditorWindow);
         Gold += DataTableManager.roundTable.Get(wave).RewardGold;
+
         // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
         endWave?.Invoke();
 
@@ -122,6 +137,8 @@ public class GameManager : MonoBehaviour
         SaveLoadManager.Data.wave = wave;
         SaveLoadManager.Data.mapid = tileManager.mapIdx;
         SaveLoadManager.Data.mapSize = tileManager.mapSize;
+        
+        escapeCount = 0;
 
         waveText.text = wave + " 웨이브";
     }
@@ -135,7 +152,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
         {
-            WaveFail();
+            EscapeAnimals();
         }
         if(Input.GetKeyDown(KeyCode.O))
         {
@@ -159,8 +176,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void WaveFail()
+    public void EscapeAnimals()
     {
-        EndWave(true);
+        escapeCount++;
+        if(currentSpawnCount * 0.1f < escapeCount)
+        {
+            EndWave(true);
+        }
     }
 }

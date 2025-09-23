@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
             switch (type)
             {
                 case TileType.None:
-                    material[0].color = Color.white;
+                    material[0].color = new Vector4(0.3118286f, 0.5396226f, 0f , 1f);
                     break;
                 case TileType.Blocked:
                     material[0].color = Color.black;

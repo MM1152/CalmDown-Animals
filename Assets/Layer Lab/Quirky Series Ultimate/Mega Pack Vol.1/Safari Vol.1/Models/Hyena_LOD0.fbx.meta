@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fafc58d64ac2a4247b4680ad8d03517c
+guid: 6359fe3ce1df7d445ab3b22ee17b444b
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
@@ -96,10 +96,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 137259
-  packageName: Quirky Series - Animals Mega Pack Vol 1
-  packageVersion: 1.4
-  assetPath: Assets/Quirky Series Ultimate/Mega Pack Vol.1/Safari Vol.1/Models/Hyena_LOD0.fbx
-  uploadId: 756213

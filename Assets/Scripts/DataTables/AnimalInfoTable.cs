@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -14,15 +13,23 @@ public class AnimalInfoTable : DataTable
         public int CR_ID { get; set; }
         public int Size_ID { get; set; }
         public int Spd { get; set; }
+        public int CaptureHP { get; set; }
         public int Range_min { get; set; }
         public int Range_max { get; set; }
         public string Model {
             set {
                 model = value;
 
-                Skin = Resources.Load<GameObject>(model);
-                Animator = Resources.Load<RuntimeAnimatorController>(model + "_Animator");
-                Avatar = Resources.Load<Avatar>(model + "_Avatar");
+                string pathname = model.Split('/')[2];
+
+                Skin = Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0");
+                Animator = Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
+                Avatar = Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
+
+                if(Skin == null)
+                {
+                    Debug.Log("Fail To Load :" + Animal_name);
+                }
             }
         }
         public float Spawn { get; set; }
@@ -34,10 +41,11 @@ public class AnimalInfoTable : DataTable
         public Avatar Avatar;
             
         public float Time => DataTableManager.animalSpeedTable.Get(Spd).Time; 
-        public int MaxHp => DataTableManager.animalCRRankTable.Get(CR_ID).Base_capture + DataTableManager.animalSizeTable.Get(Size_ID).Add_capture;
+        public int MaxHp => CaptureHP;
     }
 
     private readonly Dictionary<int, Data> animalInfos = new Dictionary<int, Data>();
+    private int index;
 
     public override void Load(string filename)
     {
@@ -52,11 +60,15 @@ public class AnimalInfoTable : DataTable
         }
     }
 
-    public Data Get(AnimalTypes animal)
+    public Data Get(int animal)
     {
         return animalInfos[(int)animal];
     }
 
+    public Data GetSquentialGet()
+    {
+        return animalInfos.ElementAt(index++).Value;
+    }
     public Data RandomGet(int CR_ID)
     {
         var list = animalInfos.Select(x => x.Value).ToList();
@@ -65,5 +77,4 @@ public class AnimalInfoTable : DataTable
         int rand = UnityEngine.Random.Range(0, withCR_ID.Count() - 1) ;
         return withCR_ID.ElementAt(rand);
     }
-
 }

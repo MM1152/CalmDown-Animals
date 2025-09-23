@@ -15,6 +15,8 @@ public class RoundTable : DataTable
         public int CR_ID6 { get; set; }
         public int RewardGold { get; set; }
         public bool IsUnavail { get; set; }
+
+        public List<int> CR_IDS = new List<int>();
     }
 
     private readonly List<Data> RoundData = new List<Data>();
@@ -28,6 +30,12 @@ public class RoundTable : DataTable
         for(int i = 0; i < datas.Count; i++)
         {
             RoundData.Add(datas[i]);
+            datas[i].CR_IDS.Add(datas[i].CR_ID1);
+            datas[i].CR_IDS.Add(datas[i].CR_ID2);
+            datas[i].CR_IDS.Add(datas[i].CR_ID3);
+            datas[i].CR_IDS.Add(datas[i].CR_ID4);
+            datas[i].CR_IDS.Add(datas[i].CR_ID5);
+            datas[i].CR_IDS.Add(datas[i].CR_ID6);
         }
     }
 
