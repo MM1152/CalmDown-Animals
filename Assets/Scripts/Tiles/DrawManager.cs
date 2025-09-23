@@ -534,11 +534,11 @@ public class DrawManager : MonoBehaviour
                     {
                         isDrawedArriveTile = true;
                         tile = Instantiate(startTilePrefabs, transform);
-                        tile.layer = i;
+                        tile.layer = level;
                     }else if(tileData.DrawType == DrawType.Start)
                     {
                         tile = Instantiate(startTilePrefabs, transform);
-                        tile.layer = i;
+                        tile.layer = level;
                     }
                 } 
                 else
@@ -562,7 +562,7 @@ public class DrawManager : MonoBehaviour
                     tile.UpdateDrawTile(tileData);
                     if(tile.DrawType == DrawType.None)
                     {
-                        tile.Draw(i);
+                        tile.Draw(level);
                         SetAroundTile(tile);
                         tile.gameObject.name = $"{i + j}";
 
@@ -584,6 +584,7 @@ public class DrawManager : MonoBehaviour
                     }
                 }
             }
+            level++;
             waveToTiles.Add(waveTiles);
         }
 
@@ -606,7 +607,7 @@ public class DrawManager : MonoBehaviour
             }
         }
 
-        DrawTileToLevel(level);
+        DrawTileToLevel(0);
     }
     private void Clear()
     {
@@ -618,6 +619,7 @@ public class DrawManager : MonoBehaviour
             }
         }
 
+        Destroy(tiles[0].gameObject);
         //for (int i = 0; i < tiles.Count; i++)
         //{
         //    foreach(var aroundTile in tiles[i].AroundTile)
