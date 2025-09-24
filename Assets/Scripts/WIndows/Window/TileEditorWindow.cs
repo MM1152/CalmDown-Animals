@@ -31,7 +31,7 @@ public class TileEditorWindow : GenericWindow
             editModeGo.SetActive(true);
             selectModeGo.SetActive(false);
             tileManager.drawMode = false;
-            DragAble.CameraDrag = true;
+            Status.CameraDrag = true;
         });
         backButtonInEditMode.onClick.AddListener(() => {
             editModeGo.SetActive(false);
@@ -39,7 +39,7 @@ public class TileEditorWindow : GenericWindow
             editButton.IsOn = false;
             destroyButton.IsOn = false;
             tileManager.drawMode = false;
-            DragAble.CameraDrag = true;
+            Status.CameraDrag = true;
             editModeOutline.SetActive(false);
         });
         deleteAllTilesBNT.onClick.AddListener(() => tileManager.ClearAllTiles());
@@ -78,7 +78,7 @@ public class TileEditorWindow : GenericWindow
         destroyButton.IsOn = destroyMode;
         tileManager.tileType = tileType;
         tileManager.drawMode = editMode || destroyMode ? true : false;
-        DragAble.CameraDrag = !tileManager.drawMode;
+        Status.CameraDrag = !tileManager.drawMode;
         editModeOutline.SetActive(tileManager.drawMode);
     }
 
@@ -112,7 +112,7 @@ public class TileEditorWindow : GenericWindow
         tileManager.InEditorWindow = false;
         tileManager.drawMode = false;
         tileManager.ResetToColorPathTiles();
-        DragAble.CameraDrag = true;
+        Status.CameraDrag = true;
         base.Close();
     }
 }

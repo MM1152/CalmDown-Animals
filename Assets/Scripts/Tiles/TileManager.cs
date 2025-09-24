@@ -20,6 +20,7 @@ public class TileManager : MonoBehaviour
     public bool drawMode;
     public bool InEditorWindow { get; set; }
     public LayerMask layerMask;
+    public LayerMask infoMask;
     public int allAnimalSpawnCount;
     public int mapSize = -1;
     public float changeToPathTileInBlock;
@@ -40,6 +41,7 @@ public class TileManager : MonoBehaviour
     public CrewManager crewSpawner;
     public EnemySpawner enemySpawner;
     public WindowManager windowManager;
+    public PopupManager popupManager;
     public GameManager gameManager;
 
     [Space(10)]
@@ -90,6 +92,26 @@ public class TileManager : MonoBehaviour
     private void Update()
     {
         SetTileType(tileType);
+        ShowAnimalInfomation();
+    }
+
+    private void ShowAnimalInfomation()
+    {
+        if (!Status.ShowAnimalInfo) return;
+        if (TouchManager.TouchType == TouchType.Tab)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
+            if(Physics.Raycast(ray, out RaycastHit hit , Mathf.Infinity , infoMask))
+            {
+                var collider = hit.collider.GetComponent<SpawnEnemyInfo>();
+
+                if(collider != null)
+                {
+                    var popup = popupManager.Open(Popup.AnimalInfoPopup) as AnimalInfoPopup;
+                    popup.AnimalInfomation = collider.GetAnimalData();
+                }
+            }
+        }
     }
 
     private void SetInitPath()

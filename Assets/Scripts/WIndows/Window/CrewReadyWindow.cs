@@ -15,7 +15,7 @@ public class CrewReadyWindow : GenericWindow
     public override void Open()
     {
         base.Open();
-        DragAble.CrewTab = true;
+        Status.CrewTab = true;
     }
 
     public override void Close()
@@ -23,7 +23,7 @@ public class CrewReadyWindow : GenericWindow
         base.Close();
         readyTab.Close();
         crewManager.ClearDragCrew();
-        DragAble.CrewTab = false;
+        Status.CrewTab = false;
     }
 
     private void Update()

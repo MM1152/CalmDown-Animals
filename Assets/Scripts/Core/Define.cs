@@ -56,15 +56,6 @@ public static class HexaUtility
     }
 }
 
-public enum AnimalTypes
-{
-    Hyena = 212356,
-    Rabbit = 211445,
-    Red_Fox = 212434,
-    Warthog = 213335,
-    Nanger_Granti = 213423,
-}
-
 public static class TagIds
 {
     public static readonly string GameManagerTag = "GameController";
@@ -83,11 +74,12 @@ public static class FloatUtility
     }
 }
 
-public static class DragAble
+public static class Status
 {
     public static bool CameraDrag = true;
     public static bool CrewTab = false;
     public static bool CrewDrag;
+    public static bool ShowAnimalInfo = false;
 }
 
 public static class DataTableIds
@@ -122,6 +114,7 @@ public enum Popup
 {
     TextPopUp,
     ScorePopUp,
+    AnimalInfoPopup,
 }
 
 public enum CrewRank

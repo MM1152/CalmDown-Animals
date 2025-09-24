@@ -38,7 +38,7 @@ public class DragCamera : MonoBehaviour
     {
         Vector3 linear = Vector3.zero;
 
-        if (!DragAble.CameraDrag) return;
+        if (!Status.CameraDrag) return;
 
         dragSpeed = Camera.main.orthographicSize.Normalization(2, 10).ReverseNormalization(10, 30);
         

@@ -14,4 +14,16 @@ public class EditorWindow : GenericWindow
         employUnitBNT.onClick.AddListener(() => manager.Open(Window.EmployUnitWindow));
         readyUnitBNT.onClick.AddListener(() => manager.Open(Window.CrewReadyWindow));
     }
+
+    public override void Open()
+    {
+        base.Open();
+        Status.ShowAnimalInfo = true;
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        Status.ShowAnimalInfo = false;
+    }
 }

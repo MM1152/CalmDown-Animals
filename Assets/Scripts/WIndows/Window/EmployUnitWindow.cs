@@ -31,7 +31,7 @@ public class EmployUnitWindow : GenericWindow
     {
         base.Open();
         sellLayout.SetActive(false);
-        DragAble.CrewDrag = true;
+        Status.CrewDrag = true;
     }
 
     public override void Close()
@@ -43,7 +43,7 @@ public class EmployUnitWindow : GenericWindow
             spawner.DragCrew.UnShowAttackRadius();
             spawner.DragCrew = null;
         }
-        DragAble.CrewDrag = false;
+        Status.CrewDrag = false;
     }
 
     public void Update()

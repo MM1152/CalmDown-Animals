@@ -185,7 +185,7 @@ public class CrewManager : MonoBehaviour
 
     private void CrewDrag()
     {
-        if (!DragAble.CrewDrag && !DragAble.CrewTab) return;
+        if (!Status.CrewDrag && !Status.CrewTab) return;
 
 
         // 이미 필드에 소환되어있는 대원 선택시
@@ -225,11 +225,11 @@ public class CrewManager : MonoBehaviour
 
     private void DragDrop()
     {
-        if (!DragAble.CrewDrag) return;
+        if (!Status.CrewDrag) return;
 
         if (DragCrew != null)
         {
-            DragAble.CameraDrag = false;
+            Status.CameraDrag = false;
             Vector3 touchPosition = Vector3.zero;
 
             if (TouchManager.TouchType == TouchType.Drag)
@@ -241,7 +241,7 @@ public class CrewManager : MonoBehaviour
             }
             else if (TouchManager.TouchType == TouchType.None && isSpawn)
             {
-                DragAble.CameraDrag = true;
+                Status.CameraDrag = true;
 
                 // Check if it is sellable
                 if (crewSellingEvent.SellAble)

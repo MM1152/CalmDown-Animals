@@ -98,4 +98,9 @@ public class SpawnEnemyInfo : MonoBehaviour
 
         enemy.Spawn(spawnTile , spawnAnimalInfo , spawnPoint);
     }
+
+    public AnimalInfoTable.Data GetAnimalData()
+    {
+        return spawnAnimalInfo;
+    }
 }
