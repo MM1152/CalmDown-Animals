@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
         copySpawnCount = 0;
         // 맵 넓어지면 여기 수정해야됌
         //var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_ID1);
-        for (int i = 0; i < infoTiles.Count; i++)
+        for (int i = 0; i < infoTiles.Count; i++)   
         {
             var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_IDS[i]);
             //var spawnInfo = animalInfoTable.GetSquentialGet();

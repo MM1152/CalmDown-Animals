@@ -95,6 +95,14 @@ public class TileManager : MonoBehaviour
     private void SetInitPath()
     {
         PathTile copyTile = startTile[0];
+        for(int i = 0; i < copyTile.Neighbor.Count; i++)
+        {
+            if(copyTile.Neighbor[i].Type != TileType.Path)
+            {
+                crewSpawner.SetStartUnit(CrewRank.Intern, copyTile.Neighbor[i]);
+                break;
+            }
+        }
         while(copyTile != null)
         {
             copyTile.Type = TileType.Path;
@@ -103,7 +111,7 @@ public class TileManager : MonoBehaviour
 
         //처음 크루 설치
         // 공짜로 설치 하고, 타일 위치는 -0.6 , 1.1
-        crewSpawner.SetStartUnit(CrewRank.Intern, tileTable[new Vector3(-1.1f, 0f , 1.9f)]);
+       
     }
 
     private void ResetInitPath()

@@ -72,8 +72,6 @@ public class CrewManager : MonoBehaviour
         {
             SaveLoadManager.Data.employCrewCount = unitInfomation;
             SaveLoadManager.Data.crewSpawn = placePosition;
-
-            gamemanager.Gold -= Payment;
         };
     }
 

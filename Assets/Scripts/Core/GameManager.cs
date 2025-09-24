@@ -110,13 +110,14 @@ public class GameManager : MonoBehaviour
 
     private void ChangeRoundClearGold(int gold)
     {
-        roundClearGoldText.text = gold.ToString();
         if(gold < 0)
         {
+            roundClearGoldText.text = gold.ToString();
             roundClearGoldText.color = Color.red;
         }
         else
         {
+            roundClearGoldText.text = "+" + gold.ToString();
             roundClearGoldText.color = Color.green;
         }
     }
@@ -139,8 +140,11 @@ public class GameManager : MonoBehaviour
     {
         WaveStart = false;
         windowManager.Open(Window.EditorWindow);
-        Gold += DataTableManager.roundTable.Get(wave).RewardGold;
-
+        Gold += RoundClearGold - Payment;
+        if(Gold < 0)
+        {
+            waveFail = true;
+        }
         // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
         endWave?.Invoke();
 
@@ -160,6 +164,7 @@ public class GameManager : MonoBehaviour
         {
             wave++;
         }
+
 
         SaveLoadManager.Data.gold = gold;
         SaveLoadManager.Data.wave = wave;
