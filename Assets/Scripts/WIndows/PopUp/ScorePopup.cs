@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScorePopup : GenericPopup
 {
@@ -79,8 +80,10 @@ public class ScorePopup : GenericPopup
 
     public override bool Close()
     {
-        if(co == null)
-            return base.Close();
+        if (co == null) { 
+            base.Close();
+            return true;
+        }
         else
         {
             StopCoroutine(co);
@@ -100,6 +103,10 @@ public class ScorePopup : GenericPopup
             uguis[startIdx].SetActive(true);
             yield return new WaitForSeconds(1f);
         }
+
+        yield return new WaitUntil(() => TouchManager.TouchType == TouchType.Tab);
+
         co = null;
+        SceneManager.LoadScene("TitleScene");
     }
 }
