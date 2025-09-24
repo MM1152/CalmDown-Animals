@@ -36,6 +36,19 @@ public class GameManager : MonoBehaviour
         {
             payment = value;
             paymentText.text = $"-{payment}";
+
+            ChangeRoundClearGold(roundClearGold - payment);
+        }
+    }
+
+    private int roundClearGold = 0;
+    public int RoundClearGold
+    {
+        get => roundClearGold;
+        set
+        {
+            roundClearGold = value;
+            ChangeRoundClearGold(roundClearGold - payment);
         }
     }
 
@@ -53,7 +66,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI paymentText;
-
+    public TextMeshProUGUI roundClearGoldText;
     public int maxWave;
     public bool WaveStart { get; private set; } = false;
 
@@ -90,6 +103,21 @@ public class GameManager : MonoBehaviour
         else
         {
             tileManager.DataLoadFail();
+        }
+
+        RoundClearGold = DataTableManager.roundTable.Get(Wave).RewardGold;
+    }
+
+    private void ChangeRoundClearGold(int gold)
+    {
+        roundClearGoldText.text = gold.ToString();
+        if(gold < 0)
+        {
+            roundClearGoldText.color = Color.red;
+        }
+        else
+        {
+            roundClearGoldText.color = Color.green;
         }
     }
 
@@ -137,7 +165,8 @@ public class GameManager : MonoBehaviour
         SaveLoadManager.Data.wave = wave;
         SaveLoadManager.Data.mapid = tileManager.mapIdx;
         SaveLoadManager.Data.mapSize = tileManager.mapSize;
-        
+
+        RoundClearGold = DataTableManager.roundTable.Get(Wave).RewardGold;
         escapeCount = 0;
 
         waveText.text = wave + " ¿þÀÌºê";

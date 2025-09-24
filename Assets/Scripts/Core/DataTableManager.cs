@@ -15,6 +15,7 @@ public static class DataTableManager
     public static CrewTable crewTable => Get<CrewTable>(DataTableIds.CrewTable);
     public static EquipmentInfo equipmentInfoTable => Get<EquipmentInfo>(DataTableIds.EquipmentInfo);
     public static EquipmentType equipmentTypeTable => Get<EquipmentType>(DataTableIds.EquipmentType);
+    public static CrewRankTable crewRankTable => Get<CrewRankTable>(DataTableIds.CrewRankTable);
 
     static DataTableManager()
     {
@@ -50,6 +51,9 @@ public static class DataTableManager
         EquipmentInfo equipmentInfo = new EquipmentInfo();
         equipmentInfo.Load(DataTableIds.EquipmentInfo);
 
+        CrewRankTable crewRanakTable= new CrewRankTable();
+        crewRanakTable.Load(DataTableIds.CrewRankTable);
+
         tables.Add(DataTableIds.StringTableIds , stringTable);
         tables.Add(DataTableIds.RoundTableIds, roundTable);
         tables.Add(DataTableIds.AnimalInfoTable, animalInfoTable);
@@ -59,6 +63,7 @@ public static class DataTableManager
         tables.Add(DataTableIds.CrewTable, crewTable);
         tables.Add(DataTableIds.EquipmentType, equipmentType);
         tables.Add(DataTableIds.EquipmentInfo, equipmentInfo);
+        tables.Add(DataTableIds.CrewRankTable, crewRanakTable);
     }
 
     public static T Get<T>(string id) where T : DataTable

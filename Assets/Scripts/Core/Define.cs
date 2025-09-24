@@ -101,6 +101,7 @@ public static class DataTableIds
     public static readonly string CrewTable = "CrewTable";
     public static readonly string EquipmentInfo = "EquipmentInfo";
     public static readonly string EquipmentType = "EquipmentType";
+    public static readonly string CrewRankTable = "CrewRankTable";
 
     public static readonly string[] MapDataIds =
     {

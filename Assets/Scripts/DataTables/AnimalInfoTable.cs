@@ -72,9 +72,9 @@ public class AnimalInfoTable : DataTable
     public Data RandomGet(int CR_ID)
     {
         var list = animalInfos.Select(x => x.Value).ToList();
-        var withCR_ID = list.Where(x => x.CR_ID == CR_ID);
+        var withCR_ID = list.Where(x => x.CR_ID == CR_ID).ToList();
 
-        int rand = UnityEngine.Random.Range(0, withCR_ID.Count() - 1) ;
-        return withCR_ID.ElementAt(rand);
+        int rand = UnityEngine.Random.Range(0, withCR_ID.Count - 1) ;
+        return withCR_ID[rand];
     }
 }

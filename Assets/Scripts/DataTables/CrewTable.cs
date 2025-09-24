@@ -18,6 +18,8 @@ public class CrewTable : DataTable
         public float Crew_atkspd { get; set; }
         public string Crew_info { get; set; }
 
+        public int GetSpawnAbleRound => DataTableManager.crewRankTable.Get(rank_ID).Buyround;
+        public string GetColorInfomation => DataTableManager.crewRankTable.Get(rank_ID).Color;
     }
 
     private readonly Dictionary<int, Data> crewTable = new Dictionary<int, Data>();

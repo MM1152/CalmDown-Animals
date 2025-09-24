@@ -331,7 +331,7 @@ public class TileManager : MonoBehaviour
         for (int i = 0; i < startTile.Count; i++)
         {
             startTile[i].Type = TileType.None;
-            Destroy(startTile[i].EnemyInfo.gameObject);
+            enemySpawner.RemoveInfoTile(startTile[i].EnemyInfo);
         }
         startTile.Clear();
 

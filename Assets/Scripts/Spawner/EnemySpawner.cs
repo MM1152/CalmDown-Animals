@@ -56,6 +56,12 @@ public class EnemySpawner : MonoBehaviour
             infoTiles[i].SetSpawnEnemy(spawnInfo);
         }
     }
+    public void RemoveInfoTile(SpawnEnemyInfo infotile)
+    {
+        infoTiles.Remove(infotile);
+        Destroy(infotile.gameObject);
+    }
+
     //Test ¿ë
     public SpawnEnemyInfo SettingSpawnInfoTile(PathTile spawnTile, Vector3 drawPosition , Vector3 enemySpawnPosition)
     {

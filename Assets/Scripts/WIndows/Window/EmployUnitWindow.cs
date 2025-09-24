@@ -13,11 +13,18 @@ public class EmployUnitWindow : GenericWindow
     public GameObject sellLayout;
     public CrewManager spawner;
     public Button clearCrewsBNT;
+    public GameManager gameManager;
+    [Header("Crew Buying Layouts")]
+    public SpawnCrewEvent[] spawnCrewEvents;
 
     private void Start()
     {
         backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
         clearCrewsBNT.onClick.AddListener(() => spawner.ClearAllCrews());
+        gameManager.endWave += () =>
+        {
+            
+        };
     }
 
     public override void Open()
