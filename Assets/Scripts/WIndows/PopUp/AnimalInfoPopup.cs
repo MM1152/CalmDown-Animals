@@ -13,6 +13,7 @@ public class AnimalInfoPopup : GenericPopup
     {
         set
         {
+            animalName.text = value.Kor_Name;
             CR_ID.text = DataTableManager.animalCRRankTable.Get(value.CR_ID).name;
             capture.text = value.CaptureHP.ToString();
             speed.text = DataTableManager.animalSpeedTable.Get(value.Spd).name;

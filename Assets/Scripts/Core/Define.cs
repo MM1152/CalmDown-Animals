@@ -39,7 +39,7 @@ public class NeighborPosition
             Mathf.Round(value.z * 10f) / 10f
         );
     }
-}
+}   
 
 public static class HexaUtility
 {

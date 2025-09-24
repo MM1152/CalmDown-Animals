@@ -109,6 +109,7 @@ public class TileManager : MonoBehaviour
                 {
                     var popup = popupManager.Open(Popup.AnimalInfoPopup) as AnimalInfoPopup;
                     popup.AnimalInfomation = collider.GetAnimalData();
+                    popup.transform.position = Camera.main.WorldToScreenPoint(collider.transform.position + new Vector3(7f , 0f , 0f));
                 }
             }
         }

@@ -26,14 +26,14 @@ public class AnimalInfoTable : DataTable
                 Animator = Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
                 Avatar = Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
 
-                if(Skin == null)
+                if (Skin == null)
                 {
                     Debug.Log("Fail To Load :" + Animal_name);
                 }
             }
         }
         public float Spawn { get; set; }
-
+        public string Kor_Name { get; set; }
         private string model;
 
         public GameObject Skin;
