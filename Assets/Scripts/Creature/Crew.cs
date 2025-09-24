@@ -96,7 +96,7 @@ public class Crew : MonoBehaviour
         if (attackRadius > 1)
         {
             List<PathTile> copyTiles = new List<PathTile>(pathTiles);
-            for (int i = 0; i < attackRadius; i++)
+            for (int i = 1; i < attackRadius; i++)
             {
                 List<PathTile> saveAroundTile = new List<PathTile>();
                 foreach(var tile in copyTiles)
@@ -164,6 +164,7 @@ public class Crew : MonoBehaviour
                 if (target.Hit(weapon.GetCaptureDmg()))
                 {
                     underTile.CrewKillCount++;
+                    spawner.gamemanager.captureAnimalCount++;
                     Debug.Log("Kill Unit", gameObject);
                 }
             }

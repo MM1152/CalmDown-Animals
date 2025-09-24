@@ -47,8 +47,11 @@ public class PopupManager : MonoBehaviour
     {
         if (openPopups.Count > 0)
         {
-            var popup = openPopups.Pop();
-            popup.Close();
+            var popup = openPopups.Peek();
+            if(popup.Close())
+            {
+                openPopups.Pop();
+            }
         }
     }
 

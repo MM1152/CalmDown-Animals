@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     }
 
     private float timer = 0;
-    private int timerToInt = 0;
+    public int timerToInt = 0;
     private bool GameFin { get; set; }
 
     public WindowManager windowManager;
@@ -80,15 +80,16 @@ public class GameManager : MonoBehaviour
         }
     }
     private int allAnimalSpawnCount;
-
+    public int captureAnimalCount ;
     private int currentSpawnCount;
     private int escapeCount;
-
+    public bool WaveClear { get; set; }
     private void Awake()
     {
         AllAnimalSpawnCount = 0;
         waveText.text = wave + " Round";
         goldText.text = gold.ToString();
+        captureAnimalCount = 0;
 
     }
 
@@ -147,18 +148,16 @@ public class GameManager : MonoBehaviour
         }
         // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
         endWave?.Invoke();
-
+        WaveClear = !waveFail;
         if (wave == maxWave && !waveFail)
         {
-            GameFin = true;
-            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
-            popup.Id = 1;
+            popupManager.Open(Popup.ScorePopUp);
             return;
         }
         else if(waveFail)
         {
-            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
-            popup.Id = 2;
+            popupManager.Open(Popup.ScorePopUp);
+            return;
         }
         else
         {

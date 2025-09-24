@@ -4,7 +4,7 @@ public class GenericPopup : MonoBehaviour
 {
     protected PopupManager manager;
 
-    public void Init(PopupManager manager)
+    public virtual void Init(PopupManager manager)
     {
         this.manager = manager; 
     }
@@ -14,8 +14,9 @@ public class GenericPopup : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public virtual void Close()
+    public virtual bool Close()
     {
         gameObject.SetActive(false);
+        return true;
     }
 }

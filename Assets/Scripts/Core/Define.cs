@@ -121,6 +121,7 @@ public enum Window
 public enum Popup
 {
     TextPopUp,
+    ScorePopUp,
 }
 
 public enum CrewRank
