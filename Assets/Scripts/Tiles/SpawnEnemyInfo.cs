@@ -16,9 +16,11 @@ public class SpawnEnemyInfo : MonoBehaviour
     private GameManager gameManager;
     private List<Enemy> spawnList = new List<Enemy>();
     private Vector3 spawnPoint;
+    private SpriteRenderer spriteRenderer;
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -72,6 +74,7 @@ public class SpawnEnemyInfo : MonoBehaviour
     public void SetSpawnEnemy(AnimalInfoTable.Data spawnAnimalInfo)
     {
         this.spawnAnimalInfo = spawnAnimalInfo;
+        spriteRenderer.sprite = this.spawnAnimalInfo.Icon;
         spawnTime = this.spawnAnimalInfo.Spawn;
         //Image 스프라이트 설정 필요
 

@@ -21,10 +21,7 @@ public static class DataTableManager
 
     static DataTableManager()
     {
-        if(!init)
-        {
-            Init();
-        }
+        Init();
     }
 
     public static void Init()

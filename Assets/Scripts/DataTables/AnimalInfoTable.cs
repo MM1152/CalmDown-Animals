@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class AnimalInfoTable : DataTable
@@ -20,15 +21,15 @@ public class AnimalInfoTable : DataTable
             set {
                 model = value;
 
-                string pathname = model.Split('/')[2];
+                pathname = model.Split('/')[2];
 
                 Skin = Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0");
                 Animator = Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
                 Avatar = Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
-
-                if (Skin == null)
+                Icon = Resources.Load<Sprite>(@$"FaceIcon/{pathname}");
+                if (Icon == null)
                 {
-                    Debug.Log("Fail To Load :" + Animal_name);
+                    Debug.Log("Fail To Load Icon :" + Animal_name);
                 }
             }
         }
@@ -36,10 +37,12 @@ public class AnimalInfoTable : DataTable
         public string Kor_Name { get; set; }
         private string model;
 
-        public GameObject Skin;
-        public RuntimeAnimatorController Animator;
-        public Avatar Avatar;
-            
+        public GameObject Skin;/* => Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0")*/
+        public RuntimeAnimatorController Animator;/* => Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}")*/
+        public Avatar Avatar;/* => Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar")*/
+        public Sprite Icon;/* => Resources.Load<Sprite>(@$"FaceIcon/{pathname}")*/
+
+        private string pathname;
         public float Time => DataTableManager.animalSpeedTable.Get(Spd).Time; 
         public int MaxHp => CaptureHP;
     }
