@@ -6,6 +6,8 @@ public class Book : MonoBehaviour
     public Toggle[] toggles;
     public ToggleGroup toggleGroup;
     public GameObject[] groups;
+
+    public AnimalImage prefabs;
     private void Start()
     {
         for(int i  = 0; i< toggles.Length; i++)

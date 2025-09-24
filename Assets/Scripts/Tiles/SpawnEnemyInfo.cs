@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 public class SpawnEnemyInfo : MonoBehaviour
 {
     private int spawnCount;
@@ -16,11 +17,12 @@ public class SpawnEnemyInfo : MonoBehaviour
     private GameManager gameManager;
     private List<Enemy> spawnList = new List<Enemy>();
     private Vector3 spawnPoint;
-    private SpriteRenderer spriteRenderer;
+
+    public Image image;
+
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -74,7 +76,7 @@ public class SpawnEnemyInfo : MonoBehaviour
     public void SetSpawnEnemy(AnimalInfoTable.Data spawnAnimalInfo)
     {
         this.spawnAnimalInfo = spawnAnimalInfo;
-        spriteRenderer.sprite = this.spawnAnimalInfo.Icon;
+        image.sprite = this.spawnAnimalInfo.Icon;
         spawnTime = this.spawnAnimalInfo.Spawn;
         //Image 스프라이트 설정 필요
 

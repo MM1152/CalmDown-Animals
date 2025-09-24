@@ -1,8 +1,5 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using NUnit.Framework.Constraints;
 public class PathTileRoad : MonoBehaviour
 {
     public Mesh[] roadMeshs;
@@ -98,13 +95,36 @@ public class PathTileRoad : MonoBehaviour
 
         if (count == 1)
         {
+            
+            //if((NextSide == Sides.TopRight && PrevSide == Sides.TopLeft)
+            //    || (NextSide == Sides.Left && PrevSide == Sides.TopLeft)
+            //    || (NextSide == Sides.Left && PrevSide == Sides.BottomLeft)
+            //    || (NextSide == Sides.BottomLeft && PrevSide == Sides.BottomRight)
+            //    || (NextSide == Sides.BottomRight && PrevSide == Sides.Right))
+            //{
+            //    meshFillter.sharedMesh = roadMeshs[7];
+            //    return;
+            //}
+
+            if(PrevSide == Sides.Left && NextSide == Sides.BottomRight)
+            {
+                meshFillter.sharedMesh = roadMeshs[7];
+                transform.eulerAngles += new Vector3(0f , -60f, 0f);
+                return;
+            }
+            if (PrevSide == Sides.Left && NextSide == Sides.TopRight)
+            {
+                meshFillter.sharedMesh = roadMeshs[7];
+                return;
+            }
+
             if (!((NextSide == Sides.TopRight && prevSide == Sides.TopLeft) 
                 || (NextSide == Sides.TopLeft && prevSide == Sides.Left)
                 || (NextSide == Sides.Left && prevSide == Sides.BottomLeft)
                 /*|| (nextSide == Sides.BottomRight && prevSide == Sides.BottomLeft)*/
                 /*|| (NextSide == Sides.BottomLeft && prevSide == Sides.Right)*/
                 || (NextSide == Sides.BottomLeft && prevSide == Sides.BottomRight)
-                || (NextSide == Sides.Right && prevSide == Sides.TopRight))) 
+                || (NextSide == Sides.Right && prevSide == Sides.TopRight)))
             {
                 transform.eulerAngles += new Vector3(0f, 240f, 0f);
             }
@@ -112,7 +132,8 @@ public class PathTileRoad : MonoBehaviour
         }
         if(count == 2)
         {
-            if(nextSide == Sides.BottomRight && prevSide == (Sides.Left | Sides.BottomRight))
+            if((nextSide == Sides.BottomRight && prevSide == (Sides.Left | Sides.BottomRight)) ||
+                nextSide == Sides.Left && prevSide == (Sides.Left | Sides.TopRight))
             {
                 meshFillter.sharedMesh = roadMeshs[4];
                 transform.eulerAngles += new Vector3(0f, 180f, 0f);
@@ -122,6 +143,50 @@ public class PathTileRoad : MonoBehaviour
             {
                 meshFillter.sharedMesh = roadMeshs[5];
                 transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
+            if (nextSide == Sides.BottomRight && prevSide == (Sides.Right | Sides.Left))
+            {
+                meshFillter.sharedMesh = roadMeshs[5];
+                transform.eulerAngles = new Vector3(0f, 180f, 0f);
+                return;
+            }
+            if (nextSide == Sides.TopRight && prevSide == (Sides.Left | Sides.Right))
+            {
+                meshFillter.sharedMesh = roadMeshs[5];
+                transform.eulerAngles = new Vector3(0f, 180f, 0f);
+                return;
+            }
+            if (nextSide == Sides.TopRight && prevSide == (Sides.Left | Sides.TopRight))
+            {
+                meshFillter.sharedMesh = roadMeshs[5];
+                transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
+            if (nextSide == Sides.Right && prevSide == (Sides.Right | Sides.BottomLeft))
+            {
+                meshFillter.sharedMesh = roadMeshs[4];
+                transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
+
+            if (nextSide == Sides.TopLeft && prevSide == (Sides.Left | Sides.BottomLeft) ||
+                (nextSide == Sides.BottomRight && prevSide == (Sides.Left | Sides.BottomLeft)))
+            {
+                meshFillter.sharedMesh = roadMeshs[8];
+                transform.eulerAngles += new Vector3(0f, -60f, 0f);
+                return;
+            }
+            if (nextSide == Sides.TopRight && prevSide == (Sides.Left | Sides.TopLeft))
+            {
+                meshFillter.sharedMesh = roadMeshs[8];
+                transform.eulerAngles += new Vector3(0f, 60f, 0f);
+                return;
+            }
+            if (nextSide == Sides.Right && prevSide == (Sides.BottomLeft | Sides.TopRight))
+            {
+                meshFillter.sharedMesh = roadMeshs[5];
+                transform.eulerAngles += new Vector3(0f, 120f, 0f);
                 return;
             }
 

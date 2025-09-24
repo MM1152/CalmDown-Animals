@@ -1,3 +1,5 @@
+using CsvHelper.Configuration.Attributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,24 +25,28 @@ public class AnimalInfoTable : DataTable
 
                 pathname = model.Split('/')[2];
 
-                Skin = Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0");
-                Animator = Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
-                Avatar = Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
-                Icon = Resources.Load<Sprite>(@$"FaceIcon/{pathname}");
-                if (Icon == null)
-                {
-                    Debug.Log("Fail To Load Icon :" + Animal_name);
-                }
+                //Skin = Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0");
+                //Animator = Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
+                //Avatar = Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
+                //Icon = Resources.Load<Sprite>(@$"FaceIcon/{pathname}");
+                //if (Icon == null)
+                //{
+                //    Debug.Log("Fail To Load Icon :" + Animal_name);
+                //}
             }
         }
         public float Spawn { get; set; }
         public string Kor_Name { get; set; }
         private string model;
 
-        public GameObject Skin;/* => Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0")*/
-        public RuntimeAnimatorController Animator;/* => Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}")*/
-        public Avatar Avatar;/* => Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar")*/
-        public Sprite Icon;/* => Resources.Load<Sprite>(@$"FaceIcon/{pathname}")*/
+        [Ignore]
+        public GameObject Skin => Resources.Load<GameObject>(@$"{model}/{pathname}_LOD0");
+        [Ignore]
+        public RuntimeAnimatorController Animator => Resources.Load<RuntimeAnimatorController>(@$"{model}/AC_{pathname}");
+        [Ignore]
+        public Avatar Avatar => Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
+        [Ignore]
+        public Sprite Icon => Resources.Load<Sprite>(@$"FaceIcon/{pathname}");
 
         private string pathname;
         public float Time => DataTableManager.animalSpeedTable.Get(Spd).Time; 

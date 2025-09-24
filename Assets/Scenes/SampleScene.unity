@@ -7356,7 +7356,7 @@ MonoBehaviour:
   goldText: {fileID: 1759496810}
   paymentText: {fileID: 1542046542}
   roundClearGoldText: {fileID: 1364228553}
-  maxWave: 10
+  maxWave: 26
   captureAnimalCount: 0
 --- !u!1 &332019324
 GameObject:

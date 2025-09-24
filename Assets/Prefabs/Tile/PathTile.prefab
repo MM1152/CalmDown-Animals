@@ -598,6 +598,9 @@ MonoBehaviour:
   - {fileID: 6054479668292126026, guid: 25942c2c89374854786e55d2421377c3, type: 3}
   - {fileID: -2359130784434930340, guid: 35ecdf16e12d3e04b999850c42f67ff9, type: 3}
   - {fileID: 4852995666286988526, guid: da83f719e0d4d4a48af04ad17e927256, type: 3}
+  - {fileID: -9208122355427140850, guid: 23eb01dc9e2af774d89045742950f7ed, type: 3}
+  - {fileID: -2984629038838911022, guid: 591d6b7291148514da2ffde2c042634c, type: 3}
+  - {fileID: -6027856916626460508, guid: 955e553f4a6b4274c89504023429e20c, type: 3}
   meshFillter: {fileID: 0}
   nextTile: {fileID: 0}
   prevSide: 0

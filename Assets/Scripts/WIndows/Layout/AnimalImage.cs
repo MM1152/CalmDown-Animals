@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class AnimalImage : MonoBehaviour
+{
+    private Image image;
+
+    private void Awake()
+    {
+        image = GetComponent<Image>();
+    }
+
+    public void UpdateSlot(Sprite image)
+    {
+        this.image.sprite = image;
+    }
+}
