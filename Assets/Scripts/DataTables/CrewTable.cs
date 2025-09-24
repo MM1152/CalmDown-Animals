@@ -20,6 +20,7 @@ public class CrewTable : DataTable
 
         public int GetSpawnAbleRound => DataTableManager.crewRankTable.Get(rank_ID).Buyround;
         public string GetColorInfomation => DataTableManager.crewRankTable.Get(rank_ID).Color;
+        public Color Color => DataTableManager.crewRankTable.Get(rank_ID).GetColor;
     }
 
     private readonly Dictionary<int, Data> crewTable = new Dictionary<int, Data>();

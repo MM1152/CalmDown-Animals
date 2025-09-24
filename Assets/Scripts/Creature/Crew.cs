@@ -69,6 +69,7 @@ public class Crew : MonoBehaviour
 
         transform.position = underTile.transform.position + Vector3.up * 0.5f;
         FindAroundTiles();
+        underTile.SetTileinfomation(TileType.Crew, DataTableManager.crewTable.Get(Rank).Color);
         underTile.Type = TileType.Crew;
     }
 

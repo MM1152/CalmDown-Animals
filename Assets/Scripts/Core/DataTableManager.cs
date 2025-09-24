@@ -17,12 +17,17 @@ public static class DataTableManager
     public static EquipmentType equipmentTypeTable => Get<EquipmentType>(DataTableIds.EquipmentType);
     public static CrewRankTable crewRankTable => Get<CrewRankTable>(DataTableIds.CrewRankTable);
 
+    public static bool init { get; set; }
+
     static DataTableManager()
     {
-        Init();
+        if(!init)
+        {
+            Init();
+        }
     }
 
-    private static void Init()
+    public static void Init()
     {
         StringTable stringTable = new StringTable();
         stringTable.Load(DataTableIds.StringTableIds);
@@ -64,6 +69,8 @@ public static class DataTableManager
         tables.Add(DataTableIds.EquipmentType, equipmentType);
         tables.Add(DataTableIds.EquipmentInfo, equipmentInfo);
         tables.Add(DataTableIds.CrewRankTable, crewRanakTable);
+
+        init = true;
     }
 
     public static T Get<T>(string id) where T : DataTable

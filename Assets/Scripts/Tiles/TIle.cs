@@ -41,7 +41,6 @@ public class Tile : MonoBehaviour
                 case TileType.Path:
                     break;
                 case TileType.Crew:
-                    material[0].color = Color.blue;
                     break;
             }
         }
@@ -51,5 +50,10 @@ public class Tile : MonoBehaviour
     {
         renderer = GetComponent<Renderer>();
         material = renderer.materials;
+    }
+    public void SetTileinfomation(TileType type , Color color)
+    {
+        Type = type;
+        material[0].color = color;
     }
 }

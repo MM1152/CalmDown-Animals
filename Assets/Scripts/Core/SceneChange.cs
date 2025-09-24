@@ -10,6 +10,9 @@ public class SceneChange : MonoBehaviour
     private Button button;
     private void Start()
     {
+        if(DataTableManager.init)
+        {
+        }
         button = GetComponent<Button>();
         button.onClick.AddListener(() => SceneManager.LoadScene(changeSceneId));       
     }
