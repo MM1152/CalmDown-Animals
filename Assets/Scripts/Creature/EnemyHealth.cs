@@ -14,6 +14,7 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
     public Hpbar slider;
 
     public event Action onDie;
+    public event Action onHit;
 
     public void Init(int maxHp)
     {
@@ -32,6 +33,7 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
             return true;
         }
 
+        onHit?.Invoke();
         return false;
     }
 
@@ -39,6 +41,7 @@ public class EnemyHealth : MonoBehaviour , IDamageAble
     {
         isDie = true;
         onDie?.Invoke();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        Destroy(gameObject, 2);
     }
 }

@@ -59,6 +59,7 @@ public static class HexaUtility
 public static class TagIds
 {
     public static readonly string GameManagerTag = "GameController";
+    public static readonly string ParticleSpawnerTag = "ParticleSpawner";
 
 }
 

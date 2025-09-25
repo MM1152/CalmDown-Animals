@@ -145,7 +145,7 @@ public class Crew : MonoBehaviour
                 transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             }
 
-            if (Time.time > lastAttackTime + data.Crew_atkspd + weapon.GetCaptureSpeed())
+            if (target != null && Time.time > lastAttackTime + data.Crew_atkspd + weapon.GetCaptureSpeed())
             {
                 lastAttackTime = Time.time;
 

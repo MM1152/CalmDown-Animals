@@ -48,6 +48,7 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
     public void OnPointerClick(PointerEventData eventData)
     {
         spawner.CrewHire(rank);
+        spawner.ClearDragCrew();
     }
 
     private void SetTexts()

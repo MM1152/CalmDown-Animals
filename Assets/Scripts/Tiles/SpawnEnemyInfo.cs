@@ -19,15 +19,21 @@ public class SpawnEnemyInfo : MonoBehaviour
     private Vector3 spawnPoint;
 
     public Image image;
-
+    private ParticleSpawner particleSpawner;
     private void Awake()
     {
         spawnCountText = transform.GetComponentInChildren<TextMeshProUGUI>();
+        
     }
 
     private void Start()
     {
         Debug.Log("Create");
+        var findParticleSpawner = GameObject.FindWithTag(TagIds.ParticleSpawnerTag);
+        if(findParticleSpawner != null)
+        {
+            particleSpawner = findParticleSpawner.GetComponent<ParticleSpawner>();
+        }
         var find = GameObject.FindWithTag(TagIds.GameManagerTag);
         if(find != null)
         {
@@ -99,6 +105,18 @@ public class SpawnEnemyInfo : MonoBehaviour
         if (health != null)
         {
             health.onDie += spawner.CheckDieEnemy;
+            health.onDie += () =>
+            {
+                var item = particleSpawner.ShowObject(ParticleType.Die);
+                item.transform.position = enemy.meshObject.transform.position + Vector3.up;
+                item.Play();
+            };
+            health.onHit += () =>
+            {
+                var item = particleSpawner.ShowObject(ParticleType.Hit);
+                item.transform.position = enemy.meshObject.transform.position + Vector3.up;
+                item.Play();
+            };
         }
 
         enemy.Spawn(spawnTile , spawnAnimalInfo , spawnPoint);

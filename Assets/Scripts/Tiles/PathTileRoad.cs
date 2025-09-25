@@ -124,7 +124,8 @@ public class PathTileRoad : MonoBehaviour
                 /*|| (nextSide == Sides.BottomRight && prevSide == Sides.BottomLeft)*/
                 /*|| (NextSide == Sides.BottomLeft && prevSide == Sides.Right)*/
                 || (NextSide == Sides.BottomLeft && prevSide == Sides.BottomRight)
-                || (NextSide == Sides.Right && prevSide == Sides.TopRight)))
+                || (NextSide == Sides.Right && prevSide == Sides.TopRight)
+                || (NextSide == Sides.BottomRight && prevSide == Sides.Right)))
             {
                 transform.eulerAngles += new Vector3(0f, 240f, 0f);
             }

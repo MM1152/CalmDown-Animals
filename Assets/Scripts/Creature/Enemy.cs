@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     private PathTile prevTile;
 
     public EnemyHealth health;
+
+    public GameObject meshObject;
     private GameManager gameManager;
     private AnimalInfoTable.Data data;
     
@@ -64,10 +66,11 @@ public class Enemy : MonoBehaviour
 
         Debug.Log(data.Animal_name);
 
-        GameObject skin = Instantiate(data.Skin, transform);
-        animator = skin.GetOrAddComponent<Animator>();
+        meshObject = Instantiate(data.Skin, transform);
+        animator = meshObject.GetOrAddComponent<Animator>();
         animator.runtimeAnimatorController = data.Animator;
         animator.avatar = data.Avatar;
+        meshObject.transform.localPosition += Vector3.right * Random.Range(-0.5f, 0.5f);
     }
 
     private void Update()

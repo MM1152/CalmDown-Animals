@@ -31,7 +31,7 @@ public class CrewRankTable : DataTable
         {
             rankTable.Add(data.rank_ID, data);
         }
-    }
+        }
 
     public Data Get(int rank_Id)
     {
