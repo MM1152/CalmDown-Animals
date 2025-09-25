@@ -24,6 +24,6 @@ public class EditorWindow : GenericWindow
     public override void Close()
     {
         base.Close();
-        Status.ShowAnimalInfo = false;
+        Status.ShowAnimalInfo = true;
     }
 }

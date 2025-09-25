@@ -10,6 +10,23 @@ public class PathTile : Tile
     public int F => G + H;
     public List<PathTile> Neighbor = new List<PathTile>();
 
+    public override TileType Type { 
+        get => base.Type;
+        set
+        {
+            base.Type = value;
+
+            if((Type & (TileType.Path | TileType.Blocked | TileType.Crew)) > 0)
+            {
+                ClearDesignTile();
+            }
+            else
+            {
+                ShowDesignTile();
+            }
+        }
+    }
+
     private TileManager tileManager;
     public PathTile ParentTile { get; set; } = null;
     public DrawTile ArriveDrawTile { get; set; }
@@ -20,6 +37,9 @@ public class PathTile : Tile
     public bool SetAbleBlockedTile { get; set; }
     public int CrewKillCount { get; set; }
 
+    public GameObject[] designObjets;
+    public int designIdx = -2;
+
     public static int operator -(PathTile x , PathTile y)
     {
         return (int)Mathf.Round(Mathf.Abs(x.transform.position.x - y.transform.position.x) + Mathf.Abs(x.transform.position.z - y.transform.position.z));
@@ -28,15 +48,33 @@ public class PathTile : Tile
     protected override void Awake()
     {
         base.Awake();
-        Type = TileType.None;
     }
 
     public void UpdatePathTile(Map.DrawData data , TileManager tileManager)
     {
+        designIdx = Random.Range(-1, designObjets.Length);
+        Type = TileType.None;
+
+        ShowDesignTile();
+
         transform.position = data.Position;
         transform.eulerAngles = data.Rotation;
 
         this.tileManager = tileManager;
+    }
+
+    private void ShowDesignTile()
+    {
+        if (designIdx <= -1) return;
+
+        designObjets[designIdx].SetActive(true);
+    }
+
+    private void ClearDesignTile()
+    {
+        if (designIdx <= -1) return;
+
+        designObjets[designIdx].SetActive(false);
     }
 
     public void ChangeColor()
@@ -44,6 +82,7 @@ public class PathTile : Tile
         if (Type == TileType.Path)
         {
             material[0].color = Color.green;
+            
         }
     }
     public void ResetColor()

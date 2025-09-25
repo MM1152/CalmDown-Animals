@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour
     private new Renderer renderer;
     protected Material[] material;
     private TileType type;
-    public TileType Type
+    public virtual TileType Type
     {
         get => type;
         set
