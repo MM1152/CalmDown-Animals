@@ -4,7 +4,6 @@ public class DebugMode : MonoBehaviour
 {
 #if DEBUG
     public Button setPrevWaveButton;
-    public Button setFirstWaveButton;
     public Button setNextWaveButton;
 
     public Button restartRound;
@@ -21,11 +20,8 @@ public class DebugMode : MonoBehaviour
 
         setPrevWaveButton.onClick.AddListener(() =>
         {
+            if (DataTableManager.roundTable.Get(gameManager.Wave).Map_Size != DataTableManager.roundTable.Get(gameManager.Wave - 1).Map_Size) return;
             gameManager.Wave--;
-        });
-        setFirstWaveButton.onClick.AddListener(() =>
-        {
-            gameManager.Wave = 1;
         });
 
         restartRound.onClick.AddListener(() =>

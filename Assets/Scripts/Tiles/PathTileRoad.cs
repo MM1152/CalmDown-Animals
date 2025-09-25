@@ -117,6 +117,18 @@ public class PathTileRoad : MonoBehaviour
                 meshFillter.sharedMesh = roadMeshs[7];
                 return;
             }
+            if (PrevSide == Sides.TopRight && NextSide == Sides.Left)
+            {
+                meshFillter.sharedMesh = roadMeshs[7];
+                transform.eulerAngles = new Vector3(0f, 120f, 0f);
+                return;
+            }
+            if (PrevSide == Sides.BottomLeft && NextSide == Sides.Right)
+            {
+                meshFillter.sharedMesh = roadMeshs[7];
+                transform.eulerAngles = new Vector3(0f, 300f, 0f);
+                return;
+            }
 
             if (!((NextSide == Sides.TopRight && prevSide == Sides.TopLeft) 
                 || (NextSide == Sides.TopLeft && prevSide == Sides.Left)
@@ -125,7 +137,8 @@ public class PathTileRoad : MonoBehaviour
                 /*|| (NextSide == Sides.BottomLeft && prevSide == Sides.Right)*/
                 || (NextSide == Sides.BottomLeft && prevSide == Sides.BottomRight)
                 || (NextSide == Sides.Right && prevSide == Sides.TopRight)
-                || (NextSide == Sides.BottomRight && prevSide == Sides.Right)))
+                || (NextSide == Sides.BottomRight && prevSide == Sides.Right)
+                || (NextSide == Sides.Left && prevSide == Sides.BottomRight)))
             {
                 transform.eulerAngles += new Vector3(0f, 240f, 0f);
             }

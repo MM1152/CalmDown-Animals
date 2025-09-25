@@ -151,17 +151,19 @@ public class GameManager : MonoBehaviour
         if (wave == maxWave && !waveFail)
         {
             popupManager.Open(Popup.ScorePopUp);
+            enemySpawner.ClearAllAnimals();
             return;
         }
         else if (waveFail)
         {
+            enemySpawner.ClearAllAnimals();
             popupManager.Open(Popup.ScorePopUp);
             return;
         }
         else
         {
             wave++;
-        }
+        }   
         endWave?.Invoke();
 
         SaveLoadManager.Data.gold = gold;

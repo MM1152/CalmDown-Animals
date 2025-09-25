@@ -7,6 +7,8 @@ public class CrewReadyWindow : GenericWindow
     public CrewReadyTab readyTab;
     public Button backButton;
 
+    private Crew currentCrew;
+
     private void Awake()
     {
         backButton.onClick.AddListener(() => manager.Open(Window.EditorWindow));
@@ -28,11 +30,13 @@ public class CrewReadyWindow : GenericWindow
 
     private void Update()
     {
-        if(crewManager.DragCrew && !readyTab.gameObject.activeSelf)
+        if((crewManager.DragCrew != null && !readyTab.gameObject.activeSelf) || 
+            (crewManager.DragCrew != null && currentCrew != crewManager.DragCrew))
         {
             readyTab.Open(crewManager.DragCrew);
+            currentCrew = crewManager.DragCrew;
         }
-        else if(!crewManager.DragCrew)
+        else if(!crewManager.DragCrew && readyTab.gameObject.activeSelf)
         {
             readyTab.Close();
         }

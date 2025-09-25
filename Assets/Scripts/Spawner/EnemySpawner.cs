@@ -39,6 +39,14 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    public void ClearAllAnimals()
+    {
+        foreach(var info in infoTiles)
+        {
+            info.ClearAllAnimals();
+        }
+    }
+
     private void EndWaveToSetInfoTiles()
     {
         copySpawnCount = 0;

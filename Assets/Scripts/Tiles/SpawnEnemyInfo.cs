@@ -40,16 +40,21 @@ public class SpawnEnemyInfo : MonoBehaviour
             gameManager = find.GetComponent<GameManager>();
             gameManager.endWave += () =>
             {
-                foreach(var enemy in spawnList)
-                {   
-                    if(enemy != null)
-                    {
-                        Destroy(enemy.gameObject);
-                    }
-                }
-                spawnList.Clear();
+                ClearAllAnimals();
             };
         }
+    }
+
+    public void ClearAllAnimals()
+    {
+        foreach (var enemy in spawnList)
+        {
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+        spawnList.Clear();
     }
 
     private void Update()

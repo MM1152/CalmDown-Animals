@@ -94,7 +94,7 @@ public class TileManager : MonoBehaviour
     private void ShowAnimalInfomation()
     {
         if (!Status.ShowAnimalInfo) return;
-        if (TouchManager.TouchType == TouchType.Tab)
+        if (TouchManager.TouchType == TouchType.Tab && !TouchManager.TouchStartInUI())
         {
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
             if(Physics.Raycast(ray, out RaycastHit hit , Mathf.Infinity , infoMask))

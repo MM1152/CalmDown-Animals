@@ -47,21 +47,24 @@ public class ScorePopup : GenericPopup
         string clear;
         if(gameManager.WaveClear)
         {
+            titleText.color = Color.red;
             clear = DataTableManager.stringTable.Get(4);
         }else
         {
+            titleText.color = Color.black;
             clear = DataTableManager.stringTable.Get(5);
         }
         titleText.text = clear;
 
-        clearGameScoreText.text = gameManager.WaveClear ? "+ 1000" : "- 1000";
-        totalScore += gameManager.WaveClear ? 1000 : -1000;
+        clearGameScoreText.text = gameManager.WaveClear ? "+ 1000" : "0";
+        totalScore += gameManager.WaveClear ? 1000 : 0;
 
         roundText.text = gameManager.Wave.ToString();
         roundScoreText.text = "+ " + (gameManager.Wave * 1000).ToString();
         totalScore += (gameManager.Wave * 1000);
 
         clearTimeText.text = gameManager.timerText.text;
+        clearTimeScoreText.color = Color.red;
         clearTimeScoreText.text = "- " + (gameManager.timerToInt * 10).ToString();
         totalScore -= (gameManager.timerToInt * 10);
 
@@ -100,8 +103,8 @@ public class ScorePopup : GenericPopup
     {
         for(; startIdx < uguis.Length; startIdx++)
         {
-            uguis[startIdx].SetActive(true);
             yield return new WaitForSeconds(1f);
+            uguis[startIdx].SetActive(true);
         }
 
         yield return new WaitUntil(() => TouchManager.TouchType == TouchType.Tab);
