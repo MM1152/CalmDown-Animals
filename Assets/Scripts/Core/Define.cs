@@ -116,6 +116,8 @@ public enum Popup
     TextPopUp,
     ScorePopUp,
     AnimalInfoPopup,
+    //OptionTabPopup,
+    //OptionPopup,
 }
 
 public enum CrewRank

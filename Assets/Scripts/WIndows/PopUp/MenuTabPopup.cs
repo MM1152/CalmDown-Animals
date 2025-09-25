@@ -1,0 +1,52 @@
+using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class MenuTabPopup : GenericPopup
+{
+    public Button optionButton;
+    public Button backToTileButton;
+
+    public GameObject target;
+
+    private Action action;
+
+    public override void Init(PopupManager manager)
+    {
+        base.Init(manager);
+        optionButton.onClick.AddListener(() =>
+        {
+            //action = () => manager.Open(Popup.OptionPopup);
+        });
+        backToTileButton.onClick.AddListener(() => SceneManager.LoadScene(0));
+    }
+    private void LateUpdate()
+    {
+        if(action != null)
+        {
+            action.Invoke();
+            action = null;
+        }
+    }
+    public override bool Close()
+    {   
+        if(TouchManager.TouchStartInUI())
+        {
+            var hit = TouchManager.GetTouchPositionUI(TouchManager.GetStartPosition());
+            if (hit.Count > 0)
+            {
+                foreach(var obj in hit)
+                {
+                    if(obj.gameObject == target)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return base.Close();
+    }
+}
+    

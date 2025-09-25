@@ -107,7 +107,7 @@ public class ScorePopup : GenericPopup
             uguis[startIdx].SetActive(true);
         }
 
-        yield return new WaitUntil(() => TouchManager.TouchType == TouchType.Tab);
+        yield return new WaitUntil(() => TouchManager.touchType == TouchType.Tab);
 
         co = null;
         SceneManager.LoadScene("TitleScene");

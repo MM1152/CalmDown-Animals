@@ -189,7 +189,7 @@ public class CrewManager : MonoBehaviour
 
 
         // 이미 필드에 소환되어있는 대원 선택시
-        if (TouchManager.TouchType == TouchType.Tab && !TouchManager.TouchStartInUI())
+        if (TouchManager.touchType == TouchType.Tab && !TouchManager.TouchStartInUI())
         {
             // 기존에 드래그하던 대원이 있다면 대원 취소
             ClearDragCrew();
@@ -232,14 +232,14 @@ public class CrewManager : MonoBehaviour
             Status.CameraDrag = false;
             Vector3 touchPosition = Vector3.zero;
 
-            if (TouchManager.TouchType == TouchType.Drag)
+            if (TouchManager.touchType == TouchType.Drag)
             {
                 touchPosition = TouchManager.GetDragWorldPosition();
                 DragCrew.transform.position = new Vector3(touchPosition.x, 1, touchPosition.z);
                 isSpawn = true;
                 DragCrew.UnShowAttackRadius();
             }
-            else if (TouchManager.TouchType == TouchType.None && isSpawn)
+            else if (TouchManager.touchType == TouchType.None && isSpawn)
             {
                 Status.CameraDrag = true;
 

@@ -1,11 +1,32 @@
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Reference")]
     public TileManager tileManager;
     public EnemySpawner enemySpawner;
+    public WindowManager windowManager;
+    public PopupManager popupManager;
+
+    [Header("Texts")]
+    public TextMeshProUGUI waveText;
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI goldText;
+    public TextMeshProUGUI paymentText;
+    public TextMeshProUGUI roundClearGoldText;
+
+    [Header("OptionWindows")]
+    public Button optionButton;
+    public GameObject optionTab;
+
+    [Header("Debug")]
+    public int timerToInt = 0;
+    public int maxWave;
+    public int captureAnimalCount;
+
     private int wave = 1;
     public int Wave
     {
@@ -51,23 +72,13 @@ public class GameManager : MonoBehaviour
             ChangeRoundClearGold(roundClearGold - payment);
         }
     }
-
     private float timer = 0;
-    public int timerToInt = 0;
-    private bool GameFin { get; set; }
 
-    public WindowManager windowManager;
-    public PopupManager popupManager;
+    private bool GameFin { get; set; }
 
     public event Action startWave;
     public event Action endWave;
 
-    public TextMeshProUGUI waveText;
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI goldText;
-    public TextMeshProUGUI paymentText;
-    public TextMeshProUGUI roundClearGoldText;
-    public int maxWave;
     public bool WaveStart { get; private set; } = false;
 
     public int AllAnimalSpawnCount
@@ -80,7 +91,6 @@ public class GameManager : MonoBehaviour
         }
     }
     private int allAnimalSpawnCount;
-    public int captureAnimalCount ;
     private int currentSpawnCount;
     private int escapeCount;
     public bool WaveClear { get; set; }
@@ -105,7 +115,10 @@ public class GameManager : MonoBehaviour
         {
             tileManager.DataLoadFail();
         }
-
+        optionButton.onClick.AddListener(() =>
+        {
+            //popupManager.Open(Popup.OptionTabPopup);
+        });
         RoundClearGold = DataTableManager.roundTable.Get(Wave).RewardGold;
     }
 
@@ -180,7 +193,9 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.N))
+
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.N))
         {
             EndWave();
         }

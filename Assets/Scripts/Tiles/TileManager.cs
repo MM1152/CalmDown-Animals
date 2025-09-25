@@ -94,7 +94,7 @@ public class TileManager : MonoBehaviour
     private void ShowAnimalInfomation()
     {
         if (!Status.ShowAnimalInfo) return;
-        if (TouchManager.TouchType == TouchType.Tab && !TouchManager.TouchStartInUI())
+        if (TouchManager.touchType == TouchType.Tab && !TouchManager.TouchStartInUI())
         {
             Ray ray = Camera.main.ScreenPointToRay(TouchManager.GetDragPos());
             if(Physics.Raycast(ray, out RaycastHit hit , Mathf.Infinity , infoMask))
@@ -227,7 +227,7 @@ public class TileManager : MonoBehaviour
         //    }
         //} 
 
-        if (TouchManager.TouchType != TouchType.Drag && TouchManager.TouchType != TouchType.Tab) return;
+        if (TouchManager.touchType != TouchType.Drag && TouchManager.touchType != TouchType.Tab) return;
         TileType targetTile = type == TileType.Path ? TileType.None : TileType.Path;
         var tile = GetTile();
         if(tile != null && tile.Type == targetTile && tile != arriveTile && !startTile.Contains(tile))
@@ -402,8 +402,10 @@ public class TileManager : MonoBehaviour
             SetArriveTile(drawArriveTile);
         }
         FindNeighbor();
+        //ClearAllTestTile();
+        //pathFind.FindMinCost(startTile , arriveTile);
     }
-    
+
     public void ClearAllTiles()
     {
         foreach(var tile in tileList)
@@ -412,6 +414,14 @@ public class TileManager : MonoBehaviour
             {
                 tile.Type = TileType.None;
             }
+        }
+    }
+
+    public void ClearAllTestTile()
+    {
+        foreach (var tile in tileList)
+        {
+             tile.testType = TestType.None;
         }
     }
 

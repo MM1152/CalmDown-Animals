@@ -33,7 +33,7 @@ public class SpawnCrewEvent : MonoBehaviour , IEndDragHandler ,IDragHandler , IP
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (spawner.GetHireCount(rank) - spawner.GetPlaceCount(rank) > 0 && TouchManager.TouchType == TouchType.Drag && !spawn)
+        if (spawner.GetHireCount(rank) - spawner.GetPlaceCount(rank) > 0 && TouchManager.touchType == TouchType.Drag && !spawn)
         {
             spawner.Spawn(rank);
             spawn = true;

@@ -1,0 +1,77 @@
+﻿Animal_ID,Animal_name,Kor_Name,CR_ID,Size_ID,Spd,CaptureHP,Range_min,Range_max,Spawn,Model,Icon
+207,Kookaburra,웃음물총새,1,0,5,20,5,5,1,0.Animal/Mypreset/Donkey
+203,Duck,오리,1,1,3,35,5,8,2,0.Animal/Mypreset/Duck
+205,Little Owl,금눈쇠올빼미,1,1,4,33,5,6,2.5,0.Animal/Mypreset/Jackal
+201,Rabbit,토끼,1,1,3,35,5,8,2,0.Animal/Mypreset/Kookaburra
+206,Raccoon,라쿤,1,1,3,35,5,8,2,0.Animal/Mypreset/Little Owl
+202,SnowWeasel,흰족제비,1,1,4,33,4,5,2.5,0.Animal/Mypreset/Pig
+204,Wild Rooster,야생 닭,1,1,3,35,5,8,2,0.Animal/Mypreset/Rabbit
+209,Donkey,당나귀,1,2,2,47,5,10,2.5,0.Animal/Mypreset/Raccoon
+211,Jackal,자칼,1,2,3,45,5,8,3,0.Animal/Mypreset/Red Fox
+210,Pig,돼지,1,2,2,47,5,10,2.5,0.Animal/Mypreset/SnowWeasel
+208,Red Fox,붉은여우,1,2,3,45,5,8,3,0.Animal/Mypreset/Wild Rooster
+213,Kingfisher,물총새,2,0,5,30,3,3,1,0.Animal/Mypreset/ArcticFox
+214,GilaMonster,독도마뱀,2,1,3,45,5,8,2,0.Animal/Mypreset/Baboon
+220,Hedgehog,고슴도치,2,1,3,45,5,8,2,0.Animal/Mypreset/Eagle
+217,ArcticFox,북극여우,2,2,4,53,4,5,3.5,0.Animal/Mypreset/Flamingo
+227,Baboon,개코원숭이,2,2,3,55,5,8,3,0.Animal/Mypreset/GilaMonster
+226,Eagle,독수리,2,2,4,53,4,5,3.5,0.Animal/Mypreset/Gazelle
+216,Flamingo,플라밍고,2,2,3,55,5,8,3,0.Animal/Mypreset/Hyena
+215,Hyena,하이에나,2,2,3,55,5,8,3,0.Animal/Mypreset/Kingfisher
+218,Penguin,팽귄,2,2,3,55,5,8,3,0.Animal/Mypreset/Ostrich
+221,Grant's Gazelle,그랜트 가젤,2,3,3,65,5,8,4,0.Animal/Mypreset/Ox
+224,Ostrich,타조,2,3,4,63,4,5,4.5,0.Animal/Mypreset/Penguin
+222,Ox,들소,2,3,2,67,5,10,3.5,0.Animal/Mypreset/SeaLion
+223,SeaLion,바다사자,2,3,2,67,5,10,3.5,0.Animal/Mypreset/Hedgehog
+219,Wolf,늑대,2,3,3,65,5,8,4,0.Animal/Mypreset/Wolf
+225,Zebra,얼룩말,2,3,3,65,5,8,4,0.Animal/Mypreset/Wombat
+212,Wombat,웜뱃,3,0,4,43,4,5,1.5,0.Animal/Mypreset/Zebra
+245,Wild Hamster,야생 햄스터,3,0,5,40,3,3,1,0.Animal/Mypreset/Antelope
+228,Quokka,쿼카,3,1,3,55,5,8,2,0.Animal/Mypreset/Armadillo
+241,Antelope,영양,3,2,3,65,5,8,3,0.Animal/Mypreset/Buffalo
+242,Armadillo,아르마딜로,3,2,2,67,5,10,2.5,0.Animal/Mypreset/Cheetah
+229,Cheetah,치타,3,2,4,63,4,5,3.5,0.Animal/Mypreset/Giraffe
+243,GoldenEagel,황금독수리,3,2,4,63,4,5,3.5,0.Animal/Mypreset/GoldenEagle
+231,Hog,멧돼지,3,2,3,65,5,8,3,0.Animal/Mypreset/Hippo
+232,Hornbill,코뿔새,3,2,3,65,5,8,3,0.Animal/Mypreset/Hog
+234,SeaOtter,해달,3,2,3,65,5,8,3,0.Animal/Mypreset/Hornbill
+230,SnowOwl,눈올빼미,3,2,3,65,5,8,3,0.Animal/Mypreset/PolarBear
+233,TasmanianDevil,테즈메이니아데빌,3,2,4,63,4,5,3.5,0.Animal/Mypreset/Quokka
+197,RedPanda,레서팬다,3,2,3,65,5,8,3,0.Animal/Mypreset/Reindeer
+239,Buffalo,버팔로,3,3,3,75,5,8,4,0.Animal/Mypreset/SeaOtter
+235,Hippo,하마,3,3,2,77,5,10,3.5,0.Animal/Mypreset/SnowOwl
+236,PolarBear,북극곰,3,3,3,75,5,8,4,0.Animal/Mypreset/TasmanianDevil
+237,Reindeer,순록,3,3,3,75,5,8,4,0.Animal/Mypreset/Walrus
+238,Walrus,바다코끼리,3,3,2,77,5,10,3.5,0.Animal/Mypreset/RedPanda
+240,Giraffe,기린,3,4,3,85,5,8,5,0.Animal/Mypreset/Camel
+244,Possum,쥐주머니,4,0,5,50,3,3,1,0.Animal/Mypreset/Crocodile
+260,Fiji Crested Iguana,피지볏 이구아나,4,1,3,65,5,8,2,0.Animal/Mypreset/Elephant
+246,Iriomote Cat,이리오모테 삵,4,1,4,63,4,5,2.5,0.Animal/Mypreset/Fiji Crested Iguana
+256,Golden Lancehead,황금창머리 살무사,4,2,3,75,5,8,3,0.Animal/Mypreset/Golden Lancehead
+257,Peacock,공작새,4,2,3,75,5,8,3,0.Animal/Mypreset/Gorilla
+247,Sloth,나무느림보,4,2,1,80,5,15,3,0.Animal/Mypreset/Hamster
+259,Camel,낙타,4,3,3,85,5,8,4,0.Animal/Mypreset/Iriomote Cat
+250,Crocodile,악어,4,3,3,85,5,8,4,0.Animal/Mypreset/Lion
+249,Gorilla,고릴라,4,3,3,85,5,8,4,0.Animal/Mypreset/Orinoco Crocodile
+253,Lion,사자,4,3,3,85,5,8,4,0.Animal/Mypreset/Peacock
+255,Orinoco Crocodile,오리노코 악어,4,3,2,87,5,10,3.5,0.Animal/Mypreset/Possum
+248,Rhino,코뿔소,4,3,3,85,5,8,4,0.Animal/Mypreset/Rhino
+258,SnappingTurtle,늑대거북,4,3,1,90,5,15,4,0.Animal/Mypreset/Sloth
+252,SnowLeopard,눈표범,4,3,4,83,4,5,4.5,0.Animal/Mypreset/SnappingTurtle
+251,Tiger,호랑이,4,3,4,83,4,5,4.5,0.Animal/Mypreset/SnowLeopard
+198,Panda,판다,4,3,3,85,5,8,4,0.Animal/Mypreset/Tiger
+254,Elephant,코끼리,4,4,2,97,5,10,4.5,0.Animal/Mypreset/Panda
+273,Agalychnis lemur,여우원숭이 청개구리,5,0,4,63,4,5,1.5,0.Animal/Mypreset/Agalychnis lemur
+266,Candango mouse,칸당고 쥐,5,0,5,60,3,3,1,0.Animal/Mypreset/Candango mouse
+261,Heath hen,뉴잉글랜드초원뇌조,5,1,5,70,3,3,2,0.Animal/Mypreset/Slime
+264,Finsch's duck,핀쉬오리,5,2,3,85,5,8,3,0.Animal/Mypreset/Dragon
+262,King Island emu,킹섬에뮤,5,2,4,83,4,5,3.5,0.Animal/Mypreset/Finsch's duck
+267,Lord Howe pigeon,로드하우 비둘기,5,2,3,85,5,8,3,0.Animal/Mypreset/Florida black wolf
+265,Norfolk Boobook,노펙 부엉이,5,2,4,83,4,5,3.5,0.Animal/Mypreset/Hawksbill Sea Turtle
+268,Red-headed macaw,붉은머리앵무새,5,2,4,83,4,5,3.5,0.Animal/Mypreset/Heath hen
+263,Florida black wolf,플로리다 검은늑대,5,3,4,93,4,5,4.5,0.Animal/Mypreset/King Island emu
+274,Hawksbill Sea Turtle,매부리바다거북,5,3,2,97,5,10,3.5,0.Animal/Mypreset/Lord Howe pigeon
+272,Seed Monster,씨앗 괴물,5,3,1,100,5,15,4,0.Animal/Mypreset/Norfolk Boobook
+271,Slime,슬라임,5,3,2,97,5,10,3.5,0.Animal/Mypreset/Seed Monster
+270,Dragon,용,5,4,3,105,5,8,5,0.Animal/Mypreset/Red-headed macaw
+269,Phoenix,불사조,5,4,4,103,4,5,5.5,0.Animal/Mypreset/Phoenix

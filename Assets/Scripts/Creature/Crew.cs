@@ -162,7 +162,7 @@ public class Crew : MonoBehaviour
                     animator.SetTrigger(Ani_ShootGun);
                 }
                 transform.position = underTile.transform.position;
-                if (target.Hit(weapon.GetCaptureDmg()))
+                if (target.Hit(weapon.GetCaptureDmg() + data.Crew_capture))
                 {
                     underTile.CrewKillCount++;
                     spawner.gamemanager.captureAnimalCount++;

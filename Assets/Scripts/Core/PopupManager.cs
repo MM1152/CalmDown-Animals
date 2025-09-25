@@ -9,6 +9,7 @@ public class PopupManager : MonoBehaviour
     private Stack<GenericPopup> openPopups = new Stack<GenericPopup>();
 
     Coroutine co;
+    private bool isOpening;
 
     private void Start()
     {
@@ -21,23 +22,26 @@ public class PopupManager : MonoBehaviour
 
     public void Update()
     {
-        if(TouchManager.TouchType == TouchType.Tab)
+        if(TouchManager.touchType == TouchType.Tab)
         {
             Close();
         }
-#if UNITY_EDITOR
-        else if (Input.GetMouseButtonDown(0))
-        {
-            Close();
-        }
-#endif
+
+        //#if UNITY_EDITOR
+        //        else if (Input.GetMouseButtonDown(0))
+        //        {
+        //            Close();
+        //        }
+        //#endif
     }
+
 
     public GenericPopup Open(Popup id)
     {
-        if(co != null)
+        if (co != null)
         {
             StopCoroutine(co);
+            isOpening = false;
         }
         co = StartCoroutine(OpenCo(id));
         return popups[(int)id];
@@ -57,9 +61,11 @@ public class PopupManager : MonoBehaviour
 
     private IEnumerator OpenCo(Popup id)
     {
-        yield return null;
-        openPopups.Push(popups[(int)id]);
         popups[(int)id].Open();
+        Debug.Log("Open");
+        yield return null;
+        Debug.Log("Push Queue");
+        openPopups.Push(popups[(int)id]);   
         co = null;
     }
 }

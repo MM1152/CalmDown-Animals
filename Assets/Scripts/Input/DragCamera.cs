@@ -73,7 +73,7 @@ public class DragCamera : MonoBehaviour
         else
         {
             //Debug.Log(Vector3.Distance(TouchManager.GetStartPositionInWorld(), Camera.main.transform.position));
-            if (TouchManager.TouchType == TouchType.Drag && !TouchManager.TouchStartInUI())
+            if (TouchManager.touchType == TouchType.Drag && !TouchManager.TouchStartInUI())
             {
                 if (prevPos == Vector3.zero)
                 {
@@ -90,7 +90,7 @@ public class DragCamera : MonoBehaviour
             }
         }
 #elif UNITY_ANDROID || UNITY_IOS
-            if (TouchManager.TouchType == TouchType.Drag && !TouchManager.TouchStartInUI())
+        if (TouchManager.touchType == TouchType.Drag && !TouchManager.TouchStartInUI())
             {
                 if (prevPos == Vector3.zero)
                 {

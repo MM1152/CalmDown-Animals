@@ -16,18 +16,18 @@ public class ZoomCamera : MonoBehaviour
     {
         float size = 0;
         //if (!DragAble.CameraDrag) return;
-        if (TouchManager.TouchType == TouchType.ZoomOut)
+        if (TouchManager.touchType == TouchType.ZoomOut)
         {
             size = Camera.main.orthographicSize * zoomSpeed * Time.deltaTime;
         }
-        else if(TouchManager.TouchType == TouchType.ZoomIn)
+        else if(TouchManager.touchType == TouchType.ZoomIn)
         {
             size = Camera.main.orthographicSize * -zoomSpeed * Time.deltaTime;
         }
 
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + size, minSize, maxSize);
 
-        if (TouchManager.TouchType == TouchType.ZoomIn 
+        if (TouchManager.touchType == TouchType.ZoomIn 
             && size != 0 && Camera.main.orthographicSize > minSize 
             && Camera.main.orthographicSize < maxSize)
         {

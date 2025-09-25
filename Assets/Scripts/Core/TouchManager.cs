@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngineInternal;
 public enum TouchType
 {
     None,
@@ -21,8 +24,8 @@ public class TouchManager : MonoBehaviour
 {
     public static Phase Phase { get; private set; }
     private Phase prevPhase;
-    public static TouchType TouchType {get; private set;}
-    public TouchType touchType;
+    private static TouchType TouchType {get; set;}
+    public static TouchType touchType;
     private static Vector2 fingerTouchStartPosition;
     private float fingerTouchStartTime;
 
@@ -40,7 +43,9 @@ public class TouchManager : MonoBehaviour
 
     private static bool touchInUi;
 
-    private bool TouchPositionInUi(Touch touch)
+    private Queue<TouchType> touchQueue = new Queue<TouchType>();
+
+    private static bool TouchPositionInUi(Touch touch)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
         eventData.position = touch.position;
@@ -48,6 +53,16 @@ public class TouchManager : MonoBehaviour
         EventSystem.current.RaycastAll(eventData, result);
 
         return result.Count > 0;
+    }
+
+    public static List<RaycastResult> GetTouchPositionUI(Vector3 pos)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = pos;
+        List<RaycastResult> result = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, result);
+  
+        return result;
     }
 
     public void Update()
@@ -63,7 +78,7 @@ public class TouchManager : MonoBehaviour
             {
                 Phase = Phase.None;
             }
-            TouchType = TouchType.None;
+            touchType = TouchType.None;
             fingerTouchStartPosition = Vector3.zero;
             zoomInDistance = 0;
 
@@ -88,31 +103,28 @@ public class TouchManager : MonoBehaviour
                 pos = Vector2.zero;
                 fingerTouchStartTime = Time.time;
                 fingerTouchStartPosition = touch.position;
-                TouchType = TouchType.None;
+                touchType = TouchType.None;
             }
 
             if(Time.time > (fingerTouchStartTime + checkTime) && amount > ckeckDragDistance)
             {
-                TouchType = TouchType.Drag;
+                touchType = TouchType.Drag;
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                TouchType = TouchType.Tab;
+                touchType = TouchType.Tab;
+                Phase = Phase.Up;
             }
             else
             {
                 amount += touch.deltaPosition.magnitude;
             }
 
-            if(touch.phase == TouchPhase.Ended)
-            {
-                Phase = Phase.Up;
-            }
             prevPhase = Phase;
             dir = (touch.position - fingerTouchStartPosition).normalized;
             pos = new Vector3(touch.position.x, touch.position.y , 10);
         }
-        else if (Input.touchCount == 2 && TouchType == TouchType.None)
+        else if (Input.touchCount == 2 && touchType == TouchType.None)
         {
             Touch touch1 = Input.GetTouch(0);
             Touch touch2 = Input.GetTouch(1);
@@ -133,7 +145,7 @@ public class TouchManager : MonoBehaviour
                     pos = Vector2.zero;
                     fingerTouchStartTime = Time.time;
                     fingerTouchStartPosition = Vector3.Lerp(touch1.position, touch2.position, 0.5f);
-                    TouchType = TouchType.None;
+                    touchType = TouchType.None;
                 }
 
                 if (zoomInDistance == 0)
@@ -145,16 +157,24 @@ public class TouchManager : MonoBehaviour
                     float distance = Vector3.Distance(touch1.position - touch1.deltaPosition, touch2.position - touch2.deltaPosition);
                     if (zoomInDistance > distance)
                     {
-                        TouchType = TouchType.ZoomOut;
+                        touchType = TouchType.ZoomOut;
                     }
                     if (zoomInDistance < distance)
                     {
-                        TouchType = TouchType.ZoomIn;
+                        touchType = TouchType.ZoomIn;
                     }
                 }
             }  
         }
-        touchType = TouchType;
+        touchQueue.Enqueue(touchType);
+    }
+
+    private void LateUpdate()
+    {
+        if(touchQueue.Count > 0)
+        {
+            touchType = touchQueue.Dequeue();
+        }
     }
 
     public static Vector3 GetSwipeDir()

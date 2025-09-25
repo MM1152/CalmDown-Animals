@@ -28,7 +28,6 @@ public class SpawnEnemyInfo : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Create");
         var findParticleSpawner = GameObject.FindWithTag(TagIds.ParticleSpawnerTag);
         if(findParticleSpawner != null)
         {
