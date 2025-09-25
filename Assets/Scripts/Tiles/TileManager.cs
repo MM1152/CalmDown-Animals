@@ -15,7 +15,7 @@ public class TileManager : MonoBehaviour
     public TileType tileType;
     public bool drawMode;
     public bool deleteMode;
-
+    public int tilePrice;
     public bool InEditorWindow { get; set; }
     public LayerMask layerMask;
     public LayerMask infoMask;
@@ -197,6 +197,7 @@ public class TileManager : MonoBehaviour
                 if (tile.GetComponent<PathTileRoad>().PrevSide == PathTileRoad.Sides.None && tile.Type == TileType.Path)
                 {
                     tile.Type = TileType.None;
+                    gameManager.Gold += tilePrice;
                 }
             }
 
@@ -251,8 +252,23 @@ public class TileManager : MonoBehaviour
         var tile = GetTile();
         if(tile != null && tile.Type == targetTile && tile != arriveTile && !startTile.Contains(tile))
         {
+            if (type == TileType.Path && gameManager.Gold < tilePrice)
+            {
+                var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
+                popup.Id = 3;
+                return;
+            }
+
             tile.Type = type;
-            if (tile.Type == TileType.Path) tile.ChangeColor();
+            if (tile.Type == TileType.Path)
+            {
+                tile.ChangeColor();
+                gameManager.Gold -= tilePrice;
+            }
+            if(tile.Type == TileType.None)
+            {
+                gameManager.Gold += tilePrice;
+            }
         }
     }
 
@@ -432,6 +448,7 @@ public class TileManager : MonoBehaviour
             if(!startTile.Contains(tile) && arriveTile != tile && tile.Type == TileType.Path)
             {
                 tile.Type = TileType.None;
+                gameManager.Gold += tilePrice;
             }
         }
     }
@@ -559,7 +576,7 @@ public class TileManager : MonoBehaviour
 
     public void ChangeToBlockedTile(int allEnemySpawnCount)
     {
-        if (!DataTableManager.roundTable.Get(gameManager.Wave).IsUnavail) return;
+        if (!DataTableManager.roundTable.Get(gameManager.Wave).isUnavail) return;
 
         float percent = Random.Range(0f, 1f);
 

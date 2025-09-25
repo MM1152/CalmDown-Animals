@@ -89,8 +89,15 @@ public class ScorePopup : GenericPopup
         }
         else
         {
-            StopCoroutine(co);
-            startIdx++;
+            if(co != null)
+            {
+                if(startIdx < uguis.Length)
+                {
+                    uguis[startIdx].SetActive(true);
+                    startIdx++;
+                }
+                return false;
+            }
 
             co = StartCoroutine(ShowClearInfomationCo());
 

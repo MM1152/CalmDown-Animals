@@ -40,8 +40,7 @@ public class PopupManager : MonoBehaviour
     {
         if (co != null)
         {
-            StopCoroutine(co);
-            isOpening = false;
+            return popups[(int)id];
         }
         co = StartCoroutine(OpenCo(id));
         return popups[(int)id];
@@ -61,11 +60,15 @@ public class PopupManager : MonoBehaviour
 
     private IEnumerator OpenCo(Popup id)
     {
-        popups[(int)id].Open();
+        if (openPopups.Contains(popups[(int)id]))
+            yield break;
+
         Debug.Log("Open");
+        popups[(int)id].Open();
         yield return null;
         Debug.Log("Push Queue");
-        openPopups.Push(popups[(int)id]);   
+        openPopups.Push(popups[(int)id]);
+        
         co = null;
     }
 }

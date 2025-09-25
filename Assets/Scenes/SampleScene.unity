@@ -621,6 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inEditModeButton: {fileID: 1962053901}
+  inDeleteButton: {fileID: 521286757}
   backButtonInEditMode: {fileID: 175445015}
   editButton: {fileID: 1330002535}
   destroyButton: {fileID: 1870619875}
@@ -632,6 +633,8 @@ MonoBehaviour:
   selectModeGo: {fileID: 335895326}
   editModeGo: {fileID: 791475655}
   editModeOutline: {fileID: 371809853}
+  initButtonSprite: {fileID: 21300000, guid: 818cceb4f26a1c448b794d8377088aac, type: 3}
+  pressedButtonSprite: {fileID: 21300000, guid: a055266de2ac3f3428d83fcf712b9103, type: 3}
 --- !u!1 &30529395
 GameObject:
   m_ObjectHideFlags: 0
@@ -6848,6 +6851,7 @@ MonoBehaviour:
   enemySpawner: {fileID: 365045145}
   windowManager: {fileID: 908200644}
   popupManager: {fileID: 908200645}
+  crewManager: {fileID: 423284645}
   waveText: {fileID: 2057822078}
   timerText: {fileID: 1443077389}
   goldText: {fileID: 1759496810}
@@ -11032,6 +11036,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &521286757 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6959778693454247545, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
+  m_PrefabInstance: {fileID: 1060692464}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521286753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &521554042
 GameObject:
   m_ObjectHideFlags: 0
@@ -21736,7 +21751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6959778693454247545, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7945260520275012447, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
       propertyPath: m_IgnoreLayout
@@ -38507,6 +38522,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: 2
   drawMode: 1
+  deleteMode: 0
+  tilePrice: 50
   layerMask:
     serializedVersion: 2
     m_Bits: 64

@@ -14,7 +14,7 @@ public class RoundTable : DataTable
         public int CR_ID5 { get; set; }
         public int CR_ID6 { get; set; }
         public int RewardGold { get; set; }
-        public bool IsUnavail { get; set; }
+        public bool isUnavail { get; set; }
 
         public List<int> CR_IDS = new List<int>();
     }
