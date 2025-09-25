@@ -21,6 +21,8 @@ public class SaveDataV1 : SaveData
     public List<Vector3> pathTile = new List<Vector3>();
     public int gold;
     public int wave;
+    public bool canLoadSaveData;
+    public int time;
     public override SaveData VersionUp()
     {
         throw new System.NotImplementedException();

@@ -89,18 +89,17 @@ public class ScorePopup : GenericPopup
         }
         else
         {
-            if(co != null)
+            if (co != null)
             {
                 if(startIdx < uguis.Length)
                 {
+                    StopCoroutine(co);
                     uguis[startIdx].SetActive(true);
                     startIdx++;
+
+                    co = StartCoroutine(ShowClearInfomationCo());
                 }
-                return false;
             }
-
-            co = StartCoroutine(ShowClearInfomationCo());
-
             return false;
         }
         
@@ -110,8 +109,8 @@ public class ScorePopup : GenericPopup
     {
         for(; startIdx < uguis.Length; startIdx++)
         {
-            yield return new WaitForSeconds(1f);
             uguis[startIdx].SetActive(true);
+            yield return new WaitForSeconds(0.2f);
         }
 
         yield return new WaitUntil(() => TouchManager.touchType == TouchType.Tab);

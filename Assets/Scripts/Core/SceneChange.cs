@@ -8,12 +8,35 @@ public class SceneChange : MonoBehaviour
     public string changeSceneId;
 
     private Button button;
+
+    public GameObject viewer;
+    public Button loadFromFile;
+    public Button startNew;
     private void Start()
     {
-        if(DataTableManager.init)
+        SaveLoadManager.Load();
+
+        loadFromFile.onClick.AddListener(() =>
         {
-        }
+            SceneManager.LoadScene(changeSceneId);
+        });
+        startNew.onClick.AddListener(() =>
+        {
+            SaveLoadManager.Data.canLoadSaveData = false;
+            SceneManager.LoadScene(changeSceneId);
+        });
+
         button = GetComponent<Button>();
-        button.onClick.AddListener(() => SceneManager.LoadScene(changeSceneId));       
+        button.onClick.AddListener(() =>
+        {
+            if(!SaveLoadManager.Data.canLoadSaveData)
+            {
+                SceneManager.LoadScene(changeSceneId);
+            }
+            else
+            {
+                viewer.SetActive(true);
+            }
+        });       
     }
 }

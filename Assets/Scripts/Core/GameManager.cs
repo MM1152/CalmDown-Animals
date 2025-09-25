@@ -106,10 +106,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (SaveLoadManager.Load())
+        if (SaveLoadManager.Data.canLoadSaveData)
         {
             Gold = SaveLoadManager.Data.gold;
             Wave = SaveLoadManager.Data.wave;
+            timer = SaveLoadManager.Data.time;
+            timerToInt = SaveLoadManager.Data.time;
             tileManager.DrawTiles(SaveLoadManager.Data.mapSize);
         }
         else
@@ -166,12 +168,16 @@ public class GameManager : MonoBehaviour
         {
             popupManager.Open(Popup.ScorePopUp);
             enemySpawner.ClearAllAnimals();
+            SaveLoadManager.Data.canLoadSaveData = false;
+            SaveLoadManager.Save();
             return;
         }
         else if (waveFail)
         {
             enemySpawner.ClearAllAnimals();
             popupManager.Open(Popup.ScorePopUp);
+            SaveLoadManager.Data.canLoadSaveData = false;
+            SaveLoadManager.Save();
             return;
         }
         else
@@ -186,6 +192,9 @@ public class GameManager : MonoBehaviour
         SaveLoadManager.Data.wave = wave;
         SaveLoadManager.Data.mapid = tileManager.mapIdx;
         SaveLoadManager.Data.mapSize = tileManager.mapSize;
+        SaveLoadManager.Data.time = timerToInt;
+        SaveLoadManager.Data.canLoadSaveData = true;
+        SaveLoadManager.Save();
 
         RoundClearGold = DataTableManager.roundTable.Get(Wave).RewardGold;
         escapeCount = 0;
