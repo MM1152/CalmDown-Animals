@@ -15,15 +15,18 @@ public class EmployUnitWindow : GenericWindow
     public Button clearCrewsBNT;
     public GameManager gameManager;
     [Header("Crew Buying Layouts")]
-    public SpawnCrewEvent[] spawnCrewEvents;
-
+    public GameObject[] spawnCrewEvents;
+    private int spawnAbleIdx = 1;
     private void Start()
     {
         backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
         clearCrewsBNT.onClick.AddListener(() => spawner.ClearAllCrews());
         gameManager.endWave += () =>
         {
-            
+            if(gameManager.Wave == DataTableManager.crewRankTable.Get(spawnAbleIdx).Buyround)
+            {
+                spawnCrewEvents[spawnAbleIdx++].SetActive(true);
+            }
         };
     }
 

@@ -47,7 +47,8 @@ public class AnimalInfoTable : DataTable
         public Avatar Avatar => Resources.Load<Avatar>(@$"{model}/{pathname}_AnimationsAvatar");
         [Ignore]
         public Sprite Icon => Resources.Load<Sprite>(@$"FaceIcon/{pathname}");
-
+        [Ignore]
+        public Sprite fullImage => Resources.Load<Sprite>($@"fullsize/{pathname}");
         private string pathname;
         public float Time => DataTableManager.animalSpeedTable.Get(Spd).Time; 
         public int MaxHp => CaptureHP;
@@ -72,6 +73,14 @@ public class AnimalInfoTable : DataTable
     public Data Get(int animal)
     {
         return animalInfos[(int)animal];
+    }
+
+    public List<Data> GetToCR_ID(int CR_ID)
+    {
+        var list = animalInfos.Select(x => x.Value).ToList();
+        var withCR_ID = list.Where(x => x.CR_ID == CR_ID).ToList();
+
+        return withCR_ID.ToList();
     }
 
     public Data GetSquentialGet()

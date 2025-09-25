@@ -1,17 +1,21 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AnimalImage : MonoBehaviour
+public class AnimalImage : MonoBehaviour , IPointerClickHandler
 {
-    private Image image;
-
-    private void Awake()
+    public Image image;
+    private AnimalInfoTable.Data data;
+    private AnimalDes des;
+    public void OnPointerClick(PointerEventData eventData)
     {
-        image = GetComponent<Image>();
+        des.UpdateDescription(data);
     }
 
-    public void UpdateSlot(Sprite image)
+    public void UpdateSlot(AnimalInfoTable.Data data , AnimalDes des)
     {
-        this.image.sprite = image;
+        this.des = des;
+        this.data = data;
+        this.image.sprite = data.Icon;
     }
 }

@@ -146,15 +146,14 @@ public class GameManager : MonoBehaviour
         {
             waveFail = true;
         }
-        // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
-        endWave?.Invoke();
         WaveClear = !waveFail;
+        // 웨이브 증가 이후 텍스트 찍기. 고려 해야됌
         if (wave == maxWave && !waveFail)
         {
             popupManager.Open(Popup.ScorePopUp);
             return;
         }
-        else if(waveFail)
+        else if (waveFail)
         {
             popupManager.Open(Popup.ScorePopUp);
             return;
@@ -163,7 +162,7 @@ public class GameManager : MonoBehaviour
         {
             wave++;
         }
-
+        endWave?.Invoke();
 
         SaveLoadManager.Data.gold = gold;
         SaveLoadManager.Data.wave = wave;
