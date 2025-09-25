@@ -14,6 +14,8 @@ public class TileManager : MonoBehaviour
     [Header("DEBUG")]
     public TileType tileType;
     public bool drawMode;
+    public bool deleteMode;
+
     public bool InEditorWindow { get; set; }
     public LayerMask layerMask;
     public LayerMask infoMask;
@@ -89,6 +91,7 @@ public class TileManager : MonoBehaviour
     {
         SetTileType(tileType);
         ShowAnimalInfomation();
+        DeleteBlockedTile();
     }
 
     private void ShowAnimalInfomation()
@@ -106,6 +109,22 @@ public class TileManager : MonoBehaviour
                     var popup = popupManager.Open(Popup.AnimalInfoPopup) as AnimalInfoPopup;
                     popup.AnimalInfomation = collider.GetAnimalData();
                     popup.transform.position = Camera.main.WorldToScreenPoint(collider.transform.position + new Vector3(7f , 0f , 0f));
+                }
+            }
+        }
+    }
+
+    private void DeleteBlockedTile()
+    {
+        if(deleteMode)
+        {
+            if(!TouchManager.TouchStartInUI() && (TouchManager.touchType == TouchType.Drag
+                || TouchManager.touchType == TouchType.Tab))
+            {
+                var tile = GetTile();
+                if(tile.Type == TileType.Blocked)
+                {
+                    tile.DeleteBlockedTile();
                 }
             }
         }

@@ -75,6 +75,19 @@ public class CrewManager : MonoBehaviour
         };
     }
 
+    public void UpdateCrewStatus()
+    {
+        for(int i = 0; i < placedCrews.Count; i++)
+        {
+            if (placedCrews[i].CheckUnderTile())
+            {
+                Destroy(placedCrews[i].gameObject);
+                placedCrews.Remove(placedCrews[i]);
+                i--;
+            }
+        }
+    }
+
     private void Update()
     {
         DragDrop();
@@ -221,6 +234,11 @@ public class CrewManager : MonoBehaviour
         }
 
         placedCrews.Clear();
+    }
+
+    public void ClearCrew(Crew crew)
+    {
+        SetPlaceCount(crew.Rank, GetPlaceCount(crew.Rank) - 1);
     }
 
     private void DragDrop()

@@ -203,6 +203,12 @@ public class PathTileRoad : MonoBehaviour
                 transform.eulerAngles += new Vector3(0f, 120f, 0f);
                 return;
             }
+            if (nextSide == Sides.Right && prevSide == (Sides.TopRight | Sides.Right))
+            {
+                meshFillter.sharedMesh = roadMeshs[4];
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+                return;
+            }
 
             bool prevBitChecker = false;
             for(int i = 0; i < 5; i++)

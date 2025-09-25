@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public EnemySpawner enemySpawner;
     public WindowManager windowManager;
     public PopupManager popupManager;
+    public CrewManager crewManager;
 
     [Header("Texts")]
     public TextMeshProUGUI waveText;
@@ -178,6 +179,8 @@ public class GameManager : MonoBehaviour
             wave++;
         }   
         endWave?.Invoke();
+
+        crewManager.UpdateCrewStatus();
 
         SaveLoadManager.Data.gold = gold;
         SaveLoadManager.Data.wave = wave;

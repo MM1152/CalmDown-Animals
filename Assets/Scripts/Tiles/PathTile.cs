@@ -134,7 +134,7 @@ public class PathTile : Tile
             if (neighbor.Type == TileType.Blocked)
             {
                 neighbor.SetAbleBlockedTile = false;
-                SetAbleBlockedTile = true;
+                SetAbleBlockedTile = false;
                 return;
             }
         }

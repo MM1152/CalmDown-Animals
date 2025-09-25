@@ -38,6 +38,15 @@ public class Crew : MonoBehaviour
         weapon.Equip(data.equType_ID);
     }
 
+    public bool CheckUnderTile()
+    {
+        if (underTile.Type == TileType.Blocked)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void ShowAttackRaius()
     {
         foreach(var aroundtile in aroundTiles)

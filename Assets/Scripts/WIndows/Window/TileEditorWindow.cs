@@ -4,6 +4,7 @@ public class TileEditorWindow : GenericWindow
 {
     [Header("Buttons")]
     public Button inEditModeButton;
+    public Button inDeleteButton;
     public Button backButtonInEditMode;
 
     public ButtonUI editButton;
@@ -21,13 +22,31 @@ public class TileEditorWindow : GenericWindow
     public GameObject editModeGo;
     public GameObject editModeOutline;
 
+    [Header("Sprite")]
+    public Sprite initButtonSprite;
+    public Sprite pressedButtonSprite;
+
     private bool editMode;
     private bool destroyMode;
 
     private void Awake()
     {
         backButton.onClick.AddListener(() => CheckPath());
+        inDeleteButton.onClick.AddListener(() =>
+        {
+            tileManager.deleteMode = !tileManager.deleteMode;
+            if(tileManager.deleteMode)
+            {
+                inDeleteButton.GetComponent<Image>().sprite = pressedButtonSprite;
+            }else
+            {
+                inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
+            }
+            Status.CameraDrag = false;
+        });
         inEditModeButton.onClick.AddListener(() => {
+            inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
+            tileManager.deleteMode = false;
             editModeGo.SetActive(true);
             selectModeGo.SetActive(false);
             tileManager.drawMode = false;
@@ -89,7 +108,11 @@ public class TileEditorWindow : GenericWindow
         if(susecss)
         {
             manager.Open(Window.EditorWindow);
-        }else
+            inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
+            tileManager.deleteMode = false;
+            Status.CameraDrag = true;
+        }
+        else
         {
             var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
             popup.Id = 0;
