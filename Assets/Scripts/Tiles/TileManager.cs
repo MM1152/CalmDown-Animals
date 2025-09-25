@@ -124,6 +124,12 @@ public class TileManager : MonoBehaviour
                 var tile = GetTile();
                 if(tile.Type == TileType.Blocked)
                 {
+                    if(gameManager.Gold < 250)
+                    {
+                        var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
+                        popup.Id = 3;
+                        return;
+                    }
                     tile.DeleteBlockedTile();
                 }
             }
