@@ -69,10 +69,10 @@ public class CrewReadyTab : MonoBehaviour
     public void Open(Crew crew)
     {
         currentCrew = crew;
-        rankText.text = crew.Rank.ToString();
+        rankText.text = DataTableManager.crewTable.Get(crew.Rank).Crew_name;
         paymentText.text = crew.GetPayCheck() + " / ¶ó¿îµå";
         equipmentNameText.text = crew.weapon.GetName();
-        dpsText.text = crew.weapon.GetCaptureDmg() + " / " + crew.weapon.GetCaptureSpeed() + "sec";
+        dpsText.text = (int)(crew.weapon.GetCaptureDmg() + crew.GetCapture()) / (int)(crew.weapon.GetCaptureSpeed() + crew.GetCaptureSpeed()) + " / sec";
         gameObject.SetActive(true);
 
         foreach(var image in captureAble)

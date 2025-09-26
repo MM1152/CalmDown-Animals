@@ -33,7 +33,7 @@ public class DragCamera : MonoBehaviour
             10,
             Mathf.Clamp(cameraPosition.z , rect.y , rect.w));
     }
-
+    // FIX  : 15 ~ 5
     private void LateUpdate()
     {
         Vector3 linear = Vector3.zero;

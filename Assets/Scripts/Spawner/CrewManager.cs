@@ -94,6 +94,11 @@ public class CrewManager : MonoBehaviour
         CrewDrag();
     }
 
+    public int GetPlaceCrewCount()
+    {
+        return placedCrews.Count;
+    }
+
     public void Spawn(CrewRank rank) 
     {
         (int hire, int place) data = unitInfomation[rank];
@@ -191,6 +196,7 @@ public class CrewManager : MonoBehaviour
             placePosition[DragCrew.Rank].Add(DragCrew.UnderTile.transform.position);
             DragCrew.SetUnderTile(null);
             DragCrew.UnShowAttackRadius();
+            placedCrews.Add(DragCrew);
             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
             DragCrew = null;
         }

@@ -141,7 +141,11 @@ public class Crew : MonoBehaviour
 
     private void Update()
     {
-        if(target != null)
+        if (target == null)
+        {
+            target = GetTarget();
+        }
+        if (target != null)
         {
             if(target.IsDie)
             {
@@ -179,10 +183,7 @@ public class Crew : MonoBehaviour
                 }
             }
         }
-        if(target == null)
-        {
-            target = GetTarget();
-        }
+
     }
 
     private EnemyHealth GetTarget()
@@ -193,8 +194,9 @@ public class Crew : MonoBehaviour
             var inTileAnimal = tile.GetComponent<InTileAnimal>();
             var animal = inTileAnimal.Get(weapon.GetCaptureSize());
 
-            if(animal != null)
+            if (animal != null)
             {
+                Debug.Log(animal);
                 return animal.GetComponent<EnemyHealth>();
             }
         }
@@ -214,5 +216,15 @@ public class Crew : MonoBehaviour
     public int GetPayCheck()
     {
         return data.crewPaycheck;
+    }
+
+    public int GetCapture()
+    {
+        return data.Crew_capture;
+    }
+
+    public int GetCaptureSpeed()
+    {
+        return data.Crew_atkspd;
     }
 }

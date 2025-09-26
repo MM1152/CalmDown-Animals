@@ -55,7 +55,8 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < infoTiles.Count; i++)   
         {
             var spawnInfo = animalInfoTable.RandomGet(DataTableManager.roundTable.Get(gameManager.Wave).CR_IDS[i]);
-            //var spawnInfo = animalInfoTable.GetSquentialGet();
+            //TEST 
+            //var spawnInfo = animalInfoTable.Get(207);
             //Debug.Log(spawnInfo.Skin.name);
             spawnCount = Random.Range(spawnInfo.Range_min, spawnInfo.Range_max);
             copySpawnCount += spawnCount;

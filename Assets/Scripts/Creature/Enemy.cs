@@ -86,7 +86,7 @@ public class Enemy : MonoBehaviour
                 inTileSetting = true;
             }
 
-            if (Vector3.Distance(transform.position , nPos) < 0.1f)
+            if (Vector3.Distance(transform.position , nPos) < 0.2f)
             {
                 prevTile = nTile;
                 if (nTile.ParentTile == null)
@@ -121,7 +121,6 @@ public class Enemy : MonoBehaviour
 
     public AnimalSize GetSize()
     {
-        Debug.Log("Size : " + (AnimalSize)(1 << data.Size_ID));
         return (AnimalSize)(1 << data.Size_ID);
     }
 }

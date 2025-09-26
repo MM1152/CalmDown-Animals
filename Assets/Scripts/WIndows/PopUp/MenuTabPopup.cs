@@ -17,7 +17,7 @@ public class MenuTabPopup : GenericPopup
         base.Init(manager);
         optionButton.onClick.AddListener(() =>
         {
-            //action = () => manager.Open(Popup.OptionPopup);
+            manager.Open(Popup.OptionPopup);
         });
         backToTileButton.onClick.AddListener(() => SceneManager.LoadScene(0));
     }
@@ -29,6 +29,12 @@ public class MenuTabPopup : GenericPopup
             action = null;
         }
     }
+    public override void Open()
+    {
+        Time.timeScale = 0f;
+        base.Open();
+    }
+
     public override bool Close()
     {   
         if(TouchManager.TouchStartInUI())
@@ -46,6 +52,8 @@ public class MenuTabPopup : GenericPopup
             }
         }
 
+
+        Time.timeScale = 1f;
         return base.Close();
     }
 }

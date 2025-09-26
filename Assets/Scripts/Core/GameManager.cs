@@ -58,8 +58,6 @@ public class GameManager : MonoBehaviour
         {
             payment = value;
             paymentText.text = $"-{payment}";
-
-            ChangeRoundClearGold(roundClearGold - payment);
         }
     }
 
@@ -70,7 +68,7 @@ public class GameManager : MonoBehaviour
         set
         {
             roundClearGold = value;
-            ChangeRoundClearGold(roundClearGold - payment);
+            roundClearGoldText.text = "+" + roundClearGold;
         }
     }
     private float timer = 0;
@@ -120,31 +118,24 @@ public class GameManager : MonoBehaviour
         }
         optionButton.onClick.AddListener(() =>
         {
-            //popupManager.Open(Popup.OptionTabPopup);
+            popupManager.Open(Popup.OptionTabPopup);
         });
         RoundClearGold = DataTableManager.roundTable.Get(Wave).RewardGold;
     }
 
-    private void ChangeRoundClearGold(int gold)
-    {
-        if(gold < 0)
-        {
-            roundClearGoldText.text = gold.ToString();
-            roundClearGoldText.color = Color.red;
-        }
-        else
-        {
-            roundClearGoldText.text = "+" + gold.ToString();
-            roundClearGoldText.color = Color.green;
-        }
-    }
 
     public void StartWave()
     {
         if(!tileManager.FindPath())
         {
-            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
-            popup.Id = 4;
+            var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
+            popup.Id = 0;
+            return;
+        }
+        if(crewManager.GetPlaceCrewCount() == 0)
+        {
+            var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
+            popup.Id = 6;
             return;
         }
 

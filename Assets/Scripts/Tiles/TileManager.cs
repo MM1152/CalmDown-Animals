@@ -58,6 +58,14 @@ public class TileManager : MonoBehaviour
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
     private List<PathTile> editTiles = new List<PathTile>();
 
+    private int[] shortPathCost = new int[]
+    {
+        0,
+        500,
+        850,
+        1250
+    };
+
     //x : left , y : top , z : width , w : height 
     public Vector4 DragAbleRect => dragAblePos;
     private Vector4 dragAblePos = new Vector4(float.MaxValue, float.MaxValue, 0, 0);
@@ -108,7 +116,7 @@ public class TileManager : MonoBehaviour
                 {
                     var popup = popupManager.Open(Popup.AnimalInfoPopup) as AnimalInfoPopup;
                     popup.AnimalInfomation = collider.GetAnimalData();
-                    popup.transform.position = Camera.main.WorldToScreenPoint(collider.transform.position + new Vector3(7f , 0f , 0f));
+                    popup.transform.position = Camera.main.WorldToScreenPoint(collider.transform.position);
                 }
             }
         }
@@ -168,6 +176,7 @@ public class TileManager : MonoBehaviour
             if(copyTile != arriveTile && copyTile != startTile[0])
             {
                 copyTile.Type = TileType.None;
+                gameManager.Gold += tilePrice;
             }
             copyTile = copyTile.ParentTile;
         }
@@ -388,7 +397,21 @@ public class TileManager : MonoBehaviour
             return;
         }
 
-        for(int i = 0; i < drawStartTiles.Count; i++)
+        if(shortPathCost[mapSize] > gameManager.Gold)
+        {
+            int sellingCrew = crewSpawner.GetHireCount(CrewRank.Intern) * DataTableManager.crewTable.Get(CrewRank.Intern).crewCost;
+            sellingCrew += crewSpawner.GetHireCount(CrewRank.Newbie) * DataTableManager.crewTable.Get(CrewRank.Newbie).crewCost;
+            sellingCrew += crewSpawner.GetHireCount(CrewRank.Senior) * DataTableManager.crewTable.Get(CrewRank.Senior).crewCost;
+            sellingCrew += crewSpawner.GetHireCount(CrewRank.Ace) * DataTableManager.crewTable.Get(CrewRank.Ace).crewCost;
+
+            if(gameManager.Gold + sellingCrew < shortPathCost[mapSize])
+            {
+                gameManager.EndWave(true);
+                return;
+            }
+        }
+
+        for (int i = 0; i < drawStartTiles.Count; i++)
         {
             Destroy(drawStartTiles[i].gameObject);
         }

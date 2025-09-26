@@ -103,20 +103,25 @@ public class TileEditorWindow : GenericWindow
 
     private void CheckPath()
     {
-        bool susecss = tileManager.FindPath();
+        manager.Open(Window.EditorWindow);
+        inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
+        tileManager.deleteMode = false;
+        Status.CameraDrag = true;
 
-        if(susecss)
-        {
-            manager.Open(Window.EditorWindow);
-            inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
-            tileManager.deleteMode = false;
-            Status.CameraDrag = true;
-        }
-        else
-        {
-            var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
-            popup.Id = 0;
-        }
+        tileManager.FindPath();
+
+        //if(susecss)
+        //{
+        //    manager.Open(Window.EditorWindow);
+        //    inDeleteButton.GetComponent<Image>().sprite = initButtonSprite;
+        //    tileManager.deleteMode = false;
+        //    Status.CameraDrag = true;
+        //}
+        //else
+        //{
+        //    var popup = (StringPopUp)popupManager.Open(Popup.TextPopUp);
+        //    popup.Id = 0;
+        //}
     }
 
     public override void Open()

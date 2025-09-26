@@ -57,7 +57,7 @@ public class InTileAnimal : MonoBehaviour
 
     public Enemy Get(AnimalSize size)
     {
-        var newList = list.Where(x => (int)(x.GetSize() & size) > 1).ToList();
+        var newList = list.Where(x => (int)(x.GetSize() & size) >= 1).ToList();
         if(newList.Count > 0)
         {
             return newList[0];
