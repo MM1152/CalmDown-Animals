@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         {
             if (value <= 0 || value > maxWave) return;
             wave = value;
-            waveText.text = wave + "Round";
+            waveText.text = wave + "웨이브";
         }
     }
     private int gold = 200;
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     public int Payment
     {
         get => payment;
-        set
+        set 
         {
             payment = value;
             paymentText.text = $"-{payment}";
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         AllAnimalSpawnCount = 0;
-        waveText.text = wave + " Round";
+        waveText.text = wave + "웨이브";
         goldText.text = gold.ToString();
         captureAnimalCount = 0;
 
