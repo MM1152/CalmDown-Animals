@@ -19,7 +19,10 @@ public class EmployUnitWindow : GenericWindow
     private int spawnAbleIdx = 1;
     private void Start()
     {
-        backBNT.onClick.AddListener(() => manager.Open(Window.EditorWindow));
+        backBNT.onClick.AddListener(() => {
+            manager.Open(Window.EditorWindow);
+            SoundManager.Instance.PlayOneShot(SFX.BackSound);
+        }); 
         clearCrewsBNT.onClick.AddListener(() => spawner.ClearAllCrews());
         gameManager.endWave += () =>
         {

@@ -47,10 +47,12 @@ public class ScorePopup : GenericPopup
         string clear;
         if(gameManager.WaveClear)
         {
+            SoundManager.Instance.PlayOneShot(SFX.GameClearSound);
             titleText.color = Color.red;
             clear = DataTableManager.stringTable.Get(4);
         }else
         {
+            SoundManager.Instance.PlayOneShot(SFX.GameLoseSound);
             titleText.color = Color.black;
             clear = DataTableManager.stringTable.Get(5);
         }

@@ -60,7 +60,7 @@ public static class TagIds
 {
     public static readonly string GameManagerTag = "GameController";
     public static readonly string ParticleSpawnerTag = "ParticleSpawner";
-
+    public static readonly string SoundManagerTag = "SoundManager";
 }
 
 public static class FloatUtility

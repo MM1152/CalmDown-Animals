@@ -110,16 +110,18 @@ public class TouchManager : MonoBehaviour
             {
                 touchType = TouchType.Drag;
             }
-            else if (touch.phase == TouchPhase.Ended)
+            else if (touchType != TouchType.Drag && touch.phase == TouchPhase.Ended)
             {
                 touchType = TouchType.Tab;
-                Phase = Phase.Up;
             }
             else
             {
                 amount += touch.deltaPosition.magnitude;
             }
-
+            if (touch.phase == TouchPhase.Ended)
+            {
+                Phase = Phase.Up;
+            }
             prevPhase = Phase;
             dir = (touch.position - fingerTouchStartPosition).normalized;
             pos = new Vector3(touch.position.x, touch.position.y , 10);

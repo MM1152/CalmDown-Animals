@@ -11,7 +11,10 @@ public class CrewReadyWindow : GenericWindow
 
     private void Awake()
     {
-        backButton.onClick.AddListener(() => manager.Open(Window.EditorWindow));
+        backButton.onClick.AddListener(() => {
+            manager.Open(Window.EditorWindow);
+            SoundManager.Instance.PlayOneShot(SFX.BackSound);
+        });
     }
 
     public override void Open()

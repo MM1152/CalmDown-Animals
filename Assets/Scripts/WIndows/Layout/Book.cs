@@ -17,6 +17,7 @@ public class Book : MonoBehaviour
     public Button button;
     public AnimalDes animalDes;
     public AnimalImage prefabs;
+
     private void Start()
     {
         for(int i = 0; i < toggles.Length; i++)
@@ -62,5 +63,6 @@ public class Book : MonoBehaviour
 
         button.onClick.AddListener(() => gameObject.SetActive(false));
         gameObject.SetActive(false);
+
     }
 }

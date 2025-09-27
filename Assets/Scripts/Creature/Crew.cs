@@ -165,14 +165,17 @@ public class Crew : MonoBehaviour
                 if (weapon.GetWeaponId() == 0)
                 {
                     animator.SetTrigger(Ani_AttackId);
+                    SoundManager.Instance.PlayOneShot(SFX.ButterflySound);
                 }
                 else if (weapon.GetWeaponId() == 1)
                 {
                     animator.SetTrigger(Ani_PlantTrap);
+                    SoundManager.Instance.PlayOneShot(SFX.TrapSound);
                 }
                 else if (weapon.GetWeaponId() == 2)
                 {
                     animator.SetTrigger(Ani_ShootGun);
+                    SoundManager.Instance.PlayOneShot(SFX.TranqGunSound);
                 }
                 transform.position = underTile.transform.position;
                 if (target.Hit(weapon.GetCaptureDmg() + data.Crew_capture))

@@ -288,6 +288,7 @@ public class CrewManager : MonoBehaviour
                             DragCrew.SetUnderTile(underTile);
                             placePosition[DragCrew.Rank].Add(underTile.transform.position);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
+                            SoundManager.Instance.PlayOneShot(SFX.PlaceCrewSound);
                             placedCrews.Add(DragCrew);
                         }
                         else

@@ -10,9 +10,18 @@ public class EditorWindow : GenericWindow
 
     public void Start()
     {
-        editTileBNT.onClick.AddListener(() => manager.Open(Window.TileEditorWindow));
-        employUnitBNT.onClick.AddListener(() => manager.Open(Window.EmployUnitWindow));
-        readyUnitBNT.onClick.AddListener(() => manager.Open(Window.CrewReadyWindow));
+        editTileBNT.onClick.AddListener(() => {
+            manager.Open(Window.TileEditorWindow);
+            SoundManager.Instance.PlayOneShot(SFX.OnClickButtonSound);
+        });
+        employUnitBNT.onClick.AddListener(() => {
+            manager.Open(Window.EmployUnitWindow);
+            SoundManager.Instance.PlayOneShot(SFX.OnClickButtonSound);
+        });
+        readyUnitBNT.onClick.AddListener(() => {
+            manager.Open(Window.CrewReadyWindow);       
+            SoundManager.Instance.PlayOneShot(SFX.OnClickButtonSound);
+        });
     }
 
     public override void Open()

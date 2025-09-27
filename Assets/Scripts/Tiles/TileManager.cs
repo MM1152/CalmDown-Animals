@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -91,7 +92,7 @@ public class TileManager : MonoBehaviour
     public void DataLoadFail()
     {
         DrawTiles();
-        FindPath(TileType.Path | TileType.None);
+        FindPathAndDrawRoads(TileType.Path | TileType.None);
         SetInitPath();
     }
 
@@ -100,6 +101,65 @@ public class TileManager : MonoBehaviour
         SetTileType(tileType);
         ShowAnimalInfomation();
         DeleteBlockedTile();
+    }
+
+    public void SetDragFailTileInTutorial()
+    {
+        //2.2 , 3.8
+        //4.4 , 0
+        ///6.6 , 0
+        tileTable[new Vector3(2.2f, 0f, 3.8f)].Type = TileType.Path;
+        tileTable[new Vector3(4.4f, 0f, 0f)].Type = TileType.Path;
+        tileTable[new Vector3(6.6f, 0f, 3.8f)].Type = TileType.Path;
+
+        ChangeToColorPathTiles();
+    }
+    public void ClearAllTileInTutorial()
+    {
+        foreach(var tile in tileList)
+        {
+            if(tile != arriveTile && tile != startTile[0])
+            {
+                tile.Type = TileType.None;
+            }
+        }
+    }
+    public void DrawTwoRoadTilesInTutorial()
+    {
+        ClearAllTileInTutorial();
+        tileTable[new Vector3(2.2f, 0f, 0f)].Type = TileType.Path;
+        tileTable[new Vector3(4.4f, 0f, 0f)].Type = TileType.Path;
+        tileTable[new Vector3(6.6f, 0f, 0f)].Type = TileType.Path;
+
+        tileTable[new Vector3(1.1f, 0f, 1.9f)].Type = TileType.Path;
+        tileTable[new Vector3(2.2f, 0f, 3.8f)].Type = TileType.Path;
+        tileTable[new Vector3(4.4f, 0f, 3.8f)].Type = TileType.Path;
+        tileTable[new Vector3(6.6f, 0f, 3.8f)].Type = TileType.Path;
+        tileTable[new Vector3(7.7f, 0f, 1.9f)].Type = TileType.Path;
+
+        ChangeToColorPathTiles();
+        //2.2 , 0 , 0
+        // 4.4 , 0 , 0
+        // 6.6 , 0 , 0
+
+        //1.1 ,  0,  1.9
+        //2.2 , 0 , 3.8
+        //4.4 , 0 , 3.8
+        //6.6, 0 ,3.8
+        //7.7, 0 , 1.9
+    }
+
+    public bool CheckClearAllTileInTutorial()
+    {
+        for(int i = 0; i < tileList.Count; i++)
+        {
+            if (tileList[i].Type == TileType.Path && tileList[i] != arriveTile && tileList[i] != startTile[0])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void ShowAnimalInfomation()
@@ -166,7 +226,7 @@ public class TileManager : MonoBehaviour
        
     }
 
-    private void ResetInitPath()
+    public void ResetInitPath()
     {
         if (isChangedTile) return;
 
@@ -185,6 +245,18 @@ public class TileManager : MonoBehaviour
     }
 
     public bool FindPath(TileType type = TileType.Path)
+    {
+        for (int i = 0; i < startTile.Count; i++)
+        {
+            if (pathFind.Find(tileList, arriveTile, startTile[i], type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool FindPathAndDrawRoads(TileType type = TileType.Path)
     {
         bool isSuseccs = true;
         for(int i = 0; i < startTile.Count; i++)
@@ -240,6 +312,8 @@ public class TileManager : MonoBehaviour
             }
             startTile = startTile.ParentTile;
         }
+
+        SoundManager.Instance.PlayOneShot(SFX.DrawTileSound);
     }
 
     public void SetTileType(TileType type)
@@ -273,6 +347,7 @@ public class TileManager : MonoBehaviour
                 popup.Id = 3;
                 return;
             }
+
 
             tile.Type = type;
             if (tile.Type == TileType.Path)
@@ -386,7 +461,7 @@ public class TileManager : MonoBehaviour
             tileTable[pos].Type = TileType.Path;
         }
 
-        FindPath();
+        FindPathAndDrawRoads();
     }
 
     public void DrawTiles()
@@ -571,6 +646,7 @@ public class TileManager : MonoBehaviour
                 copyTile = copyTile.ParentTile;
             }
         }
+        SoundManager.Instance.PlayOneShot(SFX.DestroySound);
     }
 
     // Test 용 코드임

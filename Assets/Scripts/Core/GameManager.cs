@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     public void StartWave()
     {
-        if(!tileManager.FindPath())
+        if(!tileManager.FindPathAndDrawRoads())
         {
             var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
             popup.Id = 0;

@@ -183,6 +183,12 @@ public class PathTileRoad : MonoBehaviour
                 transform.eulerAngles += new Vector3(0f, 180f, 0f);
                 return;
             }
+            if (nextSide == Sides.Right && prevSide == (Sides.BottomRight | Sides.Right))
+            {
+                meshFillter.sharedMesh = roadMeshs[4];
+                transform.eulerAngles += new Vector3(0f, 180f, 0f);
+                return;
+            }
 
             if (nextSide == Sides.TopLeft && prevSide == (Sides.Left | Sides.BottomLeft) ||
                 (nextSide == Sides.BottomRight && prevSide == (Sides.Left | Sides.BottomLeft)))

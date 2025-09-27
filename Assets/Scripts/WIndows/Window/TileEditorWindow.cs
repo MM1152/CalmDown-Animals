@@ -31,7 +31,10 @@ public class TileEditorWindow : GenericWindow
 
     private void Awake()
     {
-        backButton.onClick.AddListener(() => CheckPath());
+        backButton.onClick.AddListener(() => {
+            CheckPath();
+            SoundManager.Instance.PlayOneShot(SFX.BackSound);
+        });
         inDeleteButton.onClick.AddListener(() =>
         {
             tileManager.deleteMode = !tileManager.deleteMode;
@@ -51,6 +54,7 @@ public class TileEditorWindow : GenericWindow
             selectModeGo.SetActive(false);
             tileManager.drawMode = false;
             Status.CameraDrag = true;
+            SoundManager.Instance.PlayOneShot(SFX.OnClickButtonSound);
         });
         backButtonInEditMode.onClick.AddListener(() => {
             editModeGo.SetActive(false);
@@ -60,6 +64,7 @@ public class TileEditorWindow : GenericWindow
             tileManager.drawMode = false;
             Status.CameraDrag = true;
             editModeOutline.SetActive(false);
+            SoundManager.Instance.PlayOneShot(SFX.BackSound);
         });
         deleteAllTilesBNT.onClick.AddListener(() => tileManager.ClearAllTiles());
         editButton.GetComponent<Button>().onClick.AddListener(() =>
@@ -108,7 +113,7 @@ public class TileEditorWindow : GenericWindow
         tileManager.deleteMode = false;
         Status.CameraDrag = true;
 
-        tileManager.FindPath();
+        tileManager.FindPathAndDrawRoads();
 
         //if(susecss)
         //{
