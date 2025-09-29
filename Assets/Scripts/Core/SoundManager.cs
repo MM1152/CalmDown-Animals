@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] BGMaudioClips;
 
     private AudioSource SFXaudioSource;
-
+    private AudioSource BGMaudioSource;
     public static SoundManager Instance => GetInstance();
     private static SoundManager _Instance; 
 
@@ -64,5 +64,12 @@ public class SoundManager : MonoBehaviour
     public void PlayOneShot(SFX id)
     {
         SFXaudioSource.PlayOneShot(SFXaudioClips[(int)id]);
+    }
+
+    public void PlayBackGround(BGM bgm)
+    {
+        BGMaudioSource.clip = BGMaudioClips[(int)bgm];
+        BGMaudioSource.loop = true;
+        BGMaudioSource.Play();
     }
 }

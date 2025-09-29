@@ -20,7 +20,9 @@ public class DeleteTileTutorial : Tutorial
     {
         manager.DisAbleAllButton();
         manager.deleteTileButton.interactable = true;
-        manager.arrowImage.SetActive(false);
+        manager.arrowImage.SetActive(true);
+        manager.arrowImage.transform.eulerAngles = Vector3.back * 90f;
+        manager.arrowImage.transform.position = manager.goldObject.transform.position + Vector3.down * 100f;
 
         manager.Open();
         manager.SetText(stringIdxs[curIdx]);
@@ -42,8 +44,9 @@ public class DeleteTileTutorial : Tutorial
             curIdx++;
             if(curIdx >= stringIdxs.Length)
             {
+                manager.arrowImage.SetActive(false);
                 manager.Close();
-                ChangeFollowFingerPosition(manager.deleteTileButton.transform.position);
+                ChangeFollowFingerPosition(manager.deleteTileButton.gameObject , Side.Top);
                 return;
             }
             manager.SetText(stringIdxs[curIdx]);

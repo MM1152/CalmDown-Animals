@@ -28,6 +28,11 @@ public class EnemySpawner : MonoBehaviour
         animalInfoTable = DataTableManager.animalInfoTable;
     }
 
+    public SpawnEnemyInfo GetInfoTileInTutorial()
+    {
+        return infoTiles[0];
+    }
+
     public void CheckDieEnemy()
     {
         //FIX : 여기 수정 해야됨 모든 동물 수 카운트 이후 0 되면 종료되도록 구현 해ㅐ주어야함.

@@ -19,9 +19,9 @@ public class DrawTileTutorial : Tutorial
 
     public override void Play()
     {
+        
         manager.Open();
         manager.SetText(stringIdxs[curIdx++]);
-        manager.crewManager.ClearAllCrews();
         manager.DisAbleAllButton();
         manager.arrowImage.SetActive(false);
         manager.inEditWindowButton.interactable = true;
@@ -31,11 +31,11 @@ public class DrawTileTutorial : Tutorial
         action1 = () => {
             manager.windowManager.Open(Window.TileEditorWindow);
             Canvas.ForceUpdateCanvases();
-            ChangeFollowFingerPosition(manager.inTileDrawModeButton.transform.position);
+            ChangeFollowFingerPosition(manager.inTileDrawModeButton.gameObject, Side.Top);
         };
         action2 = () => {
             Canvas.ForceUpdateCanvases();
-            ChangeFollowFingerPosition(manager.editTileButton.transform.position);
+            ChangeFollowFingerPosition(manager.editTileButton.gameObject, Side.Top);
         };
         action3 = () =>
         {
@@ -76,7 +76,7 @@ public class DrawTileTutorial : Tutorial
             if (curIdx >= stringIdxs.Length)
             {
                 manager.Close();
-                ChangeFollowFingerPosition(manager.inEditWindowButton.transform.position);
+                ChangeFollowFingerPosition(manager.inEditWindowButton.gameObject, Side.Top);
                 return;
             }
 

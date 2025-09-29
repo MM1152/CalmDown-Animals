@@ -23,6 +23,7 @@ public class SaveDataV1 : SaveData
     public int wave;
     public bool canLoadSaveData;
     public int time;
+    public bool isClearTutorial;
     public override SaveData VersionUp()
     {
         throw new System.NotImplementedException();

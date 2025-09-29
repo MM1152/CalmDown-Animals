@@ -31,6 +31,12 @@ public class CrewManager : MonoBehaviour
     private Dictionary<CrewRank, List<Vector3>> placePosition = new Dictionary<CrewRank, List<Vector3>>();
 
     public event Action changeUnitCount;
+
+    public event Action CrewPlaceInTutorial;
+    public event Action OnClickCrew;
+    public event Action ReturnCrew;
+    public event Action SellingEvent;
+
     private List<Crew> placedCrews = new List<Crew>();
     private int Payment {
         get => gamemanager.Payment;
@@ -94,6 +100,11 @@ public class CrewManager : MonoBehaviour
         CrewDrag();
     }
 
+    public Crew GetCrewInTutorial()
+    {
+        return placedCrews[0];
+    }
+
     public int GetPlaceCrewCount()
     {
         return placedCrews.Count;
@@ -114,11 +125,9 @@ public class CrewManager : MonoBehaviour
         var spawnCrew = Instantiate(prefabs[rank], transform);
         spawnCrew.Spawn(this, DataTableManager.crewTable.Get(rank));
         spawnCrew.SetUnderTile(underTile);
-        spawnCrew.Spawn(this , DataTableManager.crewTable.Get(rank));
-        spawnCrew.SetUnderTile(underTile);
 
         placedCrews.Add(spawnCrew);
-
+        spawnCrew.UnShowAttackRadius();
         DragCrew = null;
     }
 
@@ -220,6 +229,7 @@ public class CrewManager : MonoBehaviour
                 var find = hit.collider.GetComponent<Crew>();
                 if (find != null)
                 {
+                    OnClickCrew?.Invoke();
                     find.ShowAttackRaius();
                     find.ResetUnderTile();
                     DragCrew = find;
@@ -273,6 +283,7 @@ public class CrewManager : MonoBehaviour
                     SetHireCount(DragCrew.Rank, GetHireCount(DragCrew.Rank) - 1);
                     gamemanager.Gold += DragCrew.GetCost();
                     Destroy(DragCrew.gameObject);
+                    SellingEvent?.Invoke();
                     return;
                 }
 
@@ -286,6 +297,7 @@ public class CrewManager : MonoBehaviour
                         if (underTile.Type == TileType.None)
                         {
                             DragCrew.SetUnderTile(underTile);
+                            CrewPlaceInTutorial?.Invoke();
                             placePosition[DragCrew.Rank].Add(underTile.transform.position);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
                             SoundManager.Instance.PlayOneShot(SFX.PlaceCrewSound);
@@ -294,12 +306,14 @@ public class CrewManager : MonoBehaviour
                         else
                         {
                             Destroy(DragCrew.gameObject);
+                            ReturnCrew?.Invoke();
                         }
                     }
                 }
                 else
                 {
                     Destroy(DragCrew.gameObject);
+                    ReturnCrew?.Invoke();
                 }
                 DragCrew.UnShowAttackRadius();
                 DragCrew = null;

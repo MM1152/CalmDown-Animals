@@ -4,8 +4,20 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using CsvHelper.Configuration.Attributes;
+
+public enum TutorialType
+{
+    Tile = 0,
+    Crew = 3,
+    Equipment = 6
+}
+
 public class TutorialManager : MonoBehaviour
 {
+    [Header("Select Start Tutorial")]
+    public TutorialType type;
+
     [Header("Reference")]
     public WindowManager windowManager;
     public TileManager tileManager;
@@ -22,6 +34,13 @@ public class TutorialManager : MonoBehaviour
 
     [Header("FollowTargets")]
     public GameObject goldObject;
+    public GameObject employPanel;
+    public GameObject employInternPanel;
+    public GameObject crewHireCount;
+    public GameObject crewPlaceCount;
+    public GameObject crewHireCost;
+    public GameObject payment;
+    public GameObject sellingLayout;
 
     [Header("Editor Window")]
     public Button inEditWindowButton;
@@ -38,6 +57,22 @@ public class TutorialManager : MonoBehaviour
     public Button deleteTileButton;
     public Button deleteAllTileButton;
     public Button backButtonInEditTile;
+
+    [Header("EmployCrew Window")]
+    public Button clearAllCrew;
+    public Button inEmployCrewBackButton;
+
+    [Header("ReadyCrew Window")]
+    public GameObject readyCrewWindow;
+    public GameObject changeWeaponTab;
+    public GameObject[] weaponListDisAbleTabs;
+    public GameObject weaponListTab;
+    public Button backButtonInReadyCrew;
+    public GameObject captureAbleSizeTab;
+
+    [Header("AnimalInfoTab")]
+    public EnemySpawner enemyInfo;
+    public GameObject animalInfoTab;
     
     private List<Tutorial> tutorials = new List<Tutorial>();
     private int curIdx = 0;
@@ -46,13 +81,19 @@ public class TutorialManager : MonoBehaviour
     private Coroutine co;
 
     //Tutorial Strings Start 7
-    public void Start()
+    public IEnumerator Start()
     {
+        yield return null;
         tutorials.Add(new DrawTileTutorial(this));
         tutorials.Add(new DeleteTileTutorial(this));
         tutorials.Add(new CreateRoadTutorial(this));
-        
-        curTutorial = tutorials[curIdx];
+        tutorials.Add(new EmployCrewTutorial(this));
+        tutorials.Add(new EmployCrewTutorial2(this));
+        tutorials.Add(new CrewSellingTutorial(this));
+        tutorials.Add(new CrewChangeEquipTutorial(this));
+
+        curTutorial = tutorials[(int)type];
+        curIdx = (int)type; 
         curTutorial.Play();
     }
 
@@ -105,6 +146,11 @@ public class TutorialManager : MonoBehaviour
         deleteTileButton.interactable = false; 
         deleteAllTileButton.interactable = false;
         backButtonInEditTile.interactable = false;
+
+        clearAllCrew.interactable = false;
+        inEmployCrewBackButton.interactable = false;
+
+        backButtonInReadyCrew.interactable = false;
     }
 
     public void SetStartCoroutine(IEnumerator ienum)

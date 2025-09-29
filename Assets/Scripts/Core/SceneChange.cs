@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,7 +15,7 @@ public class SceneChange : MonoBehaviour
     private void Start()
     {
         SaveLoadManager.Load();
-
+        Application.targetFrameRate = -1;
         loadFromFile.onClick.AddListener(() =>
         {
             SceneManager.LoadScene(changeSceneId);
@@ -31,7 +31,13 @@ public class SceneChange : MonoBehaviour
         {
             if(!SaveLoadManager.Data.canLoadSaveData)
             {
-                SceneManager.LoadScene(changeSceneId);
+                if(!SaveLoadManager.Data.isClearTutorial)
+                {
+                    SceneManager.LoadScene(2);
+                }else
+                {
+                    SceneManager.LoadScene(changeSceneId);
+                }
             }
             else
             {

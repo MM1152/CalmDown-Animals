@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.Instance.PlayBackGround(BGM.InGameSoundOneTime);
         if (SaveLoadManager.Data.canLoadSaveData)
         {
             Gold = SaveLoadManager.Data.gold;

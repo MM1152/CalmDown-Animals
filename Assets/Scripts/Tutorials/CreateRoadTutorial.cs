@@ -8,7 +8,7 @@ public class CreateRoadTutorial : Tutorial
     public CreateRoadTutorial(TutorialManager manager) : base(manager) { }
     private readonly int[] stringIdx = new int[] { 14, 15, 16 };
     private readonly int[] stringIdx2 = new int[] { 17, 18 };
-    private readonly int[] stringIdx3 = new int[] { 19, 20 };
+    private readonly int[] stringIdx3 = new int[] { 19, 20};
     private int[] currentStringTable;
     private int curIdx = 0;
 
@@ -21,7 +21,7 @@ public class CreateRoadTutorial : Tutorial
     //14
     public override void Clear()
     {
-        throw new System.NotImplementedException();
+        manager.backButtonInEditTile.onClick.RemoveListener(action1);
     }
 
     public override void Play()
@@ -30,35 +30,35 @@ public class CreateRoadTutorial : Tutorial
         currentAction = FirstAction;
         currentStringTable = stringIdx;
 
-        manager.DisAbleAllButton();
-
         manager.backButtonInEditTile.interactable = true;
 
         manager.followFingerImage.SetActive(false);
-        manager.arrowImage.SetActive(false);
+        manager.arrowImage.SetActive(true);
 
         manager.Open();
         manager.SetText(currentStringTable[curIdx]);
 
-        manager.arrowImage.transform.position = manager.goldObject.transform.position - Vector3.down * 100f;
+        manager.arrowImage.transform.position = manager.goldObject.transform.position + Vector3.down * 100f;
+        
         action1 = () =>
         {
             manager.Open();
             currentStringTable = stringIdx2;
             curIdx = -1;
             currentAction = SecondAction;
+            manager.followFingerImage.SetActive(false);
         };
 
         manager.backButtonInEditTile.onClick.AddListener(action1);
     }
 
     public override void Update()
-    {
+    { 
         if(currentStringTable == null)
         {
             manager.SetNexttutorial();
+            return;
         }
-
         if(curIdx < currentStringTable.Length)
         {
             curIdx++;
@@ -95,7 +95,7 @@ public class CreateRoadTutorial : Tutorial
     private void FirstAction()
     {
         manager.Close();
-        ChangeFollowFingerPosition(manager.backButtonInEditTile.transform.position);
+        ChangeFollowFingerPosition(manager.backButtonInEditTile.gameObject , Side.Top);
     }
 
     private void SecondAction()
@@ -113,5 +113,5 @@ public class CreateRoadTutorial : Tutorial
         manager.tileManager.DrawTwoRoadTilesInTutorial();
         showCreateRoad = true;
     }
-
+    
 }

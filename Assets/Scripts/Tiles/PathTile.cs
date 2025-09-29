@@ -2,11 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
-public enum TestType
-{
-    None,
-    Path
-}
 
 public class PathTile : Tile
 {
@@ -14,12 +9,6 @@ public class PathTile : Tile
     public int H { get; set; }
     public int F => G + H;
     public List<PathTile> Neighbor = new List<PathTile>();
-
-
-    public int testCost;
-    public TestType testType;
-    public PathTile testParentTile;
-
 
     public override TileType Type { 
         get => base.Type;

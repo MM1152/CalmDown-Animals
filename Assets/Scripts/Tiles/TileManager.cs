@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,7 +48,7 @@ public class TileManager : MonoBehaviour
     public bool isChangedTile;
 
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
-    private List<PathTile> tileList = new List<PathTile>();
+    public List<PathTile> tileList = new List<PathTile>();
     private LineRenderer lineRenderer;
 
     public static NeighborPosition neighborPosition;
@@ -58,6 +58,8 @@ public class TileManager : MonoBehaviour
     private DrawTile drawArriveTile = null;
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
     private List<PathTile> editTiles = new List<PathTile>();
+
+    public Action OnClickInfoTileInTutorial;
 
     private int[] shortPathCost = new int[]
     {
@@ -80,7 +82,7 @@ public class TileManager : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
 
-        mapIdx = Random.Range(0, Map.Count());
+        mapIdx = UnityEngine.Random.Range(0, Map.Count());
     }
 
     private void Start()
@@ -149,6 +151,11 @@ public class TileManager : MonoBehaviour
         //7.7, 0 , 1.9
     }
 
+    public PathTile GetTileInTutorial()
+    {
+        return tileTable[new Vector3(7.7f, 0f, 1.9f)];
+    }
+
     public bool CheckClearAllTileInTutorial()
     {
         for(int i = 0; i < tileList.Count; i++)
@@ -177,6 +184,7 @@ public class TileManager : MonoBehaviour
                     var popup = popupManager.Open(Popup.AnimalInfoPopup) as AnimalInfoPopup;
                     popup.AnimalInfomation = collider.GetAnimalData();
                     popup.transform.position = Camera.main.WorldToScreenPoint(collider.transform.position);
+                    OnClickInfoTileInTutorial?.Invoke();
                 }
             }
         }
@@ -557,14 +565,6 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public void ClearAllTestTile()
-    {
-        foreach (var tile in tileList)
-        {
-             tile.testType = TestType.None;
-        }
-    }
-
     private void FindRect(Vector2 a)
     {
         if(dragAblePos.x > a.x)
@@ -683,7 +683,7 @@ public class TileManager : MonoBehaviour
     {
         if (!DataTableManager.roundTable.Get(gameManager.Wave).isUnavail) return;
 
-        float percent = Random.Range(0f, 1f);
+        float percent = UnityEngine.Random.Range(0f, 1f);
 
         foreach (var tile in tileList)
         {
