@@ -16,13 +16,14 @@ public class OptionPopup : GenericPopup
 
     public GameObject layout;
     public TileManager tileManager;
-
+    public Cloudes cloud;
     public override void Init(PopupManager manager)
     {
         SFXsoundSlider.onValueChanged.AddListener(SoundManager.Instance.ChangeSFXSound);
         BGMsoundSlider.onValueChanged.AddListener(SoundManager.Instance.ChangeBGMSound);
         offTrees.GetComponent<Image>().color = Variable.onTree ? new Color(1f, 1f, 1f) : new Color(0.3207547f, 0.3207547f, 0.3207547f);
         offFPX.GetComponent<Image>().color = Variable.onFPX ? new Color(1f, 1f, 1f) : new Color(0.3207547f, 0.3207547f, 0.3207547f);
+        offClouds.GetComponent<Image>().color = Variable.onFPX ? new Color(1f, 1f, 1f) : new Color(0.3207547f, 0.3207547f, 0.3207547f);
         SFXsoundSlider.value = SoundManager.Instance.GetSFXValue();
         BGMsoundSlider.value = SoundManager.Instance.GetBGMValue();
 
@@ -53,6 +54,19 @@ public class OptionPopup : GenericPopup
             }
         });
 
+        offClouds.onClick.AddListener(() =>
+        {
+            Variable.onCloud = !Variable.onCloud;
+            if (!Variable.onCloud)
+            {
+                offClouds.GetComponent<Image>().color = new Color(0.3207547f, 0.3207547f, 0.3207547f);
+                cloud?.gameObject.SetActive(false);
+            }
+            else
+            {
+                offClouds.GetComponent<Image>().color = new Color(1f, 1f, 1f);
+            }
+        });
         base.Init(manager);
     }
 

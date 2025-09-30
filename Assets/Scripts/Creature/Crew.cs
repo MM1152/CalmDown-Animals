@@ -226,7 +226,7 @@ public class Crew : MonoBehaviour
         return data.Crew_capture;
     }
 
-    public int GetCaptureSpeed()
+    public float GetCaptureSpeed()
     {
         return data.Crew_atkspd;
     }

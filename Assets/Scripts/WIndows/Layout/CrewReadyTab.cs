@@ -73,8 +73,8 @@ public class CrewReadyTab : MonoBehaviour
         rankText.text = DataTableManager.crewTable.Get(crew.Rank).Crew_name;
         paymentText.text = crew.GetPayCheck() + " / ¶ó¿îµå";
         equipmentNameText.text = crew.weapon.GetName();
-        captureDamageText.text = (int)(crew.weapon.GetCaptureDmg() + crew.GetCapture()) + "";
-        captureSpeedText.text = (int)(crew.weapon.GetCaptureSpeed() + crew.GetCaptureSpeed()) + "";
+        captureDamageText.text = (crew.weapon.GetCaptureDmg() + crew.GetCapture()) + "";
+        captureSpeedText.text = (crew.weapon.GetCaptureSpeed() + crew.GetCaptureSpeed()) + "";
         gameObject.SetActive(true);
 
         if(crew.Rank == CrewRank.Intern)

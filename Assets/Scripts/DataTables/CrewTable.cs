@@ -15,7 +15,7 @@ public class CrewTable : DataTable
         public int equType_ID { get; set; }
         public bool isEquchange { get; set; }
         public int Crew_capture { get; set; }
-        public int Crew_atkspd { get; set; }
+        public float Crew_atkspd { get; set; }
         public string Crew_info { get; set; }
 
         public int GetSpawnAbleRound => DataTableManager.crewRankTable.Get(rank_ID).Buyround;
