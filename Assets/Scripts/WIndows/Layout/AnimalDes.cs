@@ -22,10 +22,10 @@ public class AnimalDes : MonoBehaviour
     public void UpdateDescription(AnimalInfoTable.Data data)
     {
         animalname.text = data.Kor_Name;
-        cr_IdText.text = DataTableManager.animalCRRankTable.Get(data.CR_ID).name;
-        captureText.text = data.CaptureHP.ToString();
-        sizeText.text = DataTableManager.animalSizeTable.Get(data.Size_ID).name;
-        speedText.text = DataTableManager.animalSpeedTable.Get(data.Spd).name;
+        cr_IdText.text = "등급 : " + DataTableManager.animalCRRankTable.Get(data.CR_ID).name;
+        captureText.text = "포획도 : " + data.CaptureHP.ToString();
+        sizeText.text = "사이즈 : " + DataTableManager.animalSizeTable.Get(data.Size_ID).name;
+        speedText.text = "속도 : " + DataTableManager.animalSpeedTable.Get(data.Spd).name;
 
         image.sprite = data.fullImage;
 

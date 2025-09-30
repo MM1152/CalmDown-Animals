@@ -9,7 +9,8 @@ public class CrewReadyTab : MonoBehaviour
 
     public TextMeshProUGUI rankText;
     public TextMeshProUGUI paymentText;
-    public TextMeshProUGUI dpsText;
+    public TextMeshProUGUI captureDamageText;
+    public TextMeshProUGUI captureSpeedText;
     public Image equipmentImage;
     public TextMeshProUGUI equipmentNameText;
     public TextMeshProUGUI captureAnimalText;
@@ -72,13 +73,23 @@ public class CrewReadyTab : MonoBehaviour
         rankText.text = DataTableManager.crewTable.Get(crew.Rank).Crew_name;
         paymentText.text = crew.GetPayCheck() + " / ¶ó¿îµå";
         equipmentNameText.text = crew.weapon.GetName();
-        dpsText.text = (int)(crew.weapon.GetCaptureDmg() + crew.GetCapture()) / (int)(crew.weapon.GetCaptureSpeed() + crew.GetCaptureSpeed()) + " / sec";
+        captureDamageText.text = (int)(crew.weapon.GetCaptureDmg() + crew.GetCapture()) + "";
+        captureSpeedText.text = (int)(crew.weapon.GetCaptureSpeed() + crew.GetCaptureSpeed()) + "";
         gameObject.SetActive(true);
 
-        foreach(var image in captureAble)
+        if(crew.Rank == CrewRank.Intern)
         {
-            image.color = Color.black;
+            equipmentList[2].transform.GetChild(0).GetComponent<Image>().color = Color.black;
         }
+        else
+        {
+            equipmentList[2].transform.GetChild(0).GetComponent<Image>().color = new Color(0.6901961f , 0.7098039f , 0.6509804f);
+        }
+
+            foreach (var image in captureAble)
+            {
+                image.color = Color.black;
+            }
 
         for(int i = 0; i < 5; i++)
         {

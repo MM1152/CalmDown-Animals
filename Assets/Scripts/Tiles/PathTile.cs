@@ -16,7 +16,7 @@ public class PathTile : Tile
         {
             base.Type = value;
 
-            if((Type & (TileType.Path | TileType.Blocked | TileType.Crew)) > 0)
+            if(((Type & (TileType.Path | TileType.Blocked | TileType.Crew)) > 0) || !Variable.onTree)
             {
                 ClearDesignTile();
             }

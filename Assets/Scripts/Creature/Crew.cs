@@ -180,7 +180,7 @@ public class Crew : MonoBehaviour
                 transform.position = underTile.transform.position;
                 if (target.Hit(weapon.GetCaptureDmg() + data.Crew_capture))
                 {
-                    underTile.CrewKillCount++;
+                    underTile.GetComponent<InTileAnimal>().killStack++;
                     spawner.gamemanager.captureAnimalCount++;
                     Debug.Log("Kill Unit", gameObject);
                 }

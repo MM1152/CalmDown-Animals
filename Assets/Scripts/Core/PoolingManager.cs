@@ -9,7 +9,10 @@ public abstract class PoolingManager<TKey,T> : MonoBehaviour where T : MonoBehav
 
     public T ShowObject(TKey key)
     {
+        if (!Variable.onFPX) return null;
+
         T item = null;
+
         if (poolingQueue[key].Count <= 0)
         {
             item = CreateInstance(key);              

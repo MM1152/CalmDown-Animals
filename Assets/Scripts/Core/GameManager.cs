@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public WindowManager windowManager;
     public PopupManager popupManager;
     public CrewManager crewManager;
-
+    public EmployUnitWindow employUnitWindow;
     [Header("Texts")]
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI timerText;
@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
     public event Action startWave;
     public event Action endWave;
 
+    private bool showWarningSign = false;
+
     public bool WaveStart { get; private set; } = false;
 
     public int AllAnimalSpawnCount
@@ -99,12 +101,11 @@ public class GameManager : MonoBehaviour
         waveText.text = wave + "¿þÀÌºê";
         goldText.text = gold.ToString();
         captureAnimalCount = 0;
-
     }
 
     private void Start()
     {
-        SoundManager.Instance.PlayBackGround(BGM.InGameSoundOneTime);
+        SoundManager.Instance.PlayBackGround(BGM.InGameSoundLoop);
         if (SaveLoadManager.Data.canLoadSaveData)
         {
             Gold = SaveLoadManager.Data.gold;
@@ -112,6 +113,7 @@ public class GameManager : MonoBehaviour
             timer = SaveLoadManager.Data.time;
             timerToInt = SaveLoadManager.Data.time;
             tileManager.DrawTiles(SaveLoadManager.Data.mapSize);
+            employUnitWindow.UpdateSaveData(Wave);
         }
         else
         {
@@ -139,8 +141,16 @@ public class GameManager : MonoBehaviour
             popup.Id = 6;
             return;
         }
+        if(roundClearGold - payment + gold < 0 && !showWarningSign)
+        {
+            var popup = popupManager.Open(Popup.TextPopUp) as StringPopUp;
+            popup.Id = 55;
+            showWarningSign = true;
+            return;
+        }
 
         WaveStart = true;
+        showWarningSign = false;
         windowManager.Open(Window.DuringGameWindow);
         startWave?.Invoke();
     }

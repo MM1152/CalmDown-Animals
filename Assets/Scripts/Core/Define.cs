@@ -56,6 +56,13 @@ public static class HexaUtility
     }
 }
 
+public static class Variable
+{
+    public static bool onTree = true;
+    public static bool onCloud = true;
+    public static bool onFPX = true;
+} 
+
 public static class TagIds
 {
     public static readonly string GameManagerTag = "GameController";

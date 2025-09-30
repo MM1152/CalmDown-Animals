@@ -14,7 +14,7 @@ public class CrewRankTable : DataTable
         {
             "Green" => new Color(0.3118286f , 0.5396226f , 0f , 1f),
             "Blue" => new Color(0.01666641f , 0f , 1f ,1f),
-            "Purple" => new Color(0.2226862f, 0f , 1f , 1f),
+            "Purple" => new Color(1f, 0.6229727f, 0f , 1f),
             "Yellow" => new Color(0.3660378f, 0.2492808f, 0.07666072f, 1f)
         };
     }

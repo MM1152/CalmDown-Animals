@@ -27,6 +27,7 @@ public class EditorWindow : GenericWindow
     public override void Open()
     {
         base.Open();
+        Status.CameraDrag = true;
         Status.ShowAnimalInfo = true;
     }
 

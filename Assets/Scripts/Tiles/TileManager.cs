@@ -64,9 +64,9 @@ public class TileManager : MonoBehaviour
     private int[] shortPathCost = new int[]
     {
         0,
-        500,
-        850,
-        1250
+        200,
+        350,
+        550
     };
 
     //x : left , y : top , z : width , w : height 
@@ -154,6 +154,14 @@ public class TileManager : MonoBehaviour
     public PathTile GetTileInTutorial()
     {
         return tileTable[new Vector3(7.7f, 0f, 1.9f)];
+    }
+
+    public void ChangeVariableOnTree()
+    {
+        foreach(var tile in tileList)
+        {
+            tile.Type = tile.Type;
+        }
     }
 
     public bool CheckClearAllTileInTutorial()
@@ -474,7 +482,7 @@ public class TileManager : MonoBehaviour
 
     public void DrawTiles()
     {
-        int mapSize = DataTableManager.roundTable.Get(gameManager.Wave - 1).Map_Size;
+        int mapSize = DataTableManager.roundTable.Get(gameManager.Wave).Map_Size;
         if (mapSize == this.mapSize)
         {
             return;
@@ -555,7 +563,8 @@ public class TileManager : MonoBehaviour
 
     public void ClearAllTiles()
     {
-        foreach(var tile in tileList)
+        isChangedTile = true;
+        foreach (var tile in tileList)
         {
             if(!startTile.Contains(tile) && arriveTile != tile && tile.Type == TileType.Path)
             {

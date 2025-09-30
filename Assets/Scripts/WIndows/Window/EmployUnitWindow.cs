@@ -33,6 +33,19 @@ public class EmployUnitWindow : GenericWindow
         };
     }
 
+    public void UpdateSaveData(int wave)
+    {
+        for(int i = 1; i <= 3; i++)
+        {
+            if(wave >= DataTableManager.crewRankTable.Get(i).Buyround)
+            {
+                spawnCrewEvents[i].SetActive(true);
+                spawnAbleIdx++;
+            }
+
+        }
+    }
+
     public override void Open()
     {
         base.Open();

@@ -63,6 +63,5 @@ public class Book : MonoBehaviour
 
         button.onClick.AddListener(() => gameObject.SetActive(false));
         gameObject.SetActive(false);
-
     }
 }

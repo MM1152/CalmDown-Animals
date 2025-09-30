@@ -112,14 +112,20 @@ public class SpawnEnemyInfo : MonoBehaviour
             health.onDie += () =>
             {
                 var item = particleSpawner.ShowObject(ParticleType.Die);
-                item.transform.position = enemy.meshObject.transform.position + Vector3.up;
-                item.Play();
+                if(item != null)
+                {
+                    item.transform.position = enemy.meshObject.transform.position + Vector3.up;
+                    item.Play();
+                }
             };
             health.onHit += () =>
             {
                 var item = particleSpawner.ShowObject(ParticleType.Hit);
-                item.transform.position = enemy.meshObject.transform.position + Vector3.up;
-                item.Play();
+                if(item != null)
+                {
+                    item.transform.position = enemy.meshObject.transform.position + Vector3.up;
+                    item.Play();
+                }
             };
         }
 

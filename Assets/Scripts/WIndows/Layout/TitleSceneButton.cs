@@ -1,12 +1,9 @@
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public class SceneChange : MonoBehaviour
+public class TitleSceneButton : MonoBehaviour
 {
-    private readonly string tutorialId = "TutorialScene";
     public string changeSceneId;
 
     private Button button;
@@ -17,15 +14,6 @@ public class SceneChange : MonoBehaviour
 
     public Button bookButton;
     public Button settingButton;
-    
-    public void ChangeScene(string id)
-    {
-        if(id == tutorialId)
-        {
-            SaveLoadManager.Data.canLoadSaveData = false;
-        }
-        SceneManager.LoadScene(id);
-    }
 
     private void Start()
     {
@@ -42,24 +30,25 @@ public class SceneChange : MonoBehaviour
         {
             SceneManager.LoadScene(changeSceneId);
         });
+
         startNew.onClick.AddListener(() =>
         {
             SoundManager.Instance.PlayOneShot(SFX.OnClickStartbuttonInTitle);
-            
+
             SaveLoadManager.Data.canLoadSaveData = false;
-            SaveLoadManager.Save();
             SceneManager.LoadScene(changeSceneId);
         });
 
         button = GetComponent<Button>();
         button.onClick.AddListener(() =>
         {
-            if(!SaveLoadManager.Data.canLoadSaveData)
+            if (!SaveLoadManager.Data.canLoadSaveData)
             {
-                if(!SaveLoadManager.Data.isClearTutorial)
+                if (!SaveLoadManager.Data.isClearTutorial)
                 {
                     SceneManager.LoadScene(2);
-                }else
+                }
+                else
                 {
                     SceneManager.LoadScene(changeSceneId);
                 }
@@ -68,6 +57,6 @@ public class SceneChange : MonoBehaviour
             {
                 viewer.SetActive(true);
             }
-        });       
+        });
     }
 }

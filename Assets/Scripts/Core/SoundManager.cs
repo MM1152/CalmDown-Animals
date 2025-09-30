@@ -18,12 +18,16 @@ public enum SFX
 
     GameClearSound,
     GameLoseSound,
+
+    OnClickButtonInTitle,
+    OnClickStartbuttonInTitle,
 }
 
 public enum BGM
 {
     InGameSoundOneTime,
     InGameSoundLoop,
+    TitleSceneBackGround,
 }
 
 [RequireComponent(typeof(AudioSource))]
@@ -35,10 +39,12 @@ public class SoundManager : MonoBehaviour
     [Header("BGM")]
     public AudioClip[] BGMaudioClips;
 
-    private AudioSource SFXaudioSource;
-    private AudioSource BGMaudioSource;
+    public AudioSource SFXaudioSource;
+    public AudioSource BGMaudioSource;
     public static SoundManager Instance => GetInstance();
     private static SoundManager _Instance; 
+
+    
 
     private static SoundManager GetInstance()
     {
@@ -57,8 +63,18 @@ public class SoundManager : MonoBehaviour
             Destroy(gameObject);
         }else
         {
-            SFXaudioSource = GetComponent<AudioSource>();
+            DontDestroyOnLoad(this);
         }
+    }
+
+    public void ChangeSFXSound(float value)
+    {
+        SFXaudioSource.volume = value;
+    }
+
+    public void ChangeBGMSound(float value)
+    {
+        BGMaudioSource.volume = value;
     }
 
     public void PlayOneShot(SFX id)
@@ -71,5 +87,15 @@ public class SoundManager : MonoBehaviour
         BGMaudioSource.clip = BGMaudioClips[(int)bgm];
         BGMaudioSource.loop = true;
         BGMaudioSource.Play();
+    }
+
+    public float GetSFXValue()
+    {
+        return SFXaudioSource.volume;
+    }
+
+    public float GetBGMValue()
+    {
+        return BGMaudioSource.volume;
     }
 }

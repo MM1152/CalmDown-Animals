@@ -15,8 +15,8 @@ public class PopupManager : MonoBehaviour
     {
         foreach(var popup in popups)
         {
-            popup.Init(this);
-            popup.Close();
+            popup?.Init(this);
+            popup?.Close();
         }
     }
 
