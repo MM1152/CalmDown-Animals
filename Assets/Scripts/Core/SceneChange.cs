@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -17,7 +18,9 @@ public class SceneChange : MonoBehaviour
 
     public Button bookButton;
     public Button settingButton;
-    
+
+    public PopupManager popup;
+
     public void ChangeScene(string id)
     {
         if(id == tutorialId)
@@ -50,6 +53,11 @@ public class SceneChange : MonoBehaviour
             SaveLoadManager.Save();
             SceneManager.LoadScene(changeSceneId);
         });
+        settingButton.onClick.AddListener(() =>
+        {
+            popup.Open(Popup.OptionPopup);
+        });
+
 
         button = GetComponent<Button>();
         button.onClick.AddListener(() =>

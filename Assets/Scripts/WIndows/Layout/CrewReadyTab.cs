@@ -80,16 +80,18 @@ public class CrewReadyTab : MonoBehaviour
         if(crew.Rank == CrewRank.Intern)
         {
             equipmentList[2].transform.GetChild(0).GetComponent<Image>().color = Color.black;
+            equipmentList[2].transform.GetChild(0).GetChild(0).GetComponent<Image>().color = Color.black;
         }
         else
         {
             equipmentList[2].transform.GetChild(0).GetComponent<Image>().color = new Color(0.6901961f , 0.7098039f , 0.6509804f);
+            equipmentList[2].transform.GetChild(0).GetChild(0).GetComponent<Image>().color = Color.white;
         }
 
-            foreach (var image in captureAble)
-            {
-                image.color = Color.black;
-            }
+        foreach (var image in captureAble)
+        {
+            image.color = Color.black;
+        }
 
         for(int i = 0; i < 5; i++)
         {

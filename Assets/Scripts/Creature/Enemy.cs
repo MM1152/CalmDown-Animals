@@ -77,6 +77,8 @@ public class Enemy : MonoBehaviour
     {
         if(spawn && nTile != null)
         {
+            var prevPosition = transform.position;
+
             transform.position += dir * speed * Time.deltaTime;
             
             if(Vector3.Distance(transform.position , nPos) < gridSize.x * 0.5f && !inTileSetting)
@@ -86,7 +88,7 @@ public class Enemy : MonoBehaviour
                 inTileSetting = true;
             }
 
-            if (Vector3.Distance(transform.position , nPos) < 0.2f)
+            if (Vector3.Distance(transform.position , nPos) < Vector3.Distance(transform.position , prevPosition))
             {
                 prevTile = nTile;
                 if (nTile.ParentTile == null)
@@ -109,9 +111,10 @@ public class Enemy : MonoBehaviour
 
         else if(spawn && nTile == null)
         {
+            var prevPosition = transform.position;
             transform.position += dir * speed * Time.deltaTime;
 
-            if (Vector3.Distance(nPos , transform.position) < 0.2f)
+            if (Vector3.Distance(nPos , transform.position) < Vector3.Distance(transform.position, prevPosition))
             {
                 health.Die();
                 gameManager.EscapeAnimals();

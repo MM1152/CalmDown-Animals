@@ -1,8 +1,10 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class DebugMode : MonoBehaviour
 {
 #if DEBUG
+    public TextMeshProUGUI frame;
     public Button setPrevWaveButton;
     public Button setNextWaveButton;
 
@@ -50,6 +52,11 @@ public class DebugMode : MonoBehaviour
                 Time.timeScale = 1f;
             }
         });
+    }
+
+    private void Update()
+    {
+        frame.text = (1f / Time.deltaTime) + " fps";
     }
 #endif
 }
