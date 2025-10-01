@@ -65,7 +65,7 @@ public class PathTile : Tile
 
     private void ShowDesignTile()
     {
-        if (designIdx <= -1) return;
+        if (designIdx <= -1 || !Variable.onTree) return;
 
         designObjets[designIdx].SetActive(true);
     }

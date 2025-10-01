@@ -19,15 +19,11 @@ public class MenuTabPopup : GenericPopup
         {
             manager.Open(Popup.OptionPopup);
         });
-        backToTileButton.onClick.AddListener(() => SceneManager.LoadScene(0));
-    }
-    private void LateUpdate()
-    {
-        if(action != null)
-        {
-            action.Invoke();
-            action = null;
-        }
+        backToTileButton.onClick.AddListener(() => {
+            SaveLoadManager.Data.canLoadSaveData = false;
+            SaveLoadManager.Save();
+            SceneManager.LoadScene(0);
+        });
     }
     public override void Open()
     {

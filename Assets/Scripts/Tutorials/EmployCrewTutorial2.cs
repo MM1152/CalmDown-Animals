@@ -68,8 +68,8 @@ public class EmployCrewTutorial2 : Tutorial
         manager.crewManager.ReturnCrew -= ReturnCrewAction;
         manager.followFingerImage.SetActive(false);
 
-        ChangeArrowPosition(manager.crewHireCost , Side.Right);
-        manager.arrowImage.transform.eulerAngles = Vector3.zero;
+        ChangeArrowPosition(manager.crewHireCost , Side.Top);
+        manager.arrowImage.transform.eulerAngles = Vector3.forward * 90f;
         duringAction = () =>
         {
             ChangeArrowPosition(manager.payment, Side.Bottom);

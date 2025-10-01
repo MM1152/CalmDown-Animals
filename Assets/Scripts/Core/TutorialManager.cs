@@ -92,8 +92,13 @@ public class TutorialManager : MonoBehaviour
         tutorials.Add(new CrewSellingTutorial(this));
         tutorials.Add(new CrewChangeEquipTutorial(this));
 
+#if UNITY_EDITOR 
         curTutorial = tutorials[(int)type];
         curIdx = (int)type; 
+#elif UNITY_ANDROID || UNITY_IOS
+        curTutorial = tutorials[0];
+        curIdx = 0;
+#endif
         curTutorial.Play();
     }
 
