@@ -112,7 +112,7 @@ public class TouchManager : MonoBehaviour
             }
             else if (touchType != TouchType.Drag && touch.phase == TouchPhase.Ended)
             {
-                touchType = TouchType.Tab;
+                    touchType = TouchType.Tab;
             }
             else
             {

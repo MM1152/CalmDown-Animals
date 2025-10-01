@@ -38,7 +38,10 @@ public class EnemySpawner : MonoBehaviour
 
     public void SetSizeColor(int sizeId)
     {
-        sizeText[sizeId].color = Color.white;
+        if(sizeId < sizeText.Length)
+        {
+            sizeText[sizeId].color = Color.white;
+        }
     }
 
     public void ClearAllText()

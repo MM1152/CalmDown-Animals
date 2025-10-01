@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour
         {
             transform.position += dir * speed * Time.deltaTime;
 
-            if (Vector3.Distance(nPos , transform.position) < 0.05f)
+            if (Vector3.Distance(nPos , transform.position) < 0.2f)
             {
                 health.Die();
                 gameManager.EscapeAnimals();

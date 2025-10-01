@@ -21508,7 +21508,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1467368766167760821, guid: 8646deba5f13ed54faed751fe6c0b76d, type: 3}
       propertyPath: m_text
-      value: "\uACF5\uACA9 \uC18D\uB3C4"
+      value: "\uD3EC\uD68D \uC18D\uB3C4"
       objectReference: {fileID: 0}
     - target: {fileID: 1467368766167760821, guid: 8646deba5f13ed54faed751fe6c0b76d, type: 3}
       propertyPath: m_fontColor32.rgba

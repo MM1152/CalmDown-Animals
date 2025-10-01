@@ -176,7 +176,6 @@ public class CrewManager : MonoBehaviour
         info.hire = hireCount;
         unitInfomation[rank] = info;
         changeUnitCount?.Invoke();
-
     }
 
     private void SetPlaceCount(CrewRank rank, int placeCount)
@@ -298,10 +297,37 @@ public class CrewManager : MonoBehaviour
                         {
                             DragCrew.SetUnderTile(underTile);
                             CrewPlaceInTutorial?.Invoke();
-                            placePosition[DragCrew.Rank].Add(underTile.transform.position);
                             SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
+
                             SoundManager.Instance.PlayOneShot(SFX.PlaceCrewSound);
-                            placedCrews.Add(DragCrew);
+
+                            SaveCrewData(DragCrew, underTile.transform.position);
+                        }
+                        else if(underTile.Type == TileType.Crew)
+                        {
+                            if(DragCrew.UnderTile != null)
+                            {
+                                RemoveCrewData(DragCrew, DragCrew.UnderTile.transform.position);
+                                RemoveCrewData(underTile.crew, underTile.transform.position);
+
+                                var destinationCrew = underTile.crew;
+
+                                SwapCrew(DragCrew, destinationCrew);
+                                SoundManager.Instance.PlayOneShot(SFX.PlaceCrewSound);
+
+                                SaveCrewData(DragCrew , DragCrew.UnderTile.transform.position);
+                                SaveCrewData(destinationCrew, destinationCrew.UnderTile.transform.position);
+                            }
+                            else
+                            {
+                                underTile.crew.ResetUnderTile();
+                                ClearCrew(underTile.crew);
+                                Destroy(underTile.crew.gameObject);
+
+                                DragCrew.SetUnderTile(underTile);
+                                SetPlaceCount(DragCrew.Rank, GetPlaceCount(DragCrew.Rank) + 1);
+                            }
+          
                         }
                         else
                         {
@@ -320,5 +346,26 @@ public class CrewManager : MonoBehaviour
                 isSpawn = false;
             }
         }
+    }
+    //Swap underTile between taget to destination
+    private void SwapCrew(Crew target , Crew destination)
+    {
+        var tempUnderTile = target.UnderTile;
+        target.SetUnderTile(destination.UnderTile);
+        destination.SetUnderTile(tempUnderTile);
+
+        SetPlaceCount(target.Rank, GetPlaceCount(target.Rank) + 1);
+    }
+
+    private void RemoveCrewData(Crew crew, Vector3 position)
+    {
+        placePosition[crew.Rank].Remove(position);
+        placedCrews.Remove(crew);
+    }
+
+    private void SaveCrewData(Crew crew , Vector3 position)
+    {
+        placePosition[crew.Rank].Add(position);
+        placedCrews.Add(crew);
     }
 }

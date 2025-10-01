@@ -107,6 +107,6 @@ public class DragCamera : MonoBehaviour
             }
 #endif
 
-        cam.transform.position += -(linear * dragSpeed * Time.deltaTime);
+        cam.transform.position += -(linear * dragSpeed * Time.unscaledDeltaTime);
     }
 }

@@ -76,15 +76,18 @@ public class Crew : MonoBehaviour
             underTile = tile;
         }
 
+        underTile.crew = this;
         transform.position = underTile.transform.position + Vector3.up * 0.5f;
         FindAroundTiles();
         underTile.SetTileinfomation(TileType.Crew, DataTableManager.crewTable.Get(Rank).Color);
         underTile.Type = TileType.Crew;
+        UnShowAttackRadius();
     }
 
     public void ResetUnderTile()
     {
         underTile.Type = TileType.None;
+       
         foreach(var aroundTile in aroundTiles)
         {
             aroundTile.CheckOutAnimal -= CheckTargetInTile;

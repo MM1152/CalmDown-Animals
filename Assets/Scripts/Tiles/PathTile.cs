@@ -9,6 +9,7 @@ public class PathTile : Tile
     public int H { get; set; }
     public int F => G + H;
     public List<PathTile> Neighbor = new List<PathTile>();
+    public Crew crew;
 
     public override TileType Type { 
         get => base.Type;

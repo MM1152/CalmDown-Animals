@@ -683,7 +683,7 @@ public class TileManager : MonoBehaviour
         Vector3 spawnPosition = drawTile.transform.position;
         Vector3 drawPosition = spawnPosition 
             + Vector3.Scale((spawnPosition - tile.transform.position).normalized ,new Vector3(neighborPosition.gridSize.y , 0 , neighborPosition.gridSize.x));
-
+        
         var spawner = enemySpawner.SettingSpawnInfoTile(startTile[startTile.Count - 1] , drawPosition, spawnPosition);
         tile.EnemyInfo = spawner;
     }

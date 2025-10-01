@@ -17,6 +17,8 @@ public class OptionPopup : GenericPopup
     public GameObject layout;
     public TileManager tileManager;
     public Cloudes cloud;
+
+
     public override void Init(PopupManager manager)
     {
         SFXsoundSlider.onValueChanged.AddListener(SoundManager.Instance.ChangeSFXSound);

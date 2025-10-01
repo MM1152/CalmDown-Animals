@@ -11,6 +11,7 @@ public class MenuTabPopup : GenericPopup
     public GameObject target;
 
     private Action action;
+    public PopupManager popupManager;
 
     public override void Init(PopupManager manager)
     {
