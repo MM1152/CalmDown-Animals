@@ -8818,9 +8818,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3109643986531986715, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 329876075}
-    - targetCorrespondingSourceObject: {fileID: 3109643986531986715, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 329876079}
     - targetCorrespondingSourceObject: {fileID: 860586795618777288, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 329876074}
@@ -8957,20 +8954,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &329876079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 329876071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98f8ffad3305cf640b60488681b40274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disAbleColor: {r: 0.5698112, g: 0.5698112, b: 0.5698112, a: 1}
-  enableColor: {r: 0.43137258, g: 0.5019608, b: 0.4156863, a: 1}
 --- !u!114 &329876081 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6959778693454247545, guid: 8a0daea69846deb418140628c68abdc8, type: 3}
