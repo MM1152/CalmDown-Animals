@@ -53,7 +53,7 @@ public class EmployCrewTutorial2 : Tutorial
     {
         manager.SetStartCoroutine(FingerMoveCo());
         startPos = Camera.main.WorldToScreenPoint(manager.crewManager.GetCrewInTutorial().transform.position);
-        manager.crewManager.ReturnCrew += ReturnCrewAction;
+        manager.crewManager.ReturnCrewInTutorial += ReturnCrewAction;
         manager.crewManager.OnClickCrew -= OnClickCrewAction;
     }
 
@@ -65,7 +65,7 @@ public class EmployCrewTutorial2 : Tutorial
         manager.SetText(curStringTable[curIdx]);    
 
         manager.SetStopCoroutine();
-        manager.crewManager.ReturnCrew -= ReturnCrewAction;
+        manager.crewManager.ReturnCrewInTutorial -= ReturnCrewAction;
         manager.followFingerImage.SetActive(false);
 
         ChangeArrowPosition(manager.crewHireCost , Side.Top);

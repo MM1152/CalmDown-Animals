@@ -34,8 +34,8 @@ public class CrewManager : MonoBehaviour
 
     public event Action CrewPlaceInTutorial;
     public event Action OnClickCrew;
-    public event Action ReturnCrew;
-    public event Action SellingEvent;
+    public event Action ReturnCrewInTutorial;
+    public event Action SellingEventInTutorial;
 
     private List<Crew> placedCrews = new List<Crew>();
     private int Payment {
@@ -283,7 +283,7 @@ public class CrewManager : MonoBehaviour
                     SetHireCount(DragCrew.Rank, GetHireCount(DragCrew.Rank) - 1);
                     gamemanager.Gold += DragCrew.GetCost();
                     Destroy(DragCrew.gameObject);
-                    SellingEvent?.Invoke();
+                    SellingEventInTutorial?.Invoke();
                     return;
                 }
 
@@ -306,14 +306,14 @@ public class CrewManager : MonoBehaviour
                         else
                         {
                             Destroy(DragCrew.gameObject);
-                            ReturnCrew?.Invoke();
+                            ReturnCrewInTutorial?.Invoke();
                         }
                     }
                 }
                 else
                 {
                     Destroy(DragCrew.gameObject);
-                    ReturnCrew?.Invoke();
+                    ReturnCrewInTutorial?.Invoke();
                 }
                 DragCrew.UnShowAttackRadius();
                 DragCrew = null;

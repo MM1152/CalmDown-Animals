@@ -44,7 +44,7 @@ public class CrewSellingTutorial : Tutorial
         manager.SetStopCoroutine();
         manager.followFingerImage.SetActive(false);
 
-        manager.crewManager.SellingEvent -= CrewSellingEvent;
+        manager.crewManager.SellingEventInTutorial -= CrewSellingEvent;
         manager.Open();
         curStringTable = stringTableIds1;
         manager.SetText(curStringTable[curIdx]);
@@ -56,7 +56,7 @@ public class CrewSellingTutorial : Tutorial
         startPos = Camera.main.WorldToScreenPoint(manager.crewManager.GetCrewInTutorial().transform.position);
         manager.SetStartCoroutine(FingerMoveCo());
 
-        manager.crewManager.SellingEvent += CrewSellingEvent; 
+        manager.crewManager.SellingEventInTutorial += CrewSellingEvent; 
         manager.crewManager.OnClickCrew -= OnClickCrew;
     }
 
