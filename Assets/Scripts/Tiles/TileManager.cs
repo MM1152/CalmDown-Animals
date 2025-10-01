@@ -46,6 +46,7 @@ public class TileManager : MonoBehaviour
     [Space(10)]
     [Header("Check")]
     public bool isChangedTile;
+    public bool undoAble;
 
     private Dictionary<Vector3, PathTile> tileTable = new Dictionary<Vector3, PathTile>();
     public List<PathTile> tileList = new List<PathTile>();
@@ -59,6 +60,11 @@ public class TileManager : MonoBehaviour
     private List<DrawTile> drawStartTiles = new List<DrawTile>();
     private List<PathTile> editTiles = new List<PathTile>();
 
+    //Undo 용으로 사용
+    private List<PathTile> undoTiles = new List<PathTile>();
+    private TileUndo tileUndo;
+
+
     public Action OnClickInfoTileInTutorial;
 
     private int[] shortPathCost = new int[]
@@ -68,6 +74,7 @@ public class TileManager : MonoBehaviour
         350,
         550
     };
+
 
     //x : left , y : top , z : width , w : height 
     public Vector4 DragAbleRect => dragAblePos;
@@ -83,6 +90,8 @@ public class TileManager : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         mapIdx = UnityEngine.Random.Range(0, Map.Count());
+
+        tileUndo ??= GetComponent<TileUndo>();
     }
 
     private void Start()
@@ -149,6 +158,16 @@ public class TileManager : MonoBehaviour
         //4.4 , 0 , 3.8
         //6.6, 0 ,3.8
         //7.7, 0 , 1.9
+    }
+
+    public void UpdateTileUndoList()
+    {
+        if(undoTiles.Count != 0)
+        {
+            undoAble = false;
+            tileUndo?.UpdateButton();
+            tileUndo?.SaveUndoList(undoTiles, gameManager.Gold);
+        }
     }
 
     public PathTile GetTileInTutorial()
@@ -285,6 +304,8 @@ public class TileManager : MonoBehaviour
      
         if(isSuseccs)
         {
+            undoTiles.Clear();
+
             for (int i = 0; i < startTile.Count; i++)
             {
                 var strTile = startTile[i];
@@ -313,6 +334,7 @@ public class TileManager : MonoBehaviour
     {
         while(startTile != null)
         {
+            undoTiles.Add(startTile);
             if(startTile.ParentTile != null)
             {
                 startTile.GetComponent<PathTileRoad>().DrawRoad(startTile.ParentTile.GetComponent<PathTileRoad>());
@@ -363,7 +385,7 @@ public class TileManager : MonoBehaviour
                 popup.Id = 3;
                 return;
             }
-
+            
 
             tile.Type = type;
             if (tile.Type == TileType.Path)
@@ -375,6 +397,9 @@ public class TileManager : MonoBehaviour
             {
                 gameManager.Gold += tilePrice;
             }
+
+            undoAble = true;
+            tileUndo?.UpdateButton();
         }
     }
 
@@ -564,6 +589,8 @@ public class TileManager : MonoBehaviour
     public void ClearAllTiles()
     {
         isChangedTile = true;
+        undoAble = true;
+        tileUndo?.UpdateButton();
         foreach (var tile in tileList)
         {
             if(!startTile.Contains(tile) && arriveTile != tile && tile.Type == TileType.Path)

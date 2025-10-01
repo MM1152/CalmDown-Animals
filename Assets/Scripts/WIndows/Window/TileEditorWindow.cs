@@ -55,6 +55,8 @@ public class TileEditorWindow : GenericWindow
             tileManager.drawMode = false;
             Status.CameraDrag = true;
             SoundManager.Instance.PlayOneShot(SFX.OnClickButtonSound);
+
+            tileManager.UpdateTileUndoList();
         });
         backButtonInEditMode.onClick.AddListener(() => {
             editModeGo.SetActive(false);
@@ -64,9 +66,12 @@ public class TileEditorWindow : GenericWindow
             tileManager.drawMode = false;
             Status.CameraDrag = true;
             editModeOutline.SetActive(false);
+            tileManager.undoAble = false;
             SoundManager.Instance.PlayOneShot(SFX.BackSound);
         });
+
         deleteAllTilesBNT.onClick.AddListener(() => tileManager.ClearAllTiles());
+
         editButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             if (destroyMode)
@@ -80,6 +85,7 @@ public class TileEditorWindow : GenericWindow
             }
             UpdateSetting(editMode, destroyMode, TileType.Path);
         });
+
         destroyButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             if(editMode)
