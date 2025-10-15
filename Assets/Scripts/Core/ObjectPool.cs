@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PoolingManager<TKey,T> : MonoBehaviour where T : MonoBehaviour
+public abstract class ObjectPool<TKey,T> : MonoBehaviour where T : MonoBehaviour
 {
     protected Dictionary<TKey, Queue<T>> poolingQueue = new Dictionary<TKey, Queue<T>>();
-
+    public List<T> prefabs = new List<T>();
 
     public T ShowObject(TKey key)
     {

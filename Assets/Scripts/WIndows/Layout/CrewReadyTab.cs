@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class CrewReadyTab : MonoBehaviour
     public GameObject equipmentListTab;
     public GameObject[] equipmentList;
     public GameObject[] equipmentTab;
+    public UIEvent changeAllWeaponEvent;
+    public CrewManager crewManager;
 
     public Sprite[] weapons;
 
@@ -25,9 +28,21 @@ public class CrewReadyTab : MonoBehaviour
 
     private Crew currentCrew;
 
+    private bool changeAllWeapons;
+
     private void Start()
     {
-        
+        if(changeAllWeaponEvent != null)
+        {
+            changeAllWeaponEvent.PointerClick += (evnet) =>
+            {
+                if (currentCrew == null) return;
+
+                changeAllWeapons = true;
+                OpenEquipmentList(true);
+            };
+        }
+
         var uiEvent = equipmentTab[0].GetOrAddComponent<UIEvent>();
         if (uiEvent != null)
         {
@@ -47,6 +62,21 @@ public class CrewReadyTab : MonoBehaviour
                     equipmentImage.sprite = weapons[currentCrew.weapon.GetWeaponId()];
                     OpenEquipmentList(false);
                     Open(currentCrew);
+
+                    if(changeAllWeapons)
+                    {
+                        var sameRank = crewManager.PlaceCrews.Where(rank => rank.Rank == currentCrew.Rank && rank != currentCrew).ToList();
+                        foreach(var crew in sameRank)
+                        {
+                            crew.weapon.Equip(idx);
+                            crew.SetUnderTile(null);
+                            crew.UnShowAttackRadius();
+                        }
+                    }
+
+                    changeAllWeapons = false;
+
+                    currentCrew.ShowAttackRaius();
                 };
             }
         }
@@ -63,6 +93,7 @@ public class CrewReadyTab : MonoBehaviour
 
     public void Close()
     {
+        changeAllWeapons = false;
         OpenEquipmentList(false);
         gameObject.SetActive(false);
         currentCrew = null;

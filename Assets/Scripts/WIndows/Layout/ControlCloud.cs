@@ -7,11 +7,14 @@ public class ControlCloud : MonoBehaviour
     {
         if(Variable.onCloud)
         {
-            cloud.gameObject.SetActive(true);
+            cloud?.gameObject.SetActive(true);
         }
     }
     private void OnDisable()
     {
-        cloud.gameObject.SetActive(false);
+        if(cloud != null)
+        {
+            cloud?.gameObject.SetActive(false);
+        }
     }
 }

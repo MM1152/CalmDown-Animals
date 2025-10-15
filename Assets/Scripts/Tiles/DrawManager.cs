@@ -346,6 +346,8 @@ public class DrawManager : MonoBehaviour
         {
             foreach (var connectTile in tile.ConnectStartTiles)
             {
+                if (connectTile == null) continue;
+
                 connectTile.UnderTile.gameObject.SetActive(true);
                 connectTile.gameObject.SetActive(false);
                 RemoveFlagTile(connectTile);

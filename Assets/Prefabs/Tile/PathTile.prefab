@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5974903512765721427
 RectTransform:
   m_ObjectHideFlags: 0
@@ -876,6 +876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Neighbor: []
+  crew: {fileID: 0}
   changeToBlockedPercent: {fileID: 188279972022227927}
   designObjets:
   - {fileID: 1503675423540367888}

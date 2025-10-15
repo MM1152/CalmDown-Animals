@@ -11,7 +11,6 @@ public class MenuTabPopup : GenericPopup
     public GameObject target;
 
     private Action action;
-    public PopupManager popupManager;
 
     public override void Init(PopupManager manager)
     {
@@ -21,9 +20,7 @@ public class MenuTabPopup : GenericPopup
             manager.Open(Popup.OptionPopup);
         });
         backToTileButton.onClick.AddListener(() => {
-            SaveLoadManager.Data.canLoadSaveData = false;
-            SaveLoadManager.Save();
-            SceneManager.LoadScene(0);
+            manager.Open(Popup.CheckPopup);
         });
     }
     public override void Open()
@@ -48,7 +45,7 @@ public class MenuTabPopup : GenericPopup
                 }
             }
         }
-
+            
 
         Time.timeScale = 1f;
         return base.Close();

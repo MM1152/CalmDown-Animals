@@ -6173,7 +6173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a034d7453ebd0eb49908429926653745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 3
   windowManager: {fileID: 908200644}
   tileManager: {fileID: 1911704527}
   crewManager: {fileID: 423284645}
@@ -13570,10 +13570,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   backBNT: {fileID: 1987544578}
-  sellLayout: {fileID: 1472931348}
-  spawner: {fileID: 423284645}
   clearCrewsBNT: {fileID: 1186233107}
+  sellLayout: {fileID: 1472931348}
   gameManager: {fileID: 330770916}
+  spawner: {fileID: 423284645}
   spawnCrewEvents:
   - {fileID: 2147013940}
   - {fileID: 1257819483}
@@ -17075,7 +17075,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 250, y: -16.472973}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 231.35, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &761018065
 MonoBehaviour:
@@ -38236,6 +38236,8 @@ MonoBehaviour:
   equipmentTab:
   - {fileID: 349356882}
   - {fileID: 396923777}
+  changeAllWeaponEvent: {fileID: 0}
+  crewManager: {fileID: 0}
   weapons:
   - {fileID: 21300000, guid: 784af5bb575a044b0896d79c615a32a5, type: 3}
   - {fileID: 21300000, guid: 576b1879823ad4b009843f8a6771bb74, type: 3}
@@ -40240,6 +40242,7 @@ MonoBehaviour:
   popupManager: {fileID: 908200645}
   gameManager: {fileID: 330770916}
   isChangedTile: 0
+  undoAble: 0
   tileList: []
 --- !u!4 &1911704528
 Transform:

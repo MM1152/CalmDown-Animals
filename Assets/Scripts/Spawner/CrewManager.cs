@@ -38,6 +38,7 @@ public class CrewManager : MonoBehaviour
     public event Action SellingEventInTutorial;
 
     private List<Crew> placedCrews = new List<Crew>();
+    public List<Crew> PlaceCrews => placedCrews;
     private int Payment {
         get => gamemanager.Payment;
         set
@@ -58,9 +59,13 @@ public class CrewManager : MonoBehaviour
     private bool isSpawn;
     public GameManager gamemanager;
 
+    private UndoCrew undoCrew;
+
     private void Awake()
-    { 
-        foreach(var crewRank in Enum.GetValues(typeof(CrewRank)))
+    {
+        undoCrew ??= GetComponent<UndoCrew>();
+
+        foreach (var crewRank in Enum.GetValues(typeof(CrewRank)))
         {
             unitInfomation.Add((CrewRank)crewRank, (0, 0));
             placePosition.Add((CrewRank)crewRank, new List<Vector3>());
@@ -92,6 +97,11 @@ public class CrewManager : MonoBehaviour
                 i--;
             }
         }
+    }
+
+    public void UpdateUndoList()
+    {
+        undoCrew?.UpdateUndoCrewList(placedCrews);
     }
 
     private void Update()
@@ -128,6 +138,7 @@ public class CrewManager : MonoBehaviour
 
         placedCrews.Add(spawnCrew);
         spawnCrew.UnShowAttackRadius();
+        SetPlaceCount(rank, GetPlaceCount(rank) + 1);
         DragCrew = null;
     }
 
@@ -178,7 +189,7 @@ public class CrewManager : MonoBehaviour
         changeUnitCount?.Invoke();
     }
 
-    private void SetPlaceCount(CrewRank rank, int placeCount)
+    private void SetPlaceCount(CrewRank rank, int placeCount)   
     {
         var info = unitInfomation[rank];
 

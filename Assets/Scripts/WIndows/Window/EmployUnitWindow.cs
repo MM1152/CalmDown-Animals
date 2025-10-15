@@ -10,10 +10,11 @@ public class EmployUnitWindow : GenericWindow
 
     [Header("Reference")]
     public Button backBNT;
-    public GameObject sellLayout;
-    public CrewManager spawner;
     public Button clearCrewsBNT;
+    public GameObject sellLayout;
     public GameManager gameManager;
+    public CrewManager spawner;
+
     [Header("Crew Buying Layouts")]
     public GameObject[] spawnCrewEvents;
     private int spawnAbleIdx = 1;
@@ -51,6 +52,7 @@ public class EmployUnitWindow : GenericWindow
         base.Open();
         sellLayout.SetActive(false);
         Status.CrewDrag = true;
+        spawner.UpdateUndoList();
     }
 
     public override void Close()
