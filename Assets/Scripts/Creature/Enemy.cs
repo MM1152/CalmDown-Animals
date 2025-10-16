@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
                 nTile.GetComponent<InTileAnimal>().InAnimal(this);
                 inTileSetting = true;
             }
-
+            //if (Vector3.Distance(prevPosition, nPos) < 0.1f)
             if (Vector3.Distance(prevPosition, nPos) < Vector3.Distance(transform.position , prevPosition))
             {
                 prevTile = nTile;

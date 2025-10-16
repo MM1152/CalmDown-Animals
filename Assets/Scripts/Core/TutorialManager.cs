@@ -81,9 +81,8 @@ public class TutorialManager : MonoBehaviour
     private Coroutine co;
 
     //Tutorial Strings Start 7
-    public IEnumerator Start()
+    public void Start()
     {
-        yield return null;
         tutorials.Add(new DrawTileTutorial(this));
         tutorials.Add(new DeleteTileTutorial(this));
         tutorials.Add(new CreateRoadTutorial(this));

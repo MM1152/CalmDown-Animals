@@ -6173,7 +6173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a034d7453ebd0eb49908429926653745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
+  type: 0
   windowManager: {fileID: 908200644}
   tileManager: {fileID: 1911704527}
   crewManager: {fileID: 423284645}
@@ -34412,9 +34412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbb3627dbd6fe684ab7cb792840c3169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  die: {fileID: 3263758992168516765, guid: b54b15d48b519aa4d90353cb64dbb431, type: 3}
-  hit: {fileID: 2826975751686738221, guid: 5735553d77c31e94e827960479d0e9de, type: 3}
-  useParticle1: 1
+  prefabs: []
 --- !u!1 &1608622519
 GameObject:
   m_ObjectHideFlags: 0
