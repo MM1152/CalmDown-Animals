@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,10 +8,12 @@ using UnityEngine;
 
 public class PathFind
 {
+    private float weight = 1.5f;
     private PriorityQueue<PathTile> openList = new PriorityQueue<PathTile>(Comparer<PathTile>.Create((x, y)=> x.F.CompareTo(y.F)));
     private List<PathTile> closeList = new List<PathTile>();
-
-
+#if UNITY_EDITOR
+    private Stopwatch stopwatch = new Stopwatch();
+#endif
     public bool Find(List<PathTile> map , PathTile startTile , PathTile endTile , TileType checkTile = TileType.Path)
     {
         openList.Clear();
@@ -20,13 +23,19 @@ public class PathFind
         startTile.H = endTile - startTile;
 
         openList.EnQueue(startTile);
-
-        while(!openList.Empty())
+#if UNITY_EDITOR
+        stopwatch.Start();
+#endif
+        while (!openList.Empty())
         {
             PathTile curTile = openList.Dequeue();
 
             if (curTile == endTile)
             {
+#if UNITY_EDITOR
+                stopwatch.Stop();
+                UnityEngine.Debug.Log($"PathFind TIme : {stopwatch.ElapsedMilliseconds} ms");
+#endif
                 return true;
             }
             if (closeList.Contains(curTile)) continue;
@@ -37,8 +46,8 @@ public class PathFind
             {
                 if((nTile.Type & checkTile) > 0 && !closeList.Contains(nTile))
                 {
-                    int G = curTile.G + 1;
-                    int H = endTile - nTile;
+                    int G = curTile.G + 10;
+                    int H = Mathf.FloorToInt((endTile - nTile) * weight * 10);
                     int F = G + H;
 
                     if(openList.Contains(nTile) && nTile.F <= F) continue;

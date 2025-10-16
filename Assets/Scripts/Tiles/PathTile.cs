@@ -43,7 +43,13 @@ public class PathTile : Tile
 
     public static int operator -(PathTile x , PathTile y)
     {
-        return (int)Mathf.Round(Mathf.Abs(x.transform.position.x - y.transform.position.x) + Mathf.Abs(x.transform.position.z - y.transform.position.z));
+        float q1 = (Mathf.Sqrt(3f) / 3f * x.transform.position.x - 1f / 3f * x.transform.position.z) / 0.5f;
+        float r1 = (2f / 3f * x.transform.position.z) / 0.5f;
+
+        float q2 = (Mathf.Sqrt(3f) / 3f * y.transform.position.x - 1f / 3f * y.transform.position.z) / 0.5f;
+        float r2 = (2f / 3f * y.transform.position.z) / 0.5f;
+
+        return (int)(Mathf.Abs(q1 - q2) + Mathf.Abs(r1 - r2) + Mathf.Abs((q1 + r1) - (q2 + r2))) / 2;
     } 
 
     protected override void Awake()
