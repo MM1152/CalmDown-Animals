@@ -81,14 +81,14 @@ public class Enemy : MonoBehaviour
 
             transform.position += dir * speed * Time.deltaTime;
             
-            if(Vector3.Distance(transform.position , nPos) < gridSize.x * 0.5f && !inTileSetting)
+            if(Vector3.Distance(prevPosition, nPos) < gridSize.x * 0.5f && !inTileSetting)
             {
                 prevTile.GetComponent<InTileAnimal>().OutAnimal(this);
                 nTile.GetComponent<InTileAnimal>().InAnimal(this);
                 inTileSetting = true;
             }
 
-            if (Vector3.Distance(transform.position , nPos) < Vector3.Distance(transform.position , prevPosition))
+            if (Vector3.Distance(prevPosition, nPos) < Vector3.Distance(transform.position , prevPosition))
             {
                 prevTile = nTile;
                 if (nTile.ParentTile == null)
@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour
             var prevPosition = transform.position;
             transform.position += dir * speed * Time.deltaTime;
 
-            if (Vector3.Distance(nPos , transform.position) < Vector3.Distance(transform.position, prevPosition))
+            if (Vector3.Distance(nPos , prevPosition) < Vector3.Distance(transform.position, prevPosition))
             {
                 health.Die();
                 gameManager.EscapeAnimals();
