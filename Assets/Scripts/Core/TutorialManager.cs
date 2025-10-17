@@ -103,7 +103,8 @@ public class TutorialManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if((TouchManager.touchType == TouchType.Tab || TouchManager.touchType == TouchType.Drag) && TouchManager.Phase == Phase.Up)
+        if((TouchManager.touchType == TouchType.Tab || TouchManager.touchType == TouchType.Drag)
+            && TouchManager.Phase == Phase.Up)
         {
             curTutorial.Update();
         }

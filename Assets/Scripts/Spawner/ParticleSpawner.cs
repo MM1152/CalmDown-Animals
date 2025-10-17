@@ -11,8 +11,10 @@ public class ParticleSpawner : ObjectPool<ParticleType, Particle>
 {
     public void Awake()
     {
-        poolingQueue.Add(ParticleType.Hit, new Queue<Particle>());
-        poolingQueue.Add(ParticleType.Die, new Queue<Particle>());
+        for(int i = 0; i < prefabs.Count; i++)
+        {
+            poolingQueue.Add((ParticleType)i, new Queue<Particle>());
+        }
     }
 
     protected override Particle CreateInstance(ParticleType key)

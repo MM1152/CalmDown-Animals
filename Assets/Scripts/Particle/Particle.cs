@@ -22,7 +22,7 @@ public class Particle : MonoBehaviour
         if(co != null)
         {
             StopCoroutine(co);
-            spawner.ReturnObject(key, this);
+            spawner.ReturnToPool(key, this);
             return false;
         }
         gameObject.SetActive(true);
@@ -33,7 +33,7 @@ public class Particle : MonoBehaviour
     private IEnumerator WaitForPlayCo()
     {
         yield return new WaitForSeconds(particle.main.duration);
-        spawner.ReturnObject(key , this);
+        spawner.ReturnToPool(key , this);
         gameObject.SetActive(false);
         co = null;
     }

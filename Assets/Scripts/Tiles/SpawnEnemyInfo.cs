@@ -111,7 +111,7 @@ public class SpawnEnemyInfo : MonoBehaviour
             health.onDie += spawner.CheckDieEnemy;
             health.onDie += () =>
             {
-                var item = particleSpawner.ShowObject(ParticleType.Die);
+                var item = particleSpawner.GetFromPool(ParticleType.Die);
                 if(item != null)
                 {
                     item.transform.position = enemy.meshObject.transform.position + Vector3.up;
@@ -120,7 +120,7 @@ public class SpawnEnemyInfo : MonoBehaviour
             };
             health.onHit += () =>
             {
-                var item = particleSpawner.ShowObject(ParticleType.Hit);
+                var item = particleSpawner.GetFromPool(ParticleType.Hit);
                 if(item != null)
                 {
                     item.transform.position = enemy.meshObject.transform.position + Vector3.up;

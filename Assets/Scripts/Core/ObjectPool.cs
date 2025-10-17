@@ -7,7 +7,7 @@ public abstract class ObjectPool<TKey,T> : MonoBehaviour where T : MonoBehaviour
     protected Dictionary<TKey, Queue<T>> poolingQueue = new Dictionary<TKey, Queue<T>>();
     public List<T> prefabs = new List<T>();
 
-    public T ShowObject(TKey key)
+    public T GetFromPool(TKey key)
     {
         if (!Variable.onFPX) return null;
 
@@ -24,7 +24,7 @@ public abstract class ObjectPool<TKey,T> : MonoBehaviour where T : MonoBehaviour
         return item;
     }
 
-    public void ReturnObject(TKey key,  T obj)
+    public void ReturnToPool(TKey key,  T obj)
     {   
         poolingQueue[key].Enqueue(obj);
     }
