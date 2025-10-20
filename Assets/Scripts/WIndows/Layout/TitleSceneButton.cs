@@ -15,8 +15,16 @@ public class TitleSceneButton : MonoBehaviour
     public Button bookButton;
     public Button settingButton;
 
+    private void Awake()
+    {
+#if !DEBUG_MODE
+        Debug.unityLogger.logEnabled = false;
+#endif        
+    }
+
     private void Start()
     {
+
         SaveLoadManager.Load();
         Application.targetFrameRate = -1;
         SoundManager.Instance.PlayBackGround(BGM.TitleSceneBackGround);

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class DebugMode : MonoBehaviour
 {
-#if DEBUG
+
     public TextMeshProUGUI frame;
     public Button setPrevWaveButton;
     public Button setNextWaveButton;
@@ -18,6 +18,15 @@ public class DebugMode : MonoBehaviour
 
     private void Start()
     {
+#if DEBUG_MODE
+        Debug.Log("Start Debug");
+        restartRound.gameObject.SetActive(true);
+        clearRound.gameObject.SetActive(true);
+        speedupButton.gameObject.SetActive(true);
+        setPrevWaveButton.gameObject.SetActive(true);
+        setNextWaveButton.gameObject.SetActive(true);
+        frame.gameObject.SetActive(true);
+
         gameManager = GameObject.FindWithTag(TagIds.GameManagerTag).GetComponent<GameManager>();
 
         setPrevWaveButton.onClick.AddListener(() =>
@@ -52,11 +61,15 @@ public class DebugMode : MonoBehaviour
                 Time.timeScale = 1f;
             }
         });
+#endif
     }
 
     private void Update()
     {
+#if DEBUG_MODE
         frame.text = (1f / Time.deltaTime) + " fps";
-    }
 #endif
+    }
+
+
 }

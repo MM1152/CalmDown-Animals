@@ -730,6 +730,8 @@ public class TileManager : MonoBehaviour
             if(percent <= changePercent)
             {
                 tile.UpdateBlockedTile();
+                crewSpawner.ClearCrew(tile.crew);
+                tile.crew = null;
                 intileAnimal.killStack = 0;
                 continue;
             }
