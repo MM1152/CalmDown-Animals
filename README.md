@@ -5,8 +5,7 @@
 ### 🐾 험악해진 동물들을 포획하고 치유하는 전략형 디펜스 게임
 
 [![Unity](https://img.shields.io/badge/Unity-2021+-black?style=flat-square&logo=unity)](https://unity.com/)
-[![C#](https://img.shields.io/badge/C%23-10.0-blue?style=flat-square&logo=csharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+[![C#](https://img.shields.io/badge/C%23-9.0-blue?style=flat-square&logo=csharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 
 </div>
 
@@ -191,7 +190,7 @@ UI 창 및 팝업 시스템
 | 분야 | 기술 |
 |------|------|
 | 🎮 **엔진** | Unity 2021+ |
-| 💻 **언어** | C# 10.0 |
+| 💻 **언어** | C# 9.0 |
 | 🎨 **렌더링** | Universal Render Pipeline (URP) |
 | 📦 **패턴** | Object Pooling, Singleton, Observer |
 | 🗄️ **데이터** | ScriptableObject, JSON |
