@@ -4,7 +4,7 @@
 <p>유니티 합반 프로젝트<br>
 육각형 타일 기반 전략 시뮬레이션 게임<br>
 </p>
-
+<img width="413" height="413" alt="Image" src="https://github.com/user-attachments/assets/94a097d8-4a6d-4849-80a3-c794aae77393" />
 </div>
 
 ---
