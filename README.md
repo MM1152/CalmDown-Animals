@@ -19,6 +19,108 @@
 
 ---
 
+## 📂 Assets/Script 폴더 구조
+```
+Assets/Scripts/
+│
+├── 📁 Animation/
+│   └── 📄 FrInverseKinematic.cs
+│
+├── 📁 Core/
+│   ├── 📄 DataTable.cs
+│   ├── 📄 DataTableManager.cs
+│   ├── 📄 Define.cs
+│   ├── 📄 ObjectPool.cs
+│   ├── 📄 PathFind.cs
+│   ├── 📄 PriorityQueue.cs
+│   ├── 📄 SafeArea.cs
+│   ├── 📄 SaveData.cs
+│   ├── 📄 SceneChange.cs
+│   ├── 📄 SoundManager.cs
+│   └── 📄 WindowManager.cs
+│
+├── 📁 Creature/
+│   ├── 📄 Crew.cs
+│   ├── 📄 Enemy.cs
+│   ├── 📄 EnemyHealth.cs
+│   └── 📄 Hpbar.cs
+│
+├── 📁 DataTables/
+│   ├── 📄 AnimalCRRank.cs
+│   ├── 📄 AnimalInfoTable.cs
+│   ├── 📄 AnimalSizeTable.cs
+│   ├── 📄 AnimalSpeedTable.cs
+│   ├── 📄 CrewRankTable.cs
+│   ├── 📄 CrewTable.cs
+│   ├── 📄 EquipmentInfo.cs
+│   ├── 📄 EquipmentType.cs
+│   ├── 📄 RoundTable.cs
+│   └── 📄 StringTable.cs
+│
+├── 📁 Debug/
+│   └── 📄 DebugMode.cs
+│
+├── 📁 Effects/
+│   └── 📄 Cloudes.cs
+│
+├── 📁 Input/
+│   ├── 📄 DragCamera.cs
+│   └── 📄 ZoomCamera.cs
+│
+├── 📁 Interface/
+│   └── 📄 IDamageAble.cs
+│
+├── 📁 Particle/
+│   └── 📄 Particle.cs
+│
+├── 📁 SaveDatas/
+│   └── 📄 JsonConvert.cs
+│
+├── 📁 Spawner/
+│   ├── 📄 ParticleSpawner.cs
+│   └── 📄 UndoCrew.cs
+│
+├── 📁 Test/
+│   └── 📄 TestAnimationLigging.cs
+│
+├── 📁 Tiles/
+│   └── 📄 Tile.cs
+│
+├── 📁 Tutorials/
+│   ├── 📄 CreateRoadTutorial.cs
+│   ├── 📄 CrewSellingTutorial.cs
+│   ├── 📄 DeleteTileTutorial.cs
+│   ├── 📄 EmployCrewTutorial.cs
+│   ├── 📄 EmployCrewTutorial2.cs
+│   └── 📄 Tutorial.cs
+│
+├── 📁 WIndows/
+│   └── 📁 PopUp/
+│       └── 📄 MenuTabPopup.cs
+│
+└── 📄 Weapon.cs
+```
+## 🔑 주요 코드 파일
+
+### 🗺️ 길찾기 (PathFinding) 관련
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `PathFind.cs` | A* 알고리즘 기반 경로 탐색 구현 | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Core/PathFind.cs) |
+| `PriorityQueue.cs` | 우선순위 큐 자료구조 직접 구현 (Min-Heap) | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Core/PriorityQueue.cs) |
+
+### 🎲 타일 (Tile) 시스템
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `Tile.cs` | 타일 베이스 클래스 (타입, 색상 관리) | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Tiles/TIle.cs) |
+| `PathTile.cs` | A* 경로 탐색용 타일 (G, H, F값, 육각 거리 계산) | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Tiles/PathTile.cs) |
+| `DrawTile.cs` | 맵 에디터용 드로잉 타일 | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Tiles/DrawTile.cs) |
+| `InTileAnimal.cs` | 타일 내 동물 관리 (진입/퇴출 추적) | [📄 보기](https://github.com/MM1152/CalmDown-Animals/blob/main/Assets/Scripts/Tiles/InTileAnimal.cs) |
+| `Tiles 폴더` | 전체 타일 관련 스크립트 | [📁 보기](https://github.com/MM1152/CalmDown-Animals/tree/main/Assets/Scripts/Tiles) |
+
+---
+
 ### 🎮 게임소개
 
 #### 🌿 **길**
